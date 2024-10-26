@@ -1,4 +1,4 @@
-From 6bb6ae865746aa6cf8258396daa95edbca434f8e Mon Sep 17 00:00:00 2001
+From 6d4be4de8f059d099625c98126a08723d186f1fd Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Thu, 9 Nov 2023 12:33:55 +0100
 Subject: [PATCH 1/8] gmscompat: Change attestation and instrumentation to pass
@@ -9,14 +9,14 @@ Updated by many people like @dereference23, @Stallix, @dyneteve, @neobuddy89 and
 Adapted by @iceows for his own AOSP A13 GSI.
 Adapted by @ponces based on the work of @chiteroman to pass newest Play Integrity API.
 ---
- core/java/android/app/Instrumentation.java    |   4 +
- .../internal/gmscompat/AttestationHooks.java  | 100 ++++++++++++++++++
- .../keystore2/AndroidKeyStoreSpi.java         |   3 +
- 3 files changed, 107 insertions(+)
+ core/java/android/app/Instrumentation.java    |  4 +
+ .../internal/gmscompat/AttestationHooks.java  | 93 +++++++++++++++++++
+ .../keystore2/AndroidKeyStoreSpi.java         |  3 +
+ 3 files changed, 100 insertions(+)
  create mode 100644 core/java/com/android/internal/gmscompat/AttestationHooks.java
 
 diff --git a/core/java/android/app/Instrumentation.java b/core/java/android/app/Instrumentation.java
-index db216b1af..9445bc1b5 100644
+index db216b1af974..9445bc1b581a 100644
 --- a/core/java/android/app/Instrumentation.java
 +++ b/core/java/android/app/Instrumentation.java
 @@ -63,6 +63,8 @@ import android.view.WindowManagerGlobal;
@@ -46,10 +46,10 @@ index db216b1af..9445bc1b5 100644
  
 diff --git a/core/java/com/android/internal/gmscompat/AttestationHooks.java b/core/java/com/android/internal/gmscompat/AttestationHooks.java
 new file mode 100644
-index 000000000..eb59bed82
+index 000000000000..99e61ae74007
 --- /dev/null
 +++ b/core/java/com/android/internal/gmscompat/AttestationHooks.java
-@@ -0,0 +1,100 @@
+@@ -0,0 +1,93 @@
 +/*
 + * Copyright (C) 2021 The Android Open Source Project
 + *
@@ -80,7 +80,6 @@ index 000000000..eb59bed82
 +/** @hide */
 +public final class AttestationHooks {
 +    private static final String TAG = "GmsCompat/Attestation";
-+    private static final boolean DEBUG = false;
 +
 +    private static final String PACKAGE_GMS = "com.google.android.gms";
 +    private static final String PACKAGE_FINSKY = "com.android.vending";
@@ -91,39 +90,32 @@ index 000000000..eb59bed82
 +
 +    private AttestationHooks() { }
 +
-+    private static void setBuildField(String key, String value) {
++    private static void setPropValue(String key, String value) {
 +        try {
-+            Log.i(TAG, "Spoofing Build." + key + " with value \"" + value + "\"");
-+            Field field = Build.class.getDeclaredField(key);
++            Log.i(TAG, "Spoofing " + key + " with value \"" + value + "\"");
++            Class clazz = Build.class;
++            if (key.startsWith("VERSION.")) {
++                clazz = Build.VERSION.class;
++                key = key.substring(8);
++            }
++            Field field = clazz.getDeclaredField(key);
 +            field.setAccessible(true);
-+            field.set(null, value);
++            field.set(null, field.getType().equals(Integer.TYPE) ? Integer.parseInt(value) : value);
 +            field.setAccessible(false);
-+        } catch (NoSuchFieldException | IllegalAccessException e) {
-+            Log.e(TAG, "Failed to spoof Build." + key, e);
-+        }
-+    }
-+
-+    private static void setVersionField(String key, Object value) {
-+        try {
-+            Log.i(TAG, "Spoofing Build.VERSION." + key + " with value \"" + value + "\"");
-+            Field field = Build.VERSION.class.getDeclaredField(key);
-+            field.setAccessible(true);
-+            field.set(null, value);
-+            field.setAccessible(false);
-+        } catch (NoSuchFieldException | IllegalAccessException e) {
-+            Log.e(TAG, "Failed to spoof Build." + key, e);
++        } catch (Exception e) {
++            Log.e(TAG, "Failed to spoof " + key, e);
 +        }
 +    }
 +
 +    private static void spoofBuildGms() {
-+        setBuildField("PRODUCT", "oriole_beta");
-+        setBuildField("DEVICE", "oriole");
-+        setBuildField("MANUFACTURER", "Google");
-+        setBuildField("BRAND", "google");
-+        setBuildField("MODEL", "Pixel 6");
-+        setBuildField("FINGERPRINT", "google/oriole_beta/oriole:15/AP41.240823.009/12329489:user/release-keys");
-+        setVersionField("SECURITY_PATCH", "2024-09-05");
-+        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.LOLLIPOP);
++        setPropValue("PRODUCT", "komodo_beta");
++        setPropValue("DEVICE", "komodo");
++        setPropValue("MANUFACTURER", "Google");
++        setPropValue("BRAND", "google");
++        setPropValue("MODEL", "Pixel 9 Pro XL");
++        setPropValue("FINGERPRINT", "google/komodo_beta/komodo:15/AP41.240823.009/12329489:user/release-keys");
++        setPropValue("VERSION.SECURITY_PATCH", "2024-09-05");
++        setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "32");
 +    }
 +
 +    public static void initApplicationBeforeOnCreate(Application app) {
@@ -140,18 +132,19 @@ index 000000000..eb59bed82
 +
 +    private static boolean isCallerSafetyNet() {
 +        return sIsGms && Arrays.stream(Thread.currentThread().getStackTrace())
-+                .anyMatch(elem -> elem.getClassName().contains("DroidGuard"));
++                .anyMatch(elem -> elem.getClassName().toLowerCase()
++                    .contains("droidguard"));
 +    }
 +
 +    public static void onEngineGetCertificateChain() {
 +        if (isCallerSafetyNet() || sIsFinsky) {
-+            Log.i(TAG, "Blocked key attestation sIsGms=" + sIsGms + " sIsFinsky=" + sIsFinsky);
++            Log.i(TAG, "Blocked key attestation");
 +            throw new UnsupportedOperationException();
 +        }
 +    }
 +}
 diff --git a/keystore/java/android/security/keystore2/AndroidKeyStoreSpi.java b/keystore/java/android/security/keystore2/AndroidKeyStoreSpi.java
-index e6a63b9c4..6a80c14c9 100644
+index e6a63b9c4c17..6a80c14c9837 100644
 --- a/keystore/java/android/security/keystore2/AndroidKeyStoreSpi.java
 +++ b/keystore/java/android/security/keystore2/AndroidKeyStoreSpi.java
 @@ -48,6 +48,7 @@ import android.system.keystore2.ResponseCode;

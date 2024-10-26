@@ -1,4 +1,4 @@
-From 98586827d510de79eac63c1fdeece3c81409605e Mon Sep 17 00:00:00 2001
+From ee39012b3a9be2be8e46fdbe4e809bd5a414dc08 Mon Sep 17 00:00:00 2001
 From: maxwen <max.weninger@gmail.com>
 Date: Fri, 22 Oct 2021 14:55:26 +0200
 Subject: [PATCH 8/8] feat: Add Lockscreen Weather with OmniJaws (1/2)
@@ -19,7 +19,7 @@ Co-authored-by: Pranav Vashi <neobuddy89@gmail.com>
  create mode 100644 core/java/com/android/internal/util/crdroid/OmniJawsClient.java
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index 5c392ae6b..e9f87249f 100644
+index 5c392ae6bd2c..e9f87249f389 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
 @@ -6249,6 +6249,11 @@ public final class Settings {
@@ -36,7 +36,7 @@ index 5c392ae6b..e9f87249f 100644
           * process when restoring historical backup datasets.
 diff --git a/core/java/com/android/internal/util/crdroid/OmniJawsClient.java b/core/java/com/android/internal/util/crdroid/OmniJawsClient.java
 new file mode 100644
-index 000000000..2bbd51ffa
+index 000000000000..2bbd51ffab8c
 --- /dev/null
 +++ b/core/java/com/android/internal/util/crdroid/OmniJawsClient.java
 @@ -0,0 +1,441 @@
@@ -482,7 +482,7 @@ index 000000000..2bbd51ffa
 +    }
 +}
 diff --git a/data/etc/com.android.systemui.xml b/data/etc/com.android.systemui.xml
-index a115c659d..d001b0329 100644
+index a115c659d85a..d001b0329650 100644
 --- a/data/etc/com.android.systemui.xml
 +++ b/data/etc/com.android.systemui.xml
 @@ -16,6 +16,7 @@
@@ -494,7 +494,7 @@ index a115c659d..d001b0329 100644
          <permission name="android.permission.ALLOW_SLIPPERY_TOUCHES"/>
          <permission name="android.permission.BATTERY_STATS"/>
 diff --git a/packages/SystemUI/AndroidManifest.xml b/packages/SystemUI/AndroidManifest.xml
-index e47dde0c1..ef993a447 100644
+index e47dde0c1af1..ef993a4472de 100644
 --- a/packages/SystemUI/AndroidManifest.xml
 +++ b/packages/SystemUI/AndroidManifest.xml
 @@ -383,6 +383,10 @@
@@ -509,7 +509,7 @@ index e47dde0c1..ef993a447 100644
          android:name=".SystemUIApplication"
          android:persistent="true"
 diff --git a/packages/SystemUI/src/com/android/keyguard/KeyguardSliceView.java b/packages/SystemUI/src/com/android/keyguard/KeyguardSliceView.java
-index d8be862e1..130f984be 100644
+index d8be862e19ac..130f984be3db 100644
 --- a/packages/SystemUI/src/com/android/keyguard/KeyguardSliceView.java
 +++ b/packages/SystemUI/src/com/android/keyguard/KeyguardSliceView.java
 @@ -163,14 +163,18 @@ public class KeyguardSliceView extends LinearLayout {
@@ -561,7 +561,7 @@ index d8be862e1..130f984be 100644
              for (Drawable drawable : getCompoundDrawables()) {
                  if (drawable != null) {
 diff --git a/packages/SystemUI/src/com/android/systemui/keyguard/KeyguardSliceProvider.java b/packages/SystemUI/src/com/android/systemui/keyguard/KeyguardSliceProvider.java
-index 68a252b2c..9d93ed73c 100644
+index 68a252b2caba..9d93ed73c621 100644
 --- a/packages/SystemUI/src/com/android/systemui/keyguard/KeyguardSliceProvider.java
 +++ b/packages/SystemUI/src/com/android/systemui/keyguard/KeyguardSliceProvider.java
 @@ -24,6 +24,7 @@ import android.content.ContentResolver;

@@ -1,4 +1,4 @@
-From 3ca70b42c7f24ce1138f2c3a78ef00bf720cb22a Mon Sep 17 00:00:00 2001
+From 193037f39fbe1019329ca0e5562279b70e8570ea Mon Sep 17 00:00:00 2001
 From: vladsendrix <83285656+vladsendrix@users.noreply.github.com>
 Date: Fri, 31 Dec 2021 03:18:04 +0100
 Subject: [PATCH 2/8] gmscompat: Spoof Pixel XL for Google Photos
@@ -9,10 +9,10 @@ Change-Id: I905e40625b07ebf500cbb3ce1deadedee2e624c5
  1 file changed, 14 insertions(+)
 
 diff --git a/core/java/com/android/internal/gmscompat/AttestationHooks.java b/core/java/com/android/internal/gmscompat/AttestationHooks.java
-index eb59bed82..563bad8a8 100644
+index 99e61ae74007..efa41e2a9b5f 100644
 --- a/core/java/com/android/internal/gmscompat/AttestationHooks.java
 +++ b/core/java/com/android/internal/gmscompat/AttestationHooks.java
-@@ -32,6 +32,7 @@ public final class AttestationHooks {
+@@ -31,6 +31,7 @@ public final class AttestationHooks {
  
      private static final String PACKAGE_GMS = "com.google.android.gms";
      private static final String PACKAGE_FINSKY = "com.android.vending";
@@ -20,23 +20,23 @@ index eb59bed82..563bad8a8 100644
      private static final String PROCESS_UNSTABLE = "com.google.android.gms.unstable";
  
      private static volatile boolean sIsGms = false;
-@@ -74,6 +75,15 @@ public final class AttestationHooks {
-         setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.LOLLIPOP);
+@@ -66,6 +67,15 @@ public final class AttestationHooks {
+         setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "32");
      }
  
 +    private static void spoofGooglePhotos() {
-+        setBuildField("PRODUCT", "marlin");
-+        setBuildField("DEVICE", "marlin");
-+        setBuildField("MANUFACTURER", "Google");
-+        setBuildField("BRAND", "google");
-+        setBuildField("MODEL", "Pixel XL");
-+        setBuildField("FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
++        setPropValue("PRODUCT", "marlin");
++        setPropValue("DEVICE", "marlin");
++        setPropValue("MANUFACTURER", "Google");
++        setPropValue("BRAND", "google");
++        setPropValue("MODEL", "Pixel XL");
++        setPropValue("FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
 +    }
 +
      public static void initApplicationBeforeOnCreate(Application app) {
          if (PACKAGE_GMS.equals(app.getPackageName()) &&
                  PROCESS_UNSTABLE.equals(Application.getProcessName())) {
-@@ -84,6 +94,10 @@ public final class AttestationHooks {
+@@ -76,6 +86,10 @@ public final class AttestationHooks {
          if (PACKAGE_FINSKY.equals(app.getPackageName())) {
              sIsFinsky = true;
          }

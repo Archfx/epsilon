@@ -1,4 +1,4 @@
-From cdb439e3ef319cd3ec2817a69b5da7f7e9255b9d Mon Sep 17 00:00:00 2001
+From 061bb69be8e88148772e74feb81cbffc750dc38d Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Sun, 26 Feb 2023 22:13:35 +0000
 Subject: [PATCH 3/8] monet: Use Style.SPRITZ by default
@@ -9,7 +9,7 @@ Change-Id: Ia44ba56c8daa07033b290de89bb300bda9d39d86
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java b/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
-index 4963aae08..9c67b44fc 100644
+index 4963aae08ab7..9c67b44fccbd 100644
 --- a/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
 +++ b/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
 @@ -146,7 +146,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
