@@ -1,0 +1,32 @@
+From cf5ab6ee6a8ce4456f7396071f28eabbe3bfc557 Mon Sep 17 00:00:00 2001
+From: Chris Crump <chriscrawford893@gmail.com>
+Date: Fri, 17 Mar 2023 20:48:46 +0100
+Subject: [PATCH 2/3] feat: Add Face Unlock with ParanoidSense (2/2)
+
+Co-authored-by: Chris Crump <chriscrawford893@gmail.com>
+Co-authored-by: Adithya R <gh0strider.2k18.reborn@gmail.com>
+Co-authored-by: Tobias Merkel <stylogey@gmail.com>
+Co-authored-by: someone5678 <someone5678@users.noreply.github.com>
+Co-authored-by: aswin7469 <aswinas@pixysos.com>
+Co-authored-by: Pranav Vashi <neobuddy89@gmail.com>
+Change-Id: I05fa784d9f7f978be9f5944900a97ad7df19f59e
+---
+ AndroidManifest.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index 69d000a9e89..c8aa7f4f0d0 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -2701,7 +2701,7 @@
+             android:screenOrientation="portrait"/>
+ 
+         <activity android:name=".biometrics.face.FaceEnrollFinish"
+-            android:exported="false"
++            android:exported="true"
+             android:theme="@style/GlifV4Theme.DayNight"
+             android:screenOrientation="portrait"/>
+ 
+-- 
+2.34.1
+

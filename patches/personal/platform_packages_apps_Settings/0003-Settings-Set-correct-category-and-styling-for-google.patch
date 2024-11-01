@@ -1,7 +1,7 @@
-From 825102a36202c4d94009a997ad4c3bf8420a4e88 Mon Sep 17 00:00:00 2001
+From d1050e6d8a9a1b7033953efce924e42efd78ab19 Mon Sep 17 00:00:00 2001
 From: shoya0x00 <shoya0x00@gmail.com>
 Date: Sat, 19 Oct 2024 12:42:04 +0000
-Subject: [PATCH 2/2] Settings: Set correct category and styling for google and
+Subject: [PATCH 3/3] Settings: Set correct category and styling for google and
  digital wellbeing
 
 On new revamped Settings UX dashboard missing styling for google and digital wellbeing tile.
@@ -14,7 +14,7 @@ Signed-off-by: shoya0x00 <shoya0x00@users.noreply.github.com>
  1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/src/com/android/settings/dashboard/DashboardFragment.java b/src/com/android/settings/dashboard/DashboardFragment.java
-index 9abc6c2..dca60f9 100644
+index 9abc6c2a0fa..dca60f902be 100644
 --- a/src/com/android/settings/dashboard/DashboardFragment.java
 +++ b/src/com/android/settings/dashboard/DashboardFragment.java
 @@ -556,12 +556,17 @@ public abstract class DashboardFragment extends SettingsPreferenceFragment
@@ -41,3 +41,4 @@ index 9abc6c2..dca60f9 100644
                      }
 -- 
 2.34.1
+

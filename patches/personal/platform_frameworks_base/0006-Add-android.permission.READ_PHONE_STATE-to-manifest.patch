@@ -1,7 +1,7 @@
-From 6ed5e8f8df73add8ec18964f3f94b90af47fc686 Mon Sep 17 00:00:00 2001
+From 774be1dc31b7f77cf8f10e94dae95656d7de046e Mon Sep 17 00:00:00 2001
 From: Janson Kang <temasek71@gmail.com>
 Date: Mon, 14 Dec 2015 11:13:24 +0800
-Subject: [PATCH 6/8] Add "android.permission.READ_PHONE_STATE" to manifest
+Subject: [PATCH 6/9] Add "android.permission.READ_PHONE_STATE" to manifest
 
 Change-Id: I78d90166635bbdf6b74e2a02efc1029387b4ad8d
 ---
