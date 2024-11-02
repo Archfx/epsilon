@@ -58,6 +58,9 @@ These results are just for reference (for people who enjoy numbers) to compare t
 > [!WARNING]
 > **Try this at your own risk and proceed with caution!**
 
+> [!TIP]
+> **Please read the release notes before performing OTA updates, Some major updates may require you to wipe user data. I highly recommend you backup your application data!**
+
 > [!CAUTION]
 > **BACKUP** your user data before proceeding, it might prompt you to wipe the user data partition depending on your current setup.
 
