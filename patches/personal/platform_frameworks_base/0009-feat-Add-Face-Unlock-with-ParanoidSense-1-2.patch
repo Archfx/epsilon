@@ -140,7 +140,7 @@ index 97791acfb43a..5c3027a7d9a6 100644
          pw.println("  bouncerShowing: $bouncerShowing")
          pw.println("  altBouncerShowing:" +
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 53730e317ac6..6b387034f1b5 100644
+index 2e726c94d41b..a62903f9be4a 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
 @@ -228,6 +228,7 @@ java_library_static {
@@ -148,9 +148,9 @@ index 53730e317ac6..6b387034f1b5 100644
          "aconfig_new_storage_flags_lib",
          "powerstats_flags_lib",
 +        "vendor.aospa.biometrics.face",
-     ],
-     javac_shard_size: 50,
-     javacflags: [
+         // HIDL
+         "vendor.mediatek.hardware.mtkpower-V1.1-java",
+         "vendor.samsung.hardware.sysinput-V1.2-java",
 diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
 index 2a1687209aad..53c75d5fa7d6 100644
 --- a/services/core/java/com/android/server/biometrics/AuthService.java
