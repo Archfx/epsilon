@@ -23,6 +23,8 @@ jobs:
       run: |
         rm -rf ./patches/trebledroid
         cp -R ./treble_aosp/patches/trebledroid ./patches/trebledroid
+        rm -rf ./patches/personal
+        cp -R ./treble_aosp/patches/personal ./patches/personal
         rm -rf ./treble_aosp
 
     - name: Configure Git

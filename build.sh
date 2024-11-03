@@ -44,6 +44,10 @@ applyPatches() {
     bash $BL/patch.sh $BL personal
     echo
 
+    echo "--> Applying DUO-DE patches"
+    bash $BL/patch.sh $BL duo
+    echo
+
     echo "--> Generating makefiles"
     cd device/phh/treble
     cp $BL/build/aosp.mk .
