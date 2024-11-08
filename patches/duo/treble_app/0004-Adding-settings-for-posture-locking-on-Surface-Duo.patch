@@ -20,7 +20,7 @@ index 70ee0a5..28b80b4 100644
                  Misc.safeSetprop("persist.sys.phh.duo.disable_hinge", value)
              }
 +
-+            DuoSettings.lockSingleScreenPostureSetting -> {          
++            DuoSettings.lockSingleScreenPosture -> {          
 +                /*
 +                    Set as string of one of three variables, convert in posture service to int. 
 +                    Should only be an integer from 0 to 2. 
