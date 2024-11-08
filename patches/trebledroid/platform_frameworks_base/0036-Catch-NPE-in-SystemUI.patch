@@ -1,4 +1,4 @@
-From e8f9e80098dedeae2c972956218abaad14408386 Mon Sep 17 00:00:00 2001
+From f83d87ee1c0dd53f480ff06ee1e696df18d8a6d1 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 6 Oct 2023 10:57:13 -0400
 Subject: [PATCH 36/52] Catch NPE in SystemUI

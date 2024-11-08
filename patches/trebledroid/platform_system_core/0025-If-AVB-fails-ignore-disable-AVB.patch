@@ -1,4 +1,4 @@
-From 94ee2a807995e98b1f96441928e27db91a6d4843 Mon Sep 17 00:00:00 2001
+From 3228952e72f8f37c96e1fc208ac263f1b639fef0 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 31 Mar 2024 17:18:05 -0400
 Subject: [PATCH 25/27] If AVB fails, ignore/disable AVB
@@ -30,7 +30,7 @@ index bfe636bbf..2bf84cf7a 100644
  
          if (!fsm->DoFirstStageMount()) {
 diff --git a/init/first_stage_mount.cpp b/init/first_stage_mount.cpp
-index dde58aa9e..99bba9a3a 100644
+index 2d68fb4ce..94df510e1 100644
 --- a/init/first_stage_mount.cpp
 +++ b/init/first_stage_mount.cpp
 @@ -233,6 +233,12 @@ Result<std::unique_ptr<FirstStageMount>> FirstStageMount::Create(const std::stri
