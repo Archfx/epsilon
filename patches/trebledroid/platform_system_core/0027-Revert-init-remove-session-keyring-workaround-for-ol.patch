@@ -1,4 +1,4 @@
-From 2166c5b3c22738cec0f838c69229cc7d7c8a3363 Mon Sep 17 00:00:00 2001
+From 91532b939648c43612fa9704f7d47373cf7c611c Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Sun, 20 Oct 2024 21:15:08 +0100
 Subject: [PATCH 27/27] Revert "init: remove session keyring workaround for old
