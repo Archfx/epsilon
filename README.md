@@ -7,11 +7,6 @@ The Surface Duo, Microsoft's dual-screen Android device, aimed to redefine mobil
 DUO-DE is a GSI variant Android ROM created for Microsoft Surface Duo devices, offering a clean AOSP experience. This build combines gapps/vanila variants of the GSI ROM from [ponces](https://github.com/ponces/treble_aosp) with desktop mode enabled + various tweaks to make it nice and smooth with the help of [thain](https://github.com/thai-ng) tweaks. All credits go to respective developers. 
 Before you proceed, please take a moment to read [this announcement](https://github.com/Archfx/duo-de/discussions/52) regarding this project. By using this ROM, you are agreeing to the [`DISCLAIMER`](#disclaimer).
 
-> [!TIP]
-> **The latest Android 14 version is stable and secure for daily usage. If you use the Duo as a daily device highly recommend using Android 14 [v2024.10.05](https://github.com/Archfx/duo-de/releases/tag/v2024.10.05)**. Don't worry A14 and A15 are maintained separately, so you will not upgrade to A15 accidentally.
-
-> [!CAUTION]
-> **Things will break with Android 15** as it is still in the beta phase. Therefore, expect many critical updates that may break your current setup, and you will have to wipe user data more often. I highly recommend having an `adb` authorized computer with you. In case biometrics authentication bricks the device (which the device will be stuck on the Microsoft startup logo), you have to boot to recovery and wipe the user data partition. 
 
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/archfx/duo-de/total?style=for-the-badge&label=duo-de%20Downloads&color=%2333cc33)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/archfx/duo-de/sync.yml?style=for-the-badge&label=TrebleDroid%20Sync)
