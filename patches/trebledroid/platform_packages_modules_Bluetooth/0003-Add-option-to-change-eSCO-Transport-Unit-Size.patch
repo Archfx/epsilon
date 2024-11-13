@@ -1,7 +1,7 @@
-From 3d5a121e85e8eba0a8fdb44c4dae43739403fed3 Mon Sep 17 00:00:00 2001
+From 010c5473c6add244fdb3571d44ab09c74969ab6b Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Thu, 17 Jun 2021 15:48:53 +0100
-Subject: [PATCH 2/8] Add option to change eSCO Transport Unit Size
+Subject: [PATCH 3/9] Add option to change eSCO Transport Unit Size
 
 Fixes Bluetooth calls on some Samsung devices if set to 16.
 

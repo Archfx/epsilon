@@ -1,7 +1,7 @@
-From 5a21a07c574e1159e70f7ee6b06261d511980a46 Mon Sep 17 00:00:00 2001
+From dfb405cc2f3510ee35a7097432847d5440620384 Mon Sep 17 00:00:00 2001
 From: wbs306 <wbs306@gmail.com>
 Date: Fri, 20 Jan 2023 17:07:41 +0800
-Subject: [PATCH 7/8] gd: hci: Ignore command READ_REMOTE_VERSION_INFORMATION
+Subject: [PATCH 8/9] gd: hci: Ignore command READ_REMOTE_VERSION_INFORMATION
  result if it doesn't in command_queue_
 
 In MTK Dimensity 8100 devices, com.android.bluetooth will gets crash if try to connect a new device.
@@ -14,7 +14,7 @@ It means this command isn't in the command_queue_, we can just ignore it.
  1 file changed, 4 insertions(+)
 
 diff --git a/system/gd/hci/hci_layer.cc b/system/gd/hci/hci_layer.cc
-index fe5fa33d18..3fd3c974d0 100644
+index 9c411fb31f..803ab382b1 100644
 --- a/system/gd/hci/hci_layer.cc
 +++ b/system/gd/hci/hci_layer.cc
 @@ -402,6 +402,10 @@ struct HciLayer::impl {
