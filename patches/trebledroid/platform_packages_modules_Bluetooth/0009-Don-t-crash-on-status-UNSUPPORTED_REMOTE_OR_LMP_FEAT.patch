@@ -1,7 +1,7 @@
-From 3914fb4c3581aff5b7d6197f90c648a899605259 Mon Sep 17 00:00:00 2001
+From e769e0be2bd15863a6fac6ce1eed9a2eb4730aca Mon Sep 17 00:00:00 2001
 From: DerTeufel <dominik-kassel@gmx.de>
 Date: Wed, 4 Jan 2023 21:39:37 +0100
-Subject: [PATCH 8/8] Don't crash on status:UNSUPPORTED_REMOTE_OR_LMP_FEATURE
+Subject: [PATCH 9/9] Don't crash on status:UNSUPPORTED_REMOTE_OR_LMP_FEATURE
 
 especially 'opcode:0x811 (SNIFF_SUBRATING)' which is the only one I had observed
 
@@ -11,7 +11,7 @@ Change-Id: Ic57d6631185370cbfdeafdac00801c6ca27fb755
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/system/gd/hci/hci_layer.cc b/system/gd/hci/hci_layer.cc
-index 3fd3c974d0..6e6b218b54 100644
+index 803ab382b1..f5d0847099 100644
 --- a/system/gd/hci/hci_layer.cc
 +++ b/system/gd/hci/hci_layer.cc
 @@ -209,8 +209,10 @@ struct HciLayer::impl {
