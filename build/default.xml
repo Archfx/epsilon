@@ -31,4 +31,6 @@
   <project name="Archfx/duoBoot" path="vendor/surface" remote="github" revision="main" />
   <project name="Archfx/duoPosture" path="packages/thain/services/PostureProcessor" remote="github" revision="main"/>
  
+  <!-- volte-fix -->
+  <project name="khrj/volte-fix" path="volte-fix" remote="github" revision="master" />
 </manifest>
