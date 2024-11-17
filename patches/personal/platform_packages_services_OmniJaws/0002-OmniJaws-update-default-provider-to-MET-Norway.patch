@@ -1,7 +1,7 @@
 From 792b17f180e40713f348148a7853ef69c82d7019 Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Mon, 9 Sep 2024 11:45:41 +0100
-Subject: [PATCH 3/3] OmniJaws: update default provider to MET Norway
+Subject: [PATCH 2/2] OmniJaws: update default provider to MET Norway
 
 ---
  app/src/main/java/org/omnirom/omnijaws/Config.java           | 4 ++--
