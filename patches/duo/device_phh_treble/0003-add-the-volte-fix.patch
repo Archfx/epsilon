@@ -5,7 +5,7 @@ Subject: [PATCH] add the volte-fix patch
 
 ---
  aosp.mk        | 2 +-
- base.mk        | 5 +++++
+ base.mk        | 5 ++++++
  phh-on-data.sh | 9 ++++++++-
  3 files changed, 14 insertions(+), 2 deletions(-)
 
@@ -29,8 +29,9 @@ index f4d5963..35a1b79 100644
  
 +# Privapp-permissions for volte-fix
 +PRODUCT_COPY_FILES += \
-+	volte-fix/xmls/*:/system/etc/permissions/ \
-+	volte-fix/64bit/ims:/system/priv-app/
++	volte-fix/xmls/qti.xml:/system/etc/permissions/qti.xml \
++	volte-fix/64bit/ims/lib/arm64/libimscamera_jni.so:/system/priv-app/ims/lib/libimscamera_jni.so \
++	volte-fix/64bit/ims/lib/arm64/libimsmedia_jni.so:/system/priv-app/ims/lib/arm64/libimsmedia_jni.so \
 +
  # Remote debugging
  PRODUCT_COPY_FILES += \
