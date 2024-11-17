@@ -1,0 +1,32 @@
+From bf2ee371ee94f496a7969b01d5ee09a546bd92bc Mon Sep 17 00:00:00 2001
+From: Peter Cai <peter@typeblog.net>
+Date: Wed, 24 Aug 2022 10:41:29 -0400
+Subject: [PATCH 2/9] gd: hci: Ignore unexpected status events
+
+For some reason, on some old devices, the controller will report a
+remote to support SNIFF_SUBRATING even when it does not. Just ignore the
+error here (the status event comes from the failure response).
+
+Co-authored-by: Alberto Ponces <ponces26@gmail.com>
+Change-Id: Ifb9a65fd77f21d15a8dc1ced9240194d38218ef6
+---
+ system/gd/hci/hci_layer.cc | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/system/gd/hci/hci_layer.cc b/system/gd/hci/hci_layer.cc
+index fe5fa33d18..ccbb36221d 100644
+--- a/system/gd/hci/hci_layer.cc
++++ b/system/gd/hci/hci_layer.cc
+@@ -209,8 +209,7 @@ struct HciLayer::impl {
+ 
+     bool is_vendor_specific = static_cast<int>(op_code) & (0x3f << 10);
+     CommandStatusView status_view = CommandStatusView::Create(event);
+-    if (is_vendor_specific && (is_status && !command_queue_.front().waiting_for_status_) &&
+-        (status_view.IsValid() && status_view.GetStatus() == ErrorCode::UNKNOWN_HCI_COMMAND)) {
++    if (command_queue_.front().waiting_for_status_ != is_status) {
+       // If this is a command status of a vendor specific command, and command complete is expected,
+       // we can't treat this as hard failure since we have no way of probing this lack of support at
+       // earlier time. Instead we let the command complete handler handle a empty Command Complete
+-- 
+2.34.1
+
