@@ -14,7 +14,6 @@
 
   <!-- ponces -->
   <project name="ponces/android_packages_apps_ParanoidSense" path="packages/apps/ParanoidSense" remote="github" revision="vauxite" />
-  <project name="ponces/android_packages_services_OmniJaws" path="packages/services/OmniJaws" remote="github" revision="15.0" />
   <project name="ponces/treble_adapter" path="treble_adapter" remote="github" revision="master" />
   <!-- <project name="ponces/packages_apps_ParanoidSense" path="packages/apps/ParanoidSense" remote="github" revision="uvite" /> -->
   <project name="ponces/vendor_gapps" path="vendor/gapps" remote="gitlab" revision="android-15.0" clone-depth="1" />
@@ -33,4 +32,7 @@
  
   <!-- volte-fix -->
   <project name="khrj/volte-fix" path="volte-fix" remote="github" revision="master" />
+
+  <!-- crDroid -->
+  <project name="crdroidandroid/android_packages_services_OmniJaws" path="packages/services/OmniJaws" remote="github" revision="15.0" />
 </manifest>
