@@ -1,8 +1,8 @@
-From 00b34966add1c1a4ccb43591625f6aa0c3e57441 Mon Sep 17 00:00:00 2001
+From 86f1a57a505499c7a863e0574304762d8b9b0c4a Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Thu, 9 Nov 2023 12:33:55 +0100
-Subject: [PATCH 1/9] gmscompat: Change attestation and instrumentation to pass
- SafetyNet and Play Integrity API.
+Subject: [PATCH 01/10] gmscompat: Change attestation and instrumentation to
+ pass SafetyNet and Play Integrity API.
 
 Original work by @kdrag0n.
 Updated by many people like @dereference23, @Stallix, @dyneteve, @neobuddy89 and @jhenrique09.
@@ -46,7 +46,7 @@ index db216b1af974..9445bc1b581a 100644
  
 diff --git a/core/java/com/android/internal/gmscompat/AttestationHooks.java b/core/java/com/android/internal/gmscompat/AttestationHooks.java
 new file mode 100644
-index 000000000000..99e61ae74007
+index 000000000000..288b51bfd738
 --- /dev/null
 +++ b/core/java/com/android/internal/gmscompat/AttestationHooks.java
 @@ -0,0 +1,93 @@
