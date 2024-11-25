@@ -1,0 +1,226 @@
+From 7bcc51872a42c38c5b27d10c9b5f4ecbf7f416ab Mon Sep 17 00:00:00 2001
+From: Archfx <cybx@live.com>
+Date: Sun, 24 Nov 2024 21:43:57 -0500
+Subject: [PATCH] DUO-DE Tablet mode native UI support
+
+---
+ .../util/TriggerSwipeUpTouchTracker.java      |  2 +-
+ src/com/android/launcher3/DeviceProfile.java  | 14 ++++-
+ .../touch/WorkspaceTouchListener.java         | 57 +++++++++++++++++++
+ .../util/ActivityOptionsWrapper.java          | 24 +++++---
+ 4 files changed, 88 insertions(+), 9 deletions(-)
+
+diff --git a/quickstep/src/com/android/quickstep/util/TriggerSwipeUpTouchTracker.java b/quickstep/src/com/android/quickstep/util/TriggerSwipeUpTouchTracker.java
+index 671b2eabae..7d784103be 100644
+--- a/quickstep/src/com/android/quickstep/util/TriggerSwipeUpTouchTracker.java
++++ b/quickstep/src/com/android/quickstep/util/TriggerSwipeUpTouchTracker.java
+@@ -88,7 +88,7 @@ public class TriggerSwipeUpTouchTracker {
+         mVelocityTracker.addMovement(ev);
+         switch (ev.getActionMasked()) {
+             case ACTION_DOWN: {
+-                mDownPos.set(ev.getX(), ev.getY());
++                mDownPos.set(ev.getX(), ev.getY());            
+                 break;
+             }
+             case ACTION_MOVE: {
+diff --git a/src/com/android/launcher3/DeviceProfile.java b/src/com/android/launcher3/DeviceProfile.java
+index 4b8017414b..2a7845d3a6 100644
+--- a/src/com/android/launcher3/DeviceProfile.java
++++ b/src/com/android/launcher3/DeviceProfile.java
+@@ -76,6 +76,8 @@ import java.io.PrintWriter;
+ import java.util.Locale;
+ import java.util.function.Consumer;
+ 
++import com.android.quickstep.util.TriggerSwipeUpTouchTracker;
++
+ @SuppressLint("NewApi")
+ public class DeviceProfile {
+ 
+@@ -291,6 +293,7 @@ public class DeviceProfile {
+     public int dropTargetGapPx;
+     public int dropTargetButtonWorkspaceEdgeGapPx;
+ 
++
+     // Insets
+     private final Rect mInsets = new Rect();
+     public final Rect workspacePadding = new Rect();
+@@ -320,6 +323,11 @@ public class DeviceProfile {
+     // DragController
+     public int flingToDeleteThresholdVelocity;
+ 
++
++    //Archfx/Duo-De settings
++
++    public boolean initialX = false; // false: left, true:right
++
+     /** TODO: Once we fully migrate to staged split, remove "isMultiWindowMode" */
+     DeviceProfile(Context context, InvariantDeviceProfile inv, Info info, WindowBounds windowBounds,
+             SparseArray<DotRenderer> dotRendererCache, boolean isMultiWindowMode,
+@@ -766,8 +774,12 @@ public class DeviceProfile {
+ 
+         if (isTablet) {
+             float allAppsHeightScale = 0.7f;
++            if (widthPx > 2500) {
++                allAppsHeightScale = 0.95f;
++            }
++
+             allAppsPadding.top = (heightPx > 1400) ? ((int) Math.round(heightPx * (1 - allAppsHeightScale))) : mInsets.top;
+-            allAppsShiftRange = (heightPx > 1400) ? ((int) Math.round(heightPx * (allAppsHeightScale))) : heightPx;
++            allAppsShiftRange = (heightPx > 1400) ? ((int) Math.round(heightPx * (allAppsHeightScale))) : heightPx;        
+         } else {
+             allAppsPadding.top = 0;
+             allAppsShiftRange =
+diff --git a/src/com/android/launcher3/touch/WorkspaceTouchListener.java b/src/com/android/launcher3/touch/WorkspaceTouchListener.java
+index 0ff10c26a5..826c076c88 100644
+--- a/src/com/android/launcher3/touch/WorkspaceTouchListener.java
++++ b/src/com/android/launcher3/touch/WorkspaceTouchListener.java
+@@ -47,6 +47,17 @@ import com.android.launcher3.logger.LauncherAtom;
+ import com.android.launcher3.testing.TestLogging;
+ import com.android.launcher3.testing.shared.TestProtocol;
+ import com.android.launcher3.util.TouchUtil;
++import com.android.launcher3.allapps.ActivityAllAppsContainerView;
++import com.android.launcher3.R;
++import android.widget.FrameLayout;
++import android.view.ViewGroup;
++import android.view.Gravity;
++import android.content.Context;
++import android.view.WindowManager;
++
++import android.util.DisplayMetrics;
++import android.widget.FrameLayout;
++import android.widget.RelativeLayout;
+ 
+ /**
+  * Helper class to handle touch on empty space in workspace and show options popup on long press
+@@ -92,6 +103,9 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
+         if (action == ACTION_DOWN) {
+             // Check if we can handle long press.
+             boolean handleLongPress = canHandleLongPress();
++            boolean isXTouch = (ev.getX() < 1344) ? false : true;
++            mLauncher.getDeviceProfile().initialX = isXTouch;
++            alignAllApps(isXTouch);
+ 
+             if (handleLongPress) {
+                 // Check if the event is not near the edges
+@@ -187,6 +201,49 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
+                 && mLauncher.isInState(NORMAL);
+     }
+ 
++    private void alignAllApps(boolean initialX) {
++
++        WindowManager windowManager = (WindowManager) mLauncher.getSystemService(Context.WINDOW_SERVICE);
++        DisplayMetrics displayMetrics = new DisplayMetrics();
++        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
++        int screenWidth = displayMetrics.widthPixels;
++        
++        ActivityAllAppsContainerView<Launcher> mAppsView = mLauncher.findViewById(R.id.apps_view);
++        View mBottomSheetBackground = mLauncher.findViewById(R.id.bottom_sheet_background);
++        // Adjust the layout parameters of mBottomSheetBackground based on the left margin        
++        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mAppsView.getLayoutParams();
++        RelativeLayout.LayoutParams backgroundParams = (RelativeLayout.LayoutParams) mBottomSheetBackground.getLayoutParams();
++
++        if (screenWidth>2500) {
++            // Set the desired width and height dynamically
++            params.width = (screenWidth / 2)-5; // Half of the screen width
++            // Align to right or left based on initialX
++            if (initialX) {
++                params.gravity = Gravity.END;
++                backgroundParams.leftMargin = (screenWidth / 2) + 5;
++                backgroundParams.rightMargin = -(screenWidth / 2);
++            } else {
++                params.gravity = Gravity.START;
++                backgroundParams.leftMargin = 0;
++                backgroundParams.rightMargin = 0;
++            }
++
++            int topPadding = mAppsView.getPaddingTop();
++            int bottomPadding = mAppsView.getPaddingBottom();
++            mAppsView.setPadding(10, topPadding, 10, bottomPadding);
++        }
++        else {
++            params.width = ViewGroup.LayoutParams.MATCH_PARENT; // Full width
++            params.height = ViewGroup.LayoutParams.MATCH_PARENT; // Full height
++            backgroundParams.leftMargin = 0;
++            backgroundParams.rightMargin = 0;
++        }
++
++        // Apply the new layout parameters to the view
++        mAppsView.setLayoutParams(params);
++        mBottomSheetBackground.setLayoutParams(backgroundParams);
++    }
++
+     private void cancelLongPress() {
+         mLongPressState = STATE_CANCELLED;
+     }
+diff --git a/src/com/android/launcher3/util/ActivityOptionsWrapper.java b/src/com/android/launcher3/util/ActivityOptionsWrapper.java
+index 3a80d5b8a7..e68c6fe9d1 100644
+--- a/src/com/android/launcher3/util/ActivityOptionsWrapper.java
++++ b/src/com/android/launcher3/util/ActivityOptionsWrapper.java
+@@ -15,6 +15,7 @@
+  */
+ package com.android.launcher3.util;
+ 
++import static com.android.launcher3.LauncherState.NORMAL;
+ 
+ import android.app.ActivityOptions;
+ import android.os.Bundle;
+@@ -28,6 +29,9 @@ import android.content.SharedPreferences;
+ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+ import com.android.launcher3.DeviceProfile;
+ import com.android.launcher3.views.ActivityContext;
++import com.android.launcher3.Launcher;
++
++import com.android.quickstep.util.TriggerSwipeUpTouchTracker;
+ 
+ /**
+  * A wrapper around {@link ActivityOptions} to allow custom functionality in launcher
+@@ -50,19 +54,19 @@ public class ActivityOptionsWrapper {
+         
+         String mode = "freeform";
+         int windowMode;
+-        Rect rect = new Rect(
+-            100,
+-            120,
+-            1244,
+-            1600);
++        Boolean isTabletMode = ActivityContext.lookupContext(this.context).getDeviceProfile().isTablet;
++        int widthPx = ActivityContext.lookupContext(this.context).getDeviceProfile().widthPx;
++        Boolean initialX = ActivityContext.lookupContext(this.context).getDeviceProfile().initialX;
++        
++        int xValue = (initialX == true && isTabletMode && widthPx>2500) ? 1394 : 50;
++        Rect rect = new Rect(xValue, 120, 1244 + xValue , 1600);
++
+         
+         if (this.context != null) {
+             SharedPreferences pref = this.context.getSharedPreferences(LauncherFiles.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+             
+             Boolean freeformTablet = pref.getBoolean("allow_freeform_mode_tablet", true);
+             Boolean freeformPhone = pref.getBoolean("allow_freeform_mode_phone", false);
+-            
+-            Boolean isTabletMode = ActivityContext.lookupContext(this.context).getDeviceProfile().isTablet;
+ 
+             if (!isTabletMode) {
+                 if (freeformPhone) mode = "freeform";
+@@ -78,6 +82,11 @@ public class ActivityOptionsWrapper {
+         } else {
+             windowMode = (Build.VERSION.SDK_INT >= 28) ? 5 : 2;
+             options.setLaunchBounds(rect);
++
++            if (context instanceof Launcher) { 
++                Launcher launcher = (Launcher) context;
++                launcher.getStateManager().goToState(NORMAL);
++            }
+         }
+                 
+         String methodName = (Build.VERSION.SDK_INT >= 28) ? "setLaunchWindowingMode" : "setLaunchStackId";
+@@ -88,6 +97,7 @@ public class ActivityOptionsWrapper {
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
++
+                 
+         return options.toBundle();
+     }
+-- 
+2.34.1
+
