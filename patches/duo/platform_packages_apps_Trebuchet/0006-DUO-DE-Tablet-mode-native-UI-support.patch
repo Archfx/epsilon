@@ -4,25 +4,11 @@ Date: Sun, 24 Nov 2024 21:43:57 -0500
 Subject: [PATCH] DUO-DE Tablet mode native UI support
 
 ---
- .../util/TriggerSwipeUpTouchTracker.java      |  2 +-
  src/com/android/launcher3/DeviceProfile.java  | 14 ++++-
  .../touch/WorkspaceTouchListener.java         | 57 +++++++++++++++++++
  .../util/ActivityOptionsWrapper.java          | 24 +++++---
  4 files changed, 88 insertions(+), 9 deletions(-)
 
-diff --git a/quickstep/src/com/android/quickstep/util/TriggerSwipeUpTouchTracker.java b/quickstep/src/com/android/quickstep/util/TriggerSwipeUpTouchTracker.java
-index 671b2eabae..7d784103be 100644
---- a/quickstep/src/com/android/quickstep/util/TriggerSwipeUpTouchTracker.java
-+++ b/quickstep/src/com/android/quickstep/util/TriggerSwipeUpTouchTracker.java
-@@ -88,7 +88,7 @@ public class TriggerSwipeUpTouchTracker {
-         mVelocityTracker.addMovement(ev);
-         switch (ev.getActionMasked()) {
-             case ACTION_DOWN: {
--                mDownPos.set(ev.getX(), ev.getY());
-+                mDownPos.set(ev.getX(), ev.getY());            
-                 break;
-             }
-             case ACTION_MOVE: {
 diff --git a/src/com/android/launcher3/DeviceProfile.java b/src/com/android/launcher3/DeviceProfile.java
 index 4b8017414b..2a7845d3a6 100644
 --- a/src/com/android/launcher3/DeviceProfile.java
