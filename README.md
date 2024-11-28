@@ -107,8 +107,8 @@ fastboot reboot
 > - Enable non-resizable in multi-window
 
 6. Once you flash a **duo-de** version using the above steps, subsequent updates will be received using OTA. You can check updates using ``settings -> system -> system updates``.
-
-7. If you wish to see future updates and feature improvements, consider _starring_ (★) the project—it motivates the development of new releases!
+   > If prompted to select the default updater, select `PHH treble updater` for always.
+8. If you wish to see future updates and feature improvements, consider _starring_ (★) the project—it motivates the development of new releases!
 
 
 ## Issues
