@@ -108,6 +108,7 @@ fastboot reboot
 
 6. Once you flash a **duo-de** version using the above steps, subsequent updates will be received using OTA. You can check updates using ``settings -> system -> system updates``.
    > If prompted to select the default updater, select `PHH treble updater` for always.
+7. Enable the ideal `Treble Settings` as outlined [here](https://github.com/Archfx/duo-de/discussions/81). 
 8. If you wish to see future updates and feature improvements, consider _starring_ (★) the project—it motivates the development of new releases!
 
 
