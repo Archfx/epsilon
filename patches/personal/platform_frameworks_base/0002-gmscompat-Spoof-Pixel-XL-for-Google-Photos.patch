@@ -1,15 +1,15 @@
-From bb8e4025d02627f63f703a46e9778efb30aecca1 Mon Sep 17 00:00:00 2001
+From 9d3693e86df969df8dc8d0f0fc3666b894d046a4 Mon Sep 17 00:00:00 2001
 From: vladsendrix <83285656+vladsendrix@users.noreply.github.com>
 Date: Fri, 31 Dec 2021 03:18:04 +0100
 Subject: [PATCH 02/10] gmscompat: Spoof Pixel XL for Google Photos
 
 Change-Id: I905e40625b07ebf500cbb3ce1deadedee2e624c5
 ---
- .../internal/gmscompat/AttestationHooks.java       | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ .../android/internal/gmscompat/AttestationHooks.java | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/core/java/com/android/internal/gmscompat/AttestationHooks.java b/core/java/com/android/internal/gmscompat/AttestationHooks.java
-index 288b51bfd738..1eff5842e224 100644
+index 0841fe83c389..f90883e655c0 100644
 --- a/core/java/com/android/internal/gmscompat/AttestationHooks.java
 +++ b/core/java/com/android/internal/gmscompat/AttestationHooks.java
 @@ -31,6 +31,7 @@ public final class AttestationHooks {
@@ -20,7 +20,7 @@ index 288b51bfd738..1eff5842e224 100644
      private static final String PROCESS_UNSTABLE = "com.google.android.gms.unstable";
  
      private static volatile boolean sIsGms = false;
-@@ -66,6 +67,15 @@ public final class AttestationHooks {
+@@ -64,6 +65,15 @@ public final class AttestationHooks {
          setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "32");
      }
  
@@ -36,17 +36,15 @@ index 288b51bfd738..1eff5842e224 100644
      public static void initApplicationBeforeOnCreate(Application app) {
          if (PACKAGE_GMS.equals(app.getPackageName()) &&
                  PROCESS_UNSTABLE.equals(Application.getProcessName())) {
-@@ -76,6 +86,10 @@ public final class AttestationHooks {
-         if (PACKAGE_FINSKY.equals(app.getPackageName())) {
+@@ -71,6 +81,8 @@ public final class AttestationHooks {
+             spoofBuildGms();
+         } else if (PACKAGE_FINSKY.equals(app.getPackageName())) {
              sIsFinsky = true;
-         }
-+
-+        if (PACKAGE_PHOTOS.equals(app.getPackageName())) {
++        } else if (PACKAGE_PHOTOS.equals(app.getPackageName())) {
 +            spoofGooglePhotos();
-+        }
+         }
      }
  
-     private static boolean isCallerSafetyNet() {
 -- 
 2.34.1
 
