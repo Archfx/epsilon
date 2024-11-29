@@ -1,31 +1,31 @@
-From 8dea3ec1361823a2d52e76dd5591b321bd8778a9 Mon Sep 17 00:00:00 2001
+From b5cda592dc9f89592b3f433f2ccd48d0df247e2c Mon Sep 17 00:00:00 2001
 From: Archfx <cybx@live.com>
-Date: Fri, 29 Nov 2024 18:15:44 -0500
-Subject: [PATCH] Fix add drawer margins during rotation
+Date: Fri, 29 Nov 2024 18:39:16 -0500
+Subject: [PATCH] Fix app drawer margins during rotation
 
 ---
- .../allapps/AllAppsTransitionController.java  | 24 ++++++++++++++++++
- 1 files changed, 24 insertions(+)
+ .../allapps/AllAppsTransitionController.java  | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/src/com/android/launcher3/allapps/AllAppsTransitionController.java b/src/com/android/launcher3/allapps/AllAppsTransitionController.java
-index 1b0ad04e89..22ce5faabe 100644
+index 1b0ad04e89..d28e235384 100644
 --- a/src/com/android/launcher3/allapps/AllAppsTransitionController.java
 +++ b/src/com/android/launcher3/allapps/AllAppsTransitionController.java
-@@ -67,6 +67,14 @@ import com.android.launcher3.util.ScrollableLayoutManager;
- import com.android.launcher3.util.Themes;
+@@ -68,6 +68,13 @@ import com.android.launcher3.util.Themes;
  import com.android.launcher3.util.VibratorWrapper;
  import com.android.launcher3.views.ScrimView;
-+
+ 
 +import com.android.launcher3.allapps.ActivityAllAppsContainerView;
 +import com.android.launcher3.R;
 +import android.widget.FrameLayout;
 +import android.view.ViewGroup;
 +import android.content.Context;
 +import android.widget.RelativeLayout;
- 
++
  /**
   * Handles AllApps view transition.
-@@ -221,6 +229,23 @@ public class AllAppsTransitionController
+  * 1) Slides all apps view using direct manipulation
+@@ -221,6 +228,23 @@ public class AllAppsTransitionController
          }
  
          mIsTablet = dp.isTablet;
@@ -49,6 +49,6 @@ index 1b0ad04e89..22ce5faabe 100644
      }
  
      /**
---
+-- 
 2.34.1
 
