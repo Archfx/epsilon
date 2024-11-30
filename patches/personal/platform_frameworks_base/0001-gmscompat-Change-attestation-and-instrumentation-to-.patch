@@ -1,4 +1,4 @@
-From 86f1a57a505499c7a863e0574304762d8b9b0c4a Mon Sep 17 00:00:00 2001
+From c0a32c12185c697008ac982a2c337b2ffe0d16bd Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Thu, 9 Nov 2023 12:33:55 +0100
 Subject: [PATCH 01/10] gmscompat: Change attestation and instrumentation to
@@ -10,9 +10,9 @@ Adapted by @iceows for his own AOSP A13 GSI.
 Adapted by @ponces based on the work of @chiteroman to pass newest Play Integrity API.
 ---
  core/java/android/app/Instrumentation.java    |  4 +
- .../internal/gmscompat/AttestationHooks.java  | 93 +++++++++++++++++++
+ .../internal/gmscompat/AttestationHooks.java  | 89 +++++++++++++++++++
  .../keystore2/AndroidKeyStoreSpi.java         |  3 +
- 3 files changed, 100 insertions(+)
+ 3 files changed, 96 insertions(+)
  create mode 100644 core/java/com/android/internal/gmscompat/AttestationHooks.java
 
 diff --git a/core/java/android/app/Instrumentation.java b/core/java/android/app/Instrumentation.java
@@ -46,10 +46,10 @@ index db216b1af974..9445bc1b581a 100644
  
 diff --git a/core/java/com/android/internal/gmscompat/AttestationHooks.java b/core/java/com/android/internal/gmscompat/AttestationHooks.java
 new file mode 100644
-index 000000000000..288b51bfd738
+index 000000000000..0841fe83c389
 --- /dev/null
 +++ b/core/java/com/android/internal/gmscompat/AttestationHooks.java
-@@ -0,0 +1,93 @@
+@@ -0,0 +1,89 @@
 +/*
 + * Copyright (C) 2021 The Android Open Source Project
 + *
@@ -88,8 +88,6 @@ index 000000000000..288b51bfd738
 +    private static volatile boolean sIsGms = false;
 +    private static volatile boolean sIsFinsky = false;
 +
-+    private AttestationHooks() { }
-+
 +    private static void setPropValue(String key, String value) {
 +        try {
 +            Log.i(TAG, "Spoofing " + key + " with value \"" + value + "\"");
@@ -113,8 +111,8 @@ index 000000000000..288b51bfd738
 +        setPropValue("MANUFACTURER", "Google");
 +        setPropValue("BRAND", "google");
 +        setPropValue("MODEL", "Pixel 9 Pro Fold");
-+        setPropValue("FINGERPRINT", "google/comet_beta/comet:15/AP41.240925.009/12534705:user/release-keys");
-+        setPropValue("VERSION.SECURITY_PATCH", "2024-10-05");
++        setPropValue("FINGERPRINT", "google/comet_beta/comet:Baklava/BP21.241018.009/12628839:user/release-keys");
++        setPropValue("VERSION.SECURITY_PATCH", "2024-11-05");
 +        setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "32");
 +    }
 +
@@ -123,9 +121,7 @@ index 000000000000..288b51bfd738
 +                PROCESS_UNSTABLE.equals(Application.getProcessName())) {
 +            sIsGms = true;
 +            spoofBuildGms();
-+        }
-+
-+        if (PACKAGE_FINSKY.equals(app.getPackageName())) {
++        } else if (PACKAGE_FINSKY.equals(app.getPackageName())) {
 +            sIsFinsky = true;
 +        }
 +    }

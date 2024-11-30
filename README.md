@@ -12,7 +12,7 @@ Before you proceed, please take a moment to read [this announcement](https://git
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/archfx/duo-de/sync.yml?style=for-the-badge&label=TrebleDroid%20Sync)
 
 <p align="center">
-<img src="images/duo-15.gif" alt="drawing" style="width:640px;"/> </p>
+<img src="images/duo-de-main.gif" alt="drawing" style="width:640px;"/> </p>
 
 ## Posture Engine and Dual Modes
 
@@ -107,8 +107,9 @@ fastboot reboot
 > - Enable non-resizable in multi-window
 
 6. Once you flash a **duo-de** version using the above steps, subsequent updates will be received using OTA. You can check updates using ``settings -> system -> system updates``.
-
-7. If you wish to see future updates and feature improvements, consider _starring_ (★) the project—it motivates the development of new releases!
+   > If prompted to select the default updater, select `PHH treble updater` for always.
+7. Enable the ideal `Treble Settings` as outlined [here](https://github.com/Archfx/duo-de/discussions/81). 
+8. If you wish to see future updates and feature improvements, consider _starring_ (★) the project—it motivates the development of new releases!
 
 
 ## Issues

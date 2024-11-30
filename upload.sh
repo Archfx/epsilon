@@ -14,6 +14,7 @@ BL=$PWD/treble_aosp
 BD=$PWD/duo-de/builds
 TAG="$(date +v%Y.%m.%d)"
 GUSER="archfx"
+# GREPO="duoPosture"
 GREPO="duo-de"
 
 SKIPOTA=false
@@ -50,7 +51,7 @@ START=$(date +%s)
 
 createRelease
 uploadAssets
-# [ "$SKIPOTA" = false ] && updateOta
+[ "$SKIPOTA" = false ] && updateOta
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))

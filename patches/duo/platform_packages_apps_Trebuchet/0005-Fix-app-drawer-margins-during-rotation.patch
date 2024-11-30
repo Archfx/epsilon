@@ -1,0 +1,54 @@
+From b5cda592dc9f89592b3f433f2ccd48d0df247e2c Mon Sep 17 00:00:00 2001
+From: Archfx <cybx@live.com>
+Date: Fri, 29 Nov 2024 18:39:16 -0500
+Subject: [PATCH] Fix app drawer margins during rotation
+
+---
+ .../allapps/AllAppsTransitionController.java  | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/src/com/android/launcher3/allapps/AllAppsTransitionController.java b/src/com/android/launcher3/allapps/AllAppsTransitionController.java
+index 1b0ad04e89..d28e235384 100644
+--- a/src/com/android/launcher3/allapps/AllAppsTransitionController.java
++++ b/src/com/android/launcher3/allapps/AllAppsTransitionController.java
+@@ -68,6 +68,13 @@ import com.android.launcher3.util.Themes;
+ import com.android.launcher3.util.VibratorWrapper;
+ import com.android.launcher3.views.ScrimView;
+ 
++import com.android.launcher3.allapps.ActivityAllAppsContainerView;
++import com.android.launcher3.R;
++import android.widget.FrameLayout;
++import android.view.ViewGroup;
++import android.content.Context;
++import android.widget.RelativeLayout;
++
+ /**
+  * Handles AllApps view transition.
+  * 1) Slides all apps view using direct manipulation
+@@ -221,6 +228,23 @@ public class AllAppsTransitionController
+         }
+ 
+         mIsTablet = dp.isTablet;
++        if (mLauncher.getStateManager().getState() == ALL_APPS) {
++            resetAllAppsMargins();
++        }
++    }
++
++    private void resetAllAppsMargins() {
++        
++        ActivityAllAppsContainerView<Launcher> mAppsView = mLauncher.findViewById(R.id.apps_view);
++        View mBottomSheetBackground = mLauncher.findViewById(R.id.bottom_sheet_background);
++        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mAppsView.getLayoutParams();
++        RelativeLayout.LayoutParams backgroundParams = (RelativeLayout.LayoutParams) mBottomSheetBackground.getLayoutParams();
++        params.width = ViewGroup.LayoutParams.MATCH_PARENT; // Full width
++        params.height = ViewGroup.LayoutParams.MATCH_PARENT; // Full height
++        backgroundParams.leftMargin = 0;
++        backgroundParams.rightMargin = 0;
++        mAppsView.setLayoutParams(params);
++        mBottomSheetBackground.setLayoutParams(backgroundParams);
+     }
+ 
+     /**
+-- 
+2.34.1
+
