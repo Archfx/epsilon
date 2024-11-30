@@ -1,0 +1,92 @@
+From fd1226255d5d704e0f28369dfd32bea46b199d6c Mon Sep 17 00:00:00 2001
+From: ethan <ethangoh98@gmail.com>
+Date: Sat, 30 Nov 2024 21:34:10 +1100
+Subject: [PATCH 1/1] Adding settings option for pen wireless charging in
+ Treble_app
+
+---
+ app/src/main/java/me/phh/treble/app/Duo.kt    | 21 +++++++++++++++++++
+ .../java/me/phh/treble/app/DuoSettings.kt     |  1 +
+ app/src/main/res/xml/pref_duo.xml             |  5 +++++
+ 3 files changed, 27 insertions(+)
+
+diff --git a/app/src/main/java/me/phh/treble/app/Duo.kt b/app/src/main/java/me/phh/treble/app/Duo.kt
+index 3810319..ba0fea1 100644
+--- a/app/src/main/java/me/phh/treble/app/Duo.kt
++++ b/app/src/main/java/me/phh/treble/app/Duo.kt
+@@ -4,10 +4,12 @@ import android.content.Context
+ import android.content.SharedPreferences
+ import android.preference.PreferenceManager
+ import android.util.Log
++import android.content.Intent
+ import java.io.File
+ import java.lang.Exception
+ 
+ object Duo: EntryStartup {
++    var ctxt: Context? = null
+     val spListener = SharedPreferences.OnSharedPreferenceChangeListener { sp, key ->
+         when(key) {
+             DuoSettings.disableHingeGap -> {
+@@ -42,6 +44,23 @@ object Duo: EntryStartup {
+                 }
+ 
+             }
++            
++            DuoSettings.wirelessPenCharging -> {
++                /* 
++                    Send an intent broadcast to the Posture Processor app,
++                    which should receive and consume this event. UNLIKE how the device
++                    expects 0 = ON, this boolean is "1" for ON, "0" for OFF.
++                */  
++                val b = sp.getBoolean(key, false)
++                val value = if(b) "1" else "0"
++                Misc.safeSetprop("persist.sys.phh.duo.wireless_pen_charging", value)
++
++                Intent().also { intent -> 
++                    intent.setAction("com.thain.duo.broadcast.SET_WIRELESS_CHARGING_STATE")
++                    intent.putExtra("data", value) // 1 for ON, 0 for OFF.
++                    ctxt?.sendBroadcast(intent)
++                }
++            }
+         }
+     }
+ 
+@@ -50,5 +69,7 @@ object Duo: EntryStartup {
+         Log.d("PHH", "Starting Duo service")
+         val sp = PreferenceManager.getDefaultSharedPreferences(ctxt)
+         sp.registerOnSharedPreferenceChangeListener(spListener)
++
++        this.ctxt = ctxt.applicationContext
+     }
+ }
+\ No newline at end of file
+diff --git a/app/src/main/java/me/phh/treble/app/DuoSettings.kt b/app/src/main/java/me/phh/treble/app/DuoSettings.kt
+index cf6796e..4deb205 100644
+--- a/app/src/main/java/me/phh/treble/app/DuoSettings.kt
++++ b/app/src/main/java/me/phh/treble/app/DuoSettings.kt
+@@ -6,6 +6,7 @@ import android.os.SystemProperties
+ object DuoSettings : Settings {
+     val disableHingeGap = "key_disable_hinge_gap"
+     val lockSingleScreenPosture = "key_duo_posture_lock"
++    val wirelessPenCharging = "wireless_pen_charging"
+ 
+     override fun enabled() = (SystemProperties.get("ro.hardware", "N/A") == "surfaceduo" || SystemProperties.get("ro.hardware", "N/A") == "surfaceduo2")
+ }
+diff --git a/app/src/main/res/xml/pref_duo.xml b/app/src/main/res/xml/pref_duo.xml
+index 2c2b9b9..ed5dfad 100644
+--- a/app/src/main/res/xml/pref_duo.xml
++++ b/app/src/main/res/xml/pref_duo.xml
+@@ -12,4 +12,9 @@
+         android:key="key_duo_posture_lock"
+ 		android:title="Default Screen in Single-screen postures" 
+     />
++    <SwitchPreference
++        android:defaultValue="false"
++        android:key="wireless_pen_charging"
++        android:title="Enable Surface Slim Pen Wireless charging"
++        android:summary="Allows pen charging when pen cases is attached. Only works on Surface Duo 2. May drain more battery." />
+ </PreferenceScreen>
+\ No newline at end of file
+-- 
+2.43.0
+
