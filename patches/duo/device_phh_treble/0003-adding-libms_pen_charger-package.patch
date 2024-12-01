@@ -1,0 +1,26 @@
+From d79f4433506dfa0d3a12dd9250894a5cc33fd412 Mon Sep 17 00:00:00 2001
+From: ethan <ethangoh98@gmail.com>
+Date: Mon, 2 Dec 2024 00:55:32 +1100
+Subject: [PATCH] adding libms_pen_charger package
+
+---
+ base.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/base.mk b/base.mk
+index f4d5963..73e5c97 100644
+--- a/base.mk
++++ b/base.mk
+@@ -292,6 +292,7 @@ PRODUCT_PACKAGES += \
+ 	SurfaceDuo2PostureProcessorOverlay \
+ 	SurfaceDuoSettingsOverlay \
+ 	SurfaceDuoSettingsIconsOverlay \
+-	SurfaceDuoAppHintingOverlay
++	SurfaceDuoAppHintingOverlay \
++	libms_pen_charger
+ 
+ $(call inherit-product-if-exists, vendor/surface/prebuilts/bootanimation/bootanimation.mk)
+\ No newline at end of file
+-- 
+2.43.0
+
