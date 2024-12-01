@@ -1,0 +1,54 @@
+From 10b4f27cdb462a29888b97ef53713dcb39cb8c86 Mon Sep 17 00:00:00 2001
+From: Pierre-Hugues Husson <phh@phh.me>
+Date: Fri, 29 Nov 2024 20:11:52 -0500
+Subject: [PATCH 25/25] Tell Unihertz/Agold we are not a GSI. Fixes aux cam on
+ Jelly Max
+
+---
+ services/camera/libcameraservice/Android.bp            |  1 +
+ .../libcameraservice/common/aidl/AidlProviderInfo.cpp  | 10 ++++++++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/services/camera/libcameraservice/Android.bp b/services/camera/libcameraservice/Android.bp
+index 5e7a9cf51a..fb2a880953 100644
+--- a/services/camera/libcameraservice/Android.bp
++++ b/services/camera/libcameraservice/Android.bp
+@@ -112,6 +112,7 @@ cc_defaults {
+         "android.hardware.camera.provider@2.6",
+         "android.hardware.camera.provider@2.7",
+         "android.hardware.camera.provider-V3-ndk",
++        "vendor.mediatek.hardware.agolddaemon-V1-ndk",
+         "vendor.samsung.hardware.camera.provider@3.0",
+         "vendor.samsung.hardware.camera.provider@4.0",
+         "vendor.samsung.hardware.camera.provider-V1-ndk",
+diff --git a/services/camera/libcameraservice/common/aidl/AidlProviderInfo.cpp b/services/camera/libcameraservice/common/aidl/AidlProviderInfo.cpp
+index d877bca05f..07da29b770 100644
+--- a/services/camera/libcameraservice/common/aidl/AidlProviderInfo.cpp
++++ b/services/camera/libcameraservice/common/aidl/AidlProviderInfo.cpp
+@@ -34,6 +34,7 @@
+ #include <utils/Trace.h>
+ 
+ #include <aidl/vendor/samsung/hardware/camera/provider/ISehCameraProvider.h>
++#include <aidl/vendor/mediatek/hardware/agolddaemon/IAgoldDaemon.h>
+ 
+ namespace {
+ const bool kEnableLazyHal(property_get_bool("ro.camera.enableLazyHal", false));
+@@ -160,6 +161,15 @@ status_t AidlProviderInfo::initializeAidlProvider(
+             __FUNCTION__, mProviderName.c_str(), mDeviceState);
+     notifyDeviceStateChange(currentDeviceState);
+ 
++    if (true) {
++        auto svc = aidl::vendor::mediatek::hardware::agolddaemon::IAgoldDaemon::fromBinder(
++                ndk::SpAIBinder(AServiceManager_checkService("vendor.mediatek.hardware.agolddaemon.IAgoldDaemon/default")));
++        if (svc != nullptr) {
++            ALOGE("Got agold aidl hal");
++            svc->setNotGsi("NotGsi");
++        }
++    }
++
+     res = setUpVendorTags();
+     if (res != OK) {
+         ALOGE("%s: Unable to set up vendor tags from provider '%s'",
+-- 
+2.34.1
+
