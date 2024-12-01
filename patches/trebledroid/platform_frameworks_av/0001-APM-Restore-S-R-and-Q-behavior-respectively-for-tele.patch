@@ -1,7 +1,7 @@
 From 9146bc66c6fc47a31fb236360f25104704faad04 Mon Sep 17 00:00:00 2001
 From: Peter Cai <peter@typeblog.net>
 Date: Thu, 18 Aug 2022 15:44:46 -0400
-Subject: [PATCH 01/24] APM: Restore S, R and Q behavior respectively for
+Subject: [PATCH 01/25] APM: Restore S, R and Q behavior respectively for
  telephony audio
 
 This conditionally reverts part of b2e5cb (T), 51c9cc (S) and afd4ce (R)
