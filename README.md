@@ -41,6 +41,10 @@ You can still launch apps in split window mode (similar to the Stock 12L) using 
 
 Both options will prompt you to open the second application to share the screen.
 
+## Surface Duo 2 Status
+
+While DUO-DE works smoothly on both [Surface Duo (Gen1)](https://support.microsoft.com/en-us/surface/surface-duo-1st-gen-features-and-specs-13f2bba9-2b5d-8802-b021-abf26539eef8) and [Surface Duo 2](https://support.microsoft.com/en-us/surface/surface-duo-2-features-01e772a5-3272-4e2f-b0cd-53b5b73e8d21), some of the extra functionalities like camera, surface pen charging of Duo2 require a lot of reverse engineering work. The Duo2 reverse engineering work is led by [Ethanol10](https://github.com/Ethanol10). Discussions related to reverse engineering Duo2 are available [here](https://github.com/Archfx/duo-de/discussions/54).
+
 ## Benchmarks
 
 These results are just for reference (for people who enjoy numbers) to compare the CPU and GPU performance of this ROM (latest build) with other operating system options. The best-case numbers of each operating system are included in the graphs.
@@ -119,7 +123,7 @@ Any issues, please
 ## Credits
 These people have helped this project in some way or another, so they should be the ones who receive all the credit:
 
-[phhusson](https://github.com/phhusson) [AndyYan](https://github.com/AndyCGYan) [eremitein](https://github.com/eremitein) [kdrag0n](https://github.com/kdrag0n) [Peter Cai](https://github.com/PeterCxy) [haridhayal11](https://github.com/haridhayal11) [sooti](https://github.com/sooti) [Iceows](https://github.com/Iceows) [ChonDoit](https://github.com/ChonDoit) [ponces](https://github.com/ponces) [thai-ng](https://github.com/thai-ng) [farmerbb](https://github.com/farmerbb)
+[phhusson](https://github.com/phhusson) [AndyYan](https://github.com/AndyCGYan) [eremitein](https://github.com/eremitein) [kdrag0n](https://github.com/kdrag0n) [Peter Cai](https://github.com/PeterCxy) [haridhayal11](https://github.com/haridhayal11) [sooti](https://github.com/sooti) [Iceows](https://github.com/Iceows) [ChonDoit](https://github.com/ChonDoit) [ponces](https://github.com/ponces) [thai-ng](https://github.com/thai-ng) [farmerbb](https://github.com/farmerbb) [Ethanol10](https://github.com/Ethanol10)
 
 
 ## Disclaimer

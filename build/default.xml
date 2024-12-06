@@ -7,7 +7,6 @@
   <project name="TrebleDroid/device_phh_treble" path="device/phh/treble" remote="github" revision="android-15.0" />
   <project name="TrebleDroid/vendor_hardware_overlay" path="vendor/hardware_overlay" remote="github" revision="pie" />
   <project name="TrebleDroid/vendor_interfaces" path="vendor/interfaces" remote="github" revision="android-15.0" />
-  <project name="TrebleDroid/treble_app" path="treble_app" remote="github" revision="master" />
   <project name="phhusson/vendor_magisk" path="vendor/magisk" remote="github" revision="android-10.0" />
   <project name="AndyCGYan/android_packages_apps_QcRilAm" path="packages/apps/QcRilAm" remote="github" revision="master" />
   <project name="platform/prebuilts/vndk/v28" path="prebuilts/vndk/v28" remote="aosp" revision="204f1bad00aaf480ba33233f7b8c2ddaa03155dd" clone-depth="1" />
@@ -27,9 +26,10 @@
 
   <!-- duo specifics -->
   <project name="Archfx/duoOverlays" path="packages/thain/rro_overlays" remote="github" revision="main" />
-  <project name="Archfx/duoBoot" path="vendor/surface" remote="github" revision="main" />
+  <project name="Archfx/duoVendor" path="vendor/surface" remote="github" revision="main" />
   <project name="Archfx/duoPosture" path="packages/thain/services/PostureProcessor" remote="github" revision="main"/>
- 
+  <project name="Archfx/duoTreble" path="treble_app" remote="github" revision="master" />
+  
   <!-- crDroid -->
   <project name="crdroidandroid/android_packages_services_OmniJaws" path="packages/services/OmniJaws" remote="github" revision="15.0" />
 </manifest>

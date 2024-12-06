@@ -1,0 +1,50 @@
+From 5e0d48eab89f624ed5e95a136b46e052dd6492ea Mon Sep 17 00:00:00 2001
+From: Archfx <cybx@live.com>
+Date: Wed, 4 Dec 2024 10:30:46 -0500
+Subject: [PATCH] duo2 touch pen charger support se-linux policy
+
+Change-Id: Iaa2c274c9f3e5673aeed530f68bbb33caeeac8c8
+---
+ private/file.te        | 3 +++
+ private/genfs_contexts | 3 +++
+ private/system_app.te  | 3 +++
+ 3 files changed, 9 insertions(+)
+
+diff --git a/private/file.te b/private/file.te
+index f8a48cd13..4e6db8b8b 100644
+--- a/private/file.te
++++ b/private/file.te
+@@ -209,3 +209,6 @@ type storage_area_content_file, file_type, data_file_type, core_data_file_type,
+ 
+ # /data/misc_ce/userId/storage_area_keys
+ type storage_area_key_file, file_type, data_file_type, core_data_file_type;
++
++# definition for duo2 touch pen charger
++type ms_pen_charger_file, file_type, data_file_type, core_data_file_type;
+\ No newline at end of file
+diff --git a/private/genfs_contexts b/private/genfs_contexts
+index ac59c9afc..2f4f32515 100644
+--- a/private/genfs_contexts
++++ b/private/genfs_contexts
+@@ -340,3 +340,6 @@ genfscon bpf /prog_bpfMemEvents_tracepoint_vmscan_mm_vmscan_direct_reclaim_end_l
+ genfscon bpf /tethering u:object_r:fs_bpf_tethering:s0
+ genfscon bpf /vendor u:object_r:fs_bpf_vendor:s0
+ genfscon bpf /uprobestats u:object_r:fs_bpf_uprobestats:s0
++
++# duo2 touch pen charger allow read and write
++genfscon sysfs /devices/platform/soc/soc:surface_util/ms_pen_charger/ms_pen_charger u:object_r:ms_pen_charger_file:s0
+diff --git a/private/system_app.te b/private/system_app.te
+index e0ed8c3e8..299efde15 100644
+--- a/private/system_app.te
++++ b/private/system_app.te
+@@ -199,3 +199,6 @@ neverallow { domain -init -system_app } drm_forcel3_prop:property_service set;
+ 
+ allow system_app vendor_boot_ota_file:dir { r_dir_perms };
+ allow system_app vendor_boot_ota_file:file { r_file_perms };
++
++# duo2 touch pen charger allow read and write
++allow system_app ms_pen_charger_file:file { r_file_perms w_file_perms };
+\ No newline at end of file
+-- 
+2.34.1
+

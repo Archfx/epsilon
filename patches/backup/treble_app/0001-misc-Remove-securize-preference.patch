@@ -56,15 +56,15 @@ diff --git a/app/src/main/res/xml/pref_misc.xml b/app/src/main/res/xml/pref_misc
 index 4210106..9176674 100644
 --- a/app/src/main/res/xml/pref_misc.xml
 +++ b/app/src/main/res/xml/pref_misc.xml
-@@ -161,8 +161,6 @@
+@@ -203,9 +203,7 @@
              android:entryValues="@array/pref_misc_fod_color_values"
              android:key="key_misc_fod_color"
              android:title="Under-display fp color" />
 -        <Preference android:title="Securize"
 -            android:key="key_misc_securize" />
-     </PreferenceCategory>
-     <PreferenceCategory android:title="Debugging">
-         <Preference android:title="Debug Sensors">
+         <SwitchPreference
+             android:defaultValue="false"
+             android:key="key_misc_secure_adb"
+             android:title="Secure adb"
 -- 
 2.34.1
-
