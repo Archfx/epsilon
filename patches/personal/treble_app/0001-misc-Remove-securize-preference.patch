@@ -1,0 +1,71 @@
+From 1586c804a971422cd93de3743ae67d27212986be Mon Sep 17 00:00:00 2001
+From: Alberto Ponces <ponces26@gmail.com>
+Date: Tue, 8 Jun 2021 09:44:26 +0100
+Subject: [PATCH] misc: Remove securize preference
+
+---
+ .../java/me/phh/treble/app/MiscSettings.kt    | 33 -------------------
+ app/src/main/res/xml/pref_misc.xml            |  2 --
+ 2 files changed, 35 deletions(-)
+
+diff --git a/app/src/main/java/me/phh/treble/app/MiscSettings.kt b/app/src/main/java/me/phh/treble/app/MiscSettings.kt
+index dc2e0e3..80530b1 100644
+--- a/app/src/main/java/me/phh/treble/app/MiscSettings.kt
++++ b/app/src/main/java/me/phh/treble/app/MiscSettings.kt
+@@ -49,39 +49,6 @@ class MiscSettingsFragment : SettingsFragment() {
+     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+         super.onCreatePreferences(savedInstanceState, rootKey)
+ 
+-        val securizePref = findPreference<Preference>(MiscSettings.securize)
+-        securizePref!!.setOnPreferenceClickListener {
+-                val builder = AlertDialog.Builder( this.getActivity() )
+-                builder.setTitle(getString(R.string.remove_root))
+-                builder.setMessage(getString(R.string.continue_question))
+-
+-                builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+-
+-                var cmds = listOf(
+-                    arrayOf("/sbin/su", "-c", "/system/bin/phh-securize.sh"),
+-                    arrayOf("/system/xbin/su", "-c", "/system/bin/phh-securize.sh"),
+-                    arrayOf("/system/xbin/phh-su", "-c", "/system/bin/phh-securize.sh"),
+-                    arrayOf("/sbin/su", "0", "/system/bin/phh-securize.sh"),
+-                    arrayOf("/system/xbin/su", "0", "/system/bin/phh-securize.sh"),
+-                    arrayOf("/system/xbin/phh-su", "0", "/system/bin/phh-securize.sh")
+-                )
+-                for (cmd in cmds) {
+-                    try {
+-                        Runtime.getRuntime().exec(cmd).waitFor()
+-                        break
+-                    } catch (t: Throwable) {
+-                        Log.d("PHH", "Failed to exec \"" + cmd.joinToString(separator = " ") + "\", skipping")
+-                    }
+-                }
+-            }
+-
+-            builder.setNegativeButton(android.R.string.no) { dialog, which ->
+-            }
+-
+-            builder.show()
+-            return@setOnPreferenceClickListener true
+-        }
+-
+         val removeTelephonyPref = findPreference<Preference>(MiscSettings.removeTelephony)
+         removeTelephonyPref!!.setOnPreferenceClickListener {
+ 
+diff --git a/app/src/main/res/xml/pref_misc.xml b/app/src/main/res/xml/pref_misc.xml
+index 4210106..9176674 100644
+--- a/app/src/main/res/xml/pref_misc.xml
++++ b/app/src/main/res/xml/pref_misc.xml
+@@ -203,9 +203,7 @@
+             android:entryValues="@array/pref_misc_fod_color_values"
+             android:key="key_misc_fod_color"
+             android:title="Under-display fp color" />
+-        <Preference android:title="Securize"
+-            android:key="key_misc_securize" />
+         <SwitchPreference
+             android:defaultValue="false"
+             android:key="key_misc_secure_adb"
+             android:title="Secure adb"
+-- 
+2.34.1
+
