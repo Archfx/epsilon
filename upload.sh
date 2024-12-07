@@ -14,7 +14,8 @@ BL=$PWD/treble_aosp
 BD=$PWD/duo-de/builds
 TAG="$(date +v%Y.%m.%d)"
 GUSER="archfx"
-GREPO="duoPosture"
+# GREPO="duoPosture"
+GREPO="duoTreble"
 # GREPO="duo-de"
 
 SKIPOTA=false
@@ -49,7 +50,7 @@ updateOta() {
 
 START=$(date +%s)
 
-createRelease
+# createRelease
 uploadAssets
 # [ "$SKIPOTA" = false ] && updateOta
 
