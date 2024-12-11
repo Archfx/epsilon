@@ -19,7 +19,7 @@ index dc506de64db..203c4641ad7 100644
      <string name="help_url_audio_sharing" translatable="false"></string>
 +    
 +    <string name="gsi_info">System Image</string>
-+    <string name="gsi_info_summary">ARCHFX/DUO-DE A15 (archfx.github.io/duo-de)</string>
++    <string name="gsi_info_summary">ARCHFX/DUO-DE A15 (archfx.me/duo-de)</string>
  </resources>
 diff --git a/res/xml/my_device_info.xml b/res/xml/my_device_info.xml
 index aec064b599f..21a1b22b1f7 100644
