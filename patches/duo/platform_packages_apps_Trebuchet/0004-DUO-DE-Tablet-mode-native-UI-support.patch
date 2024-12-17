@@ -174,7 +174,7 @@ index 3a80d5b8a7..e68c6fe9d1 100644
 +        Boolean initialX = ActivityContext.lookupContext(this.context).getDeviceProfile().initialX;
 +        
 +        int xValue = (initialX == true && isTabletMode && widthPx>2500) ? 1394 : 50;
-+        Rect rect = new Rect(xValue, 120, 1244 + xValue , 1600);
++        Rect rect = new Rect(xValue, 120, 1244 + xValue , 1710);
 +
          
          if (this.context != null) {
