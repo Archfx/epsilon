@@ -59,6 +59,10 @@ These results are just for reference (for people who enjoy numbers) to compare t
 
 </div>
 
+## Security
+
+All DUO-DE releases are signed with [release keys](https://source.android.com/docs/core/ota/sign_builds), ensuring protection against malicious OTA updates and unauthorized system application replacements. Additionally, DUO-DE passes [play integrity checks](https://developer.android.com/google/play/integrity/overview), safeguarding against malicious applications. For more details about the security of GSI images like DUO-DE, visit [this post](https://archfx.me/posts/2024/12/androidsecurity/).
+
 
 ## Flashing steps
 > [!WARNING]
