@@ -8,7 +8,7 @@ Subject: [PATCH] Surface duo specific configurations from thain
  base.mk                                | 25 +++++++++++++++++++++++++
  files/com.microsoft.surface.duo_v1.xml |  7 +++++++
  files/device_state_configuration.xml   | 18 ++++++++++++++++++
- phh-on-data.sh                         | 20 ++++++++++++++++++++
+ phh-on-data.sh                         | 26 ++++++++++++++++++++++++++
  sepolicy/hal.te                        |  2 ++
  sepolicy/service.te                    |  1 +
  sepolicy/service_contexts              |  5 +++++
@@ -107,7 +107,7 @@ diff --git a/phh-on-data.sh b/phh-on-data.sh
 index 472d16e..f36b15e 100644
 --- a/phh-on-data.sh
 +++ b/phh-on-data.sh
-@@ -29,3 +29,23 @@ if [ "$vndk" = 28 ];then
+@@ -29,3 +29,29 @@ if [ "$vndk" = 28 ];then
      mount $minijailSrc64 /vendor/lib64/libminijail.so
      mount $minijailSrc /vendor/lib/libminijail.so
  fi
@@ -129,7 +129,13 @@ index 472d16e..f36b15e 100644
 +# Retrieve the hardware property
 +hardware=$(getprop ro.hardware)
 +if [ "$hardware" = "surfaceduo2" ]; then
++    pm uninstall -k --user 0 com.microsoft.surface.camera
++    settings put global enable_freeform_support 1
++    echo "1" >> /sys/devices/platform/soc/soc:surface_util/ms_pen_charger/ms_pen_charger
 +    chmod 777 /sys/devices/platform/soc/soc:surface_util/ms_pen_charger/ms_pen_charger
++elif [ "$hardware" = "surfaceduo" ]; then
++    pm uninstall -k --user 0 com.microsoft.surface.camera
++    settings put global enable_freeform_support 1
 +fi
 \ No newline at end of file
 diff --git a/sepolicy/hal.te b/sepolicy/hal.te

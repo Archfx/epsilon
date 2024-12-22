@@ -5,7 +5,7 @@
 The Surface Duo, Microsoft's dual-screen Android device, aimed to redefine mobile productivity by offering a unique form factor that combined the versatility of two screens with the familiarity of the Android operating system. Although Microsoft officially ceased updates and support for the Surface Duo line in early 2023, with AOSP GSI and the help of the open-source community, it is time to give a second life to this awesome and unique hardware.
 
 DUO-DE is a GSI variant Android ROM created for Microsoft Surface Duo devices, offering a clean AOSP experience. This build combines gapps/vanila variants of the GSI ROM from [ponces](https://github.com/ponces/treble_aosp) with desktop mode enabled + various tweaks to make it nice and smooth with the help of [thain](https://github.com/thai-ng) tweaks. All credits go to respective developers. 
-Before you proceed, please take a moment to read [this announcement](https://github.com/Archfx/duo-de/discussions/52) regarding this project. By using this ROM, you are agreeing to the [`DISCLAIMER`](#disclaimer). We are looking for [contributors](https://github.com/Archfx/duo-de/discussions/129)!
+Before you proceed, please take a moment to read [this announcement](https://github.com/Archfx/duo-de/discussions/52) regarding this project. By using this ROM, you are agreeing to the [`DISCLAIMER`](#disclaimer).
 
 
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/archfx/duo-de/total?style=for-the-badge&label=duo-de%20Downloads&color=%2333cc33)
@@ -21,7 +21,9 @@ With the posture processor engine, both duo1 and duo2 react to various postures.
 <img src="images/duo-1.png" alt="drawing" style="height:300px;" /> 
 <img src="images/duo-2.png" alt="drawing" style="height:300px;"/> </p>
 
-This ROM switches between tablet mode (first image) and phone mode (second image) when you change the postures. These modes are optimized (both visually and utility-wise) for each of the situations and the screen's real state. Additionally, it supports peak mode display of device status when the device is unfolded partially.
+You can control the active display from quick settings. You can see it in action [here](https://x.com/Archfx/status/1869969450419790257). To add this quick setting tile, use the pencil icon in the notification panel and drag and drop the "Active Screen" tile to your panel.
+
+This ROM switches between tablet mode (first image) and phone mode (second image) when you change the postures or active screen. These modes are optimized (both visually and utility-wise) for each of the situations and the screen's real state. Additionally, it supports peak mode display of device status when the device is unfolded partially.
 
 <p align="center">
 <img src="images/tabletmode.png" alt="drawing" style="height:300px;" /> 
@@ -110,11 +112,7 @@ adb reboot fastboot
 fastboot flash system aosp-arm64-ab-gapps-15.0-[[version]].img
 fastboot reboot 
 ```
-5. Enable the following settings from the developer options and perform a manual reboot.  
-> - Force activities to be resizable
-> - Enable freeform windows
-> - Enable non-resizable in multi-window
-
+5. When the device is booted, perform a manual reboot to apply the first-time configurations correctly.  
 6. Once you flash a **duo-de** version using the above steps, subsequent updates will be received using OTA. You can check updates using ``settings -> system -> system updates``.
    > If prompted to select the default updater, select `PHH treble updater` for always.
 7. Enable the ideal `Treble Settings` as outlined [here](https://github.com/Archfx/duo-de/discussions/81). 
