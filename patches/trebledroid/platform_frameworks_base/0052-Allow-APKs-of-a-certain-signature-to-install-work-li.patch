@@ -1,4 +1,4 @@
-From 33a95f034b01ef7df57f4c422e89259a7f207615 Mon Sep 17 00:00:00 2001
+From 859a5fcfdea6f42f1f025af310dd7afea60ece70 Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Sun, 7 Jul 2024 21:55:42 +0800
 Subject: [PATCH 52/52] Allow APKs of a certain signature to install/work like
@@ -14,10 +14,10 @@ Change-Id: Ia1a13edec8eb8ecf0ea25fffaee4aeff9c75a5e1
  3 files changed, 20 insertions(+), 1 deletion(-)
 
 diff --git a/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java b/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java
-index ff8abf879487..f2aa9d6ba435 100644
+index 975758241e77..b6c0e0cc2614 100644
 --- a/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java
 +++ b/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java
-@@ -189,6 +189,8 @@ public class PackageManagerServiceUtils {
+@@ -190,6 +190,8 @@ public class PackageManagerServiceUtils {
       */
      private static final boolean FORCE_PACKAGE_PARSED_CACHE_ENABLED = false;
  
@@ -26,7 +26,7 @@ index ff8abf879487..f2aa9d6ba435 100644
      /**
       * Returns the registered PackageManagerLocal instance, or else throws an unchecked error.
       */
-@@ -274,6 +276,11 @@ public class PackageManagerServiceUtils {
+@@ -275,6 +277,11 @@ public class PackageManagerServiceUtils {
          return maxModifiedTime;
      }
  
@@ -38,7 +38,7 @@ index ff8abf879487..f2aa9d6ba435 100644
      private static File getSettingsProblemFile() {
          File dataDir = Environment.getDataDirectory();
          File systemDir = new File(dataDir, "system");
-@@ -547,6 +554,10 @@ public class PackageManagerServiceUtils {
+@@ -548,6 +555,10 @@ public class PackageManagerServiceUtils {
              boolean compareCompat, boolean compareRecover, boolean isRollback)
              throws PackageManagerException {
          final String packageName = pkgSetting.getPackageName();
@@ -66,7 +66,7 @@ index e667bfe36d18..e08a6ba24807 100644
              seInfo = DEFAULT_SEINFO;
          }
 diff --git a/services/core/java/com/android/server/pm/ScanPackageUtils.java b/services/core/java/com/android/server/pm/ScanPackageUtils.java
-index 9ab6016f3d57..e8d67b1a3b19 100644
+index 0802e9ee50bc..c657353327c0 100644
 --- a/services/core/java/com/android/server/pm/ScanPackageUtils.java
 +++ b/services/core/java/com/android/server/pm/ScanPackageUtils.java
 @@ -47,6 +47,7 @@ import static com.android.server.pm.PackageManagerService.TAG;
@@ -77,7 +77,7 @@ index 9ab6016f3d57..e8d67b1a3b19 100644
  import static com.android.server.pm.PackageManagerServiceUtils.getLastModifiedTime;
  
  import android.annotation.NonNull;
-@@ -927,7 +928,9 @@ final class ScanPackageUtils {
+@@ -931,7 +932,9 @@ final class ScanPackageUtils {
                          || (platformPkg != null && compareSignatures(
                          platformPkg.getSigningDetails(),
                          parsedPackage.getSigningDetails()

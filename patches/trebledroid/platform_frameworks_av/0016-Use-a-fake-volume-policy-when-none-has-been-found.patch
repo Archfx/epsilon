@@ -1,7 +1,7 @@
-From 446e9248207657d36bdcd180a9e73868df84cc0d Mon Sep 17 00:00:00 2001
+From 17c976e2ca04456dd6b0ada8ee6cb12ecb0bc053 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 28 Mar 2021 14:48:49 +0200
-Subject: [PATCH 16/25] Use a fake volume policy when none has been found
+Subject: [PATCH 16/24] Use a fake volume policy when none has been found
 
 This is useful, because on Samsung devices, the "real"
 (=non-gsi-cheating) audio policy doesn't have any volume policy.
@@ -15,10 +15,10 @@ Change-Id: I461a3f22893ab2b1d96d67f22397369b2cae41e5
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/services/audiopolicy/engine/config/src/EngineConfig.cpp b/services/audiopolicy/engine/config/src/EngineConfig.cpp
-index 3f9ae19aee..c6ae45598f 100644
+index 714ab78203..74297aae92 100644
 --- a/services/audiopolicy/engine/config/src/EngineConfig.cpp
 +++ b/services/audiopolicy/engine/config/src/EngineConfig.cpp
-@@ -823,7 +823,12 @@ android::status_t parseLegacyVolumeFile(const char* path, VolumeGroups &volumeGr
+@@ -839,7 +839,12 @@ android::status_t parseLegacyVolumeFile(const char* path, VolumeGroups &volumeGr
  android::status_t parseLegacyVolumes(VolumeGroups &volumeGroups) {
      if (std::string audioPolicyXmlConfigFile = audio_get_audio_policy_config_file();
              !audioPolicyXmlConfigFile.empty()) {

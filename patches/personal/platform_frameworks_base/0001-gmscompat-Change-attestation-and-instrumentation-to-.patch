@@ -1,4 +1,4 @@
-From c0a32c12185c697008ac982a2c337b2ffe0d16bd Mon Sep 17 00:00:00 2001
+From 40d849d1d60cb49b3c336dff19738b2a8ff9e6a8 Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Thu, 9 Nov 2023 12:33:55 +0100
 Subject: [PATCH 01/10] gmscompat: Change attestation and instrumentation to
@@ -16,7 +16,7 @@ Adapted by @ponces based on the work of @chiteroman to pass newest Play Integrit
  create mode 100644 core/java/com/android/internal/gmscompat/AttestationHooks.java
 
 diff --git a/core/java/android/app/Instrumentation.java b/core/java/android/app/Instrumentation.java
-index db216b1af974..9445bc1b581a 100644
+index 93a9489849af..1f19fd277453 100644
 --- a/core/java/android/app/Instrumentation.java
 +++ b/core/java/android/app/Instrumentation.java
 @@ -63,6 +63,8 @@ import android.view.WindowManagerGlobal;
@@ -28,7 +28,7 @@ index db216b1af974..9445bc1b581a 100644
  import java.io.File;
  import java.lang.annotation.Retention;
  import java.lang.annotation.RetentionPolicy;
-@@ -1351,6 +1353,7 @@ public class Instrumentation {
+@@ -1353,6 +1355,7 @@ public class Instrumentation {
          Application app = getFactory(context.getPackageName())
                  .instantiateApplication(cl, className);
          app.attach(context);
@@ -36,7 +36,7 @@ index db216b1af974..9445bc1b581a 100644
          return app;
      }
      
-@@ -1368,6 +1371,7 @@ public class Instrumentation {
+@@ -1370,6 +1373,7 @@ public class Instrumentation {
              ClassNotFoundException {
          Application app = (Application)clazz.newInstance();
          app.attach(context);

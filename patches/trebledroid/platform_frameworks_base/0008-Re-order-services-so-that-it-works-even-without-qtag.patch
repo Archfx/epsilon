@@ -1,4 +1,4 @@
-From ffc69f29013c67f723804161277172d55b3ea33e Mon Sep 17 00:00:00 2001
+From 0874a8ae4a0a7f19cc73d87be8a870262b48e03e Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Thu, 8 Nov 2018 23:04:03 +0100
 Subject: [PATCH 08/52] Re-order services so that it works even without qtaguid
@@ -9,10 +9,10 @@ Change-Id: I0c0f527b3ae151d45c68f7ac6c205da3f34e74df
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/services/core/java/com/android/server/net/NetworkPolicyManagerService.java b/services/core/java/com/android/server/net/NetworkPolicyManagerService.java
-index d9e22c5a270f..378be8fa132c 100644
+index a6f4c0e597d1..ec810cfa8e93 100644
 --- a/services/core/java/com/android/server/net/NetworkPolicyManagerService.java
 +++ b/services/core/java/com/android/server/net/NetworkPolicyManagerService.java
-@@ -1035,6 +1035,10 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
+@@ -1032,6 +1032,10 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
          Trace.traceBegin(Trace.TRACE_TAG_NETWORK, "systemReady");
          final int oldPriority = Process.getThreadPriority(Process.myTid());
          try {
@@ -23,7 +23,7 @@ index d9e22c5a270f..378be8fa132c 100644
              // Boost thread's priority during system server init
              Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
              if (!isBandwidthControlEnabled()) {
-@@ -1042,10 +1046,6 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
+@@ -1039,10 +1043,6 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                  return;
              }
  
@@ -33,7 +33,7 @@ index d9e22c5a270f..378be8fa132c 100644
 -
              mUseMeteredFirewallChains = Flags.useMeteredFirewallChains();
              mUseDifferentDelaysForBackgroundChain = Flags.useDifferentDelaysForBackgroundChain();
- 
+             mNeverApplyRulesToCoreUids = Flags.neverApplyRulesToCoreUids();
 -- 
 2.34.1
 

@@ -1,4 +1,4 @@
-From 671d0164a3d68325aec407055a5d3f03065a8b67 Mon Sep 17 00:00:00 2001
+From 162d6557fc6cf8628379259022561eb1bcba1586 Mon Sep 17 00:00:00 2001
 From: ChonDoit <thphantomblog@gmail.com>
 Date: Thu, 24 Aug 2023 15:58:15 -0300
 Subject: [PATCH 39/52] Fix brightness slider curve for some devices

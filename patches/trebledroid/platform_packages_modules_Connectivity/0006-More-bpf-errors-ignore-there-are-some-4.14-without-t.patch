@@ -1,18 +1,18 @@
-From 7fb849c1e7811b6f9a8b9926d612c0cfd71002f5 Mon Sep 17 00:00:00 2001
+From 9e4619998cb2e165e780487cb6ca0aaa05ed2630 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 15 May 2024 05:56:59 -0400
 Subject: [PATCH 6/8] More bpf errors ignore -- there are some 4.14 without the
  bpf jit file
 
 ---
- netbpfload/NetBpfLoad.cpp | 7 +++----
+ bpf/loader/NetBpfLoad.cpp | 7 +++----
  1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/netbpfload/NetBpfLoad.cpp b/netbpfload/NetBpfLoad.cpp
-index 4778c84dbd..8c471e5975 100644
---- a/netbpfload/NetBpfLoad.cpp
-+++ b/netbpfload/NetBpfLoad.cpp
-@@ -420,8 +420,7 @@ static int doLoad(char** argv, char * const envp[]) {
+diff --git a/bpf/loader/NetBpfLoad.cpp b/bpf/loader/NetBpfLoad.cpp
+index 7f3b2bc7f7..ab49cc35d2 100644
+--- a/bpf/loader/NetBpfLoad.cpp
++++ b/bpf/loader/NetBpfLoad.cpp
+@@ -1579,8 +1579,7 @@ static int doLoad(char** argv, char * const envp[]) {
          // but we need 0 (enabled)
          // (this writeFile is known to fail on at least 4.19, but always defaults to 0 on
          // pre-5.13, on 5.13+ it depends on CONFIG_BPF_UNPRIV_DEFAULT_OFF)
@@ -22,7 +22,7 @@ index 4778c84dbd..8c471e5975 100644
      }
  
      if (isAtLeastU) {
-@@ -436,12 +435,12 @@ static int doLoad(char** argv, char * const envp[]) {
+@@ -1595,12 +1594,12 @@ static int doLoad(char** argv, char * const envp[]) {
          //  kernel does not have CONFIG_BPF_JIT=y)
          // BPF_JIT is required by R VINTF (which means 4.14/4.19/5.4 kernels),
          // but 4.14/4.19 were released with P & Q, and only 5.4 is new in R+.

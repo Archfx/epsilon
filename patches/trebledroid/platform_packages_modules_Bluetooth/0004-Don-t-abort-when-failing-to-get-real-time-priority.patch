@@ -1,4 +1,4 @@
-From 4b9b45609a13877320c1f943cd1f1839bf66ed73 Mon Sep 17 00:00:00 2001
+From b20f3ed1d6affcec252b4d6e2dc1b546e5e0365b Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 17 Oct 2021 17:17:13 -0400
 Subject: [PATCH 4/9] Don't abort when failing to get real-time priority
@@ -19,7 +19,7 @@ Change-Id: Id25dac186628e933185bdfd640498004459b375a
  4 files changed, 14 insertions(+), 4 deletions(-)
 
 diff --git a/system/btif/src/btif_a2dp_sink.cc b/system/btif/src/btif_a2dp_sink.cc
-index ffa783cdab..8960603a31 100644
+index 0aba99e201..a0523f7390 100644
 --- a/system/btif/src/btif_a2dp_sink.cc
 +++ b/system/btif/src/btif_a2dp_sink.cc
 @@ -196,7 +196,7 @@ bool btif_a2dp_sink_init() {
@@ -30,12 +30,12 @@ index ffa783cdab..8960603a31 100644
 +    log::error("Failed to increase A2DP decoder thread priority");
  #endif
    }
-   btif_a2dp_sink_cb.worker_thread.DoInThread(
+   btif_a2dp_sink_cb.worker_thread.DoInThread(FROM_HERE,
 diff --git a/system/btif/src/btif_a2dp_source.cc b/system/btif/src/btif_a2dp_source.cc
-index b691805fa9..9643ca2a08 100644
+index f67527da8b..b5f1b37d69 100644
 --- a/system/btif/src/btif_a2dp_source.cc
 +++ b/system/btif/src/btif_a2dp_source.cc
-@@ -372,7 +372,7 @@ static void btif_a2dp_source_startup_delayed() {
+@@ -350,7 +350,7 @@ static void btif_a2dp_source_startup_delayed() {
    log::info("state={}", btif_a2dp_source_cb.StateStr());
    if (!btif_a2dp_source_thread.EnableRealTimeScheduling()) {
  #if defined(__ANDROID__)
@@ -45,10 +45,10 @@ index b691805fa9..9643ca2a08 100644
    }
    if (!bluetooth::audio::a2dp::init(&btif_a2dp_source_thread)) {
 diff --git a/system/osi/src/alarm.cc b/system/osi/src/alarm.cc
-index b0206d326a..d6898fbc74 100644
+index 0d515c486d..098eb1763c 100644
 --- a/system/osi/src/alarm.cc
 +++ b/system/osi/src/alarm.cc
-@@ -667,7 +667,17 @@ static bool timer_create_internal(const clockid_t clock_id, timer_t* timer) {
+@@ -673,7 +673,17 @@ static bool timer_create_internal(const clockid_t clock_id, timer_t* timer) {
    sigevent.sigev_notify = SIGEV_THREAD;
    sigevent.sigev_notify_function = (void (*)(union sigval))timer_callback;
    sigevent.sigev_notify_attributes = &thread_attr;
@@ -64,14 +64,14 @@ index b0206d326a..d6898fbc74 100644
 +      ret = timer_create(clock_id, &sigevent, timer);
 +  }
 +  if (ret == -1) {
-     log::error("unable to create timer with clock {}: {}", clock_id,
-                strerror(errno));
+     log::error("unable to create timer with clock {}: {}", clock_id, strerror(errno));
      if (clock_id == CLOCK_BOOTTIME_ALARM) {
+       log::error(
 diff --git a/system/stack/btu/main_thread.cc b/system/stack/btu/main_thread.cc
-index b6ba58cc9c..08174ed92f 100644
+index 03afc210f5..e30c592f34 100644
 --- a/system/stack/btu/main_thread.cc
 +++ b/system/stack/btu/main_thread.cc
-@@ -77,7 +77,7 @@ void main_thread_start_up() {
+@@ -70,7 +70,7 @@ void main_thread_start_up() {
    }
    if (!main_thread.EnableRealTimeScheduling()) {
  #if defined(__ANDROID__)

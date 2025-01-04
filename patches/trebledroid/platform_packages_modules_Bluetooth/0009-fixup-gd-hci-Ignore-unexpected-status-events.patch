@@ -1,4 +1,4 @@
-From 9110c9e2cdb4ff4a9ab61bfdeeccba00c508f3ed Mon Sep 17 00:00:00 2001
+From 53e399036ab6eda29aaf6bf4c246b69b481682f5 Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Mon, 18 Nov 2024 15:32:49 +0000
 Subject: [PATCH 9/9] fixup! gd: hci: Ignore unexpected status events
@@ -8,10 +8,10 @@ Subject: [PATCH 9/9] fixup! gd: hci: Ignore unexpected status events
  1 file changed, 2 insertions(+), 9 deletions(-)
 
 diff --git a/system/gd/hci/hci_layer.cc b/system/gd/hci/hci_layer.cc
-index 803ab382b1..eb4f25cf24 100644
+index e8a6ef4f87..768d0fdaa1 100644
 --- a/system/gd/hci/hci_layer.cc
 +++ b/system/gd/hci/hci_layer.cc
-@@ -209,8 +209,7 @@ struct HciLayer::impl {
+@@ -216,8 +216,7 @@ struct HciLayer::impl {
  
      bool is_vendor_specific = static_cast<int>(op_code) & (0x3f << 10);
      CommandStatusView status_view = CommandStatusView::Create(event);
@@ -21,8 +21,8 @@ index 803ab382b1..eb4f25cf24 100644
        // If this is a command status of a vendor specific command, and command complete is expected,
        // we can't treat this as hard failure since we have no way of probing this lack of support at
        // earlier time. Instead we let the command complete handler handle a empty Command Complete
-@@ -230,13 +229,7 @@ struct HciLayer::impl {
-           command_complete_view.IsValid(), "assert failed: command_complete_view.IsValid()");
+@@ -236,13 +235,7 @@ struct HciLayer::impl {
+                        "assert failed: command_complete_view.IsValid()");
        (*command_queue_.front().GetCallback<CommandCompleteView>())(command_complete_view);
      } else {
 -      if (command_queue_.front().waiting_for_status_ == is_status) {

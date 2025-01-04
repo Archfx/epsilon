@@ -1,4 +1,4 @@
-From 54d7a604df37eb84589401a46ff6c801f43d9ab5 Mon Sep 17 00:00:00 2001
+From 830ba5387e1cdf6886b82487b972b40550d9303f Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 2 Jun 2023 19:19:31 -0400
 Subject: [PATCH 31/52] Try catch around constrainNitsAndBacklightArrays, and
@@ -9,10 +9,10 @@ Subject: [PATCH 31/52] Try catch around constrainNitsAndBacklightArrays, and
  1 file changed, 33 insertions(+), 27 deletions(-)
 
 diff --git a/services/core/java/com/android/server/display/DisplayDeviceConfig.java b/services/core/java/com/android/server/display/DisplayDeviceConfig.java
-index 43725ae0ec03..3f4b39863e15 100644
+index ceb291e46725..71f69f51edc5 100644
 --- a/services/core/java/com/android/server/display/DisplayDeviceConfig.java
 +++ b/services/core/java/com/android/server/display/DisplayDeviceConfig.java
-@@ -1910,37 +1910,43 @@ public class DisplayDeviceConfig {
+@@ -2009,37 +2009,43 @@ public class DisplayDeviceConfig {
              return;
          }
  
@@ -82,7 +82,7 @@ index 43725ae0ec03..3f4b39863e15 100644
 -        constrainNitsAndBacklightArrays();
      }
  
-     private Spline loadSdrHdrRatioMap(HighBrightnessMode hbmConfig) {
+     private void loadThermalThrottlingConfig(DisplayConfiguration config) {
 -- 
 2.34.1
 

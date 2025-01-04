@@ -1,4 +1,4 @@
-From 533b5e389bf02c5688c01d9853ac5d8d3b760bbd Mon Sep 17 00:00:00 2001
+From 7000befb02f8653414fef9d8f48bc4a311544ba2 Mon Sep 17 00:00:00 2001
 From: Ido Ben-Hur <idoybh2@gmail.com>
 Date: Mon, 9 Sep 2024 03:12:57 +0300
 Subject: [PATCH] Revert "Remove timestamp from local build number"
@@ -13,7 +13,7 @@ Signed-off-by: Pranav Vashi <neobuddy89@gmail.com>
  1 file changed, 5 insertions(+), 7 deletions(-)
 
 diff --git a/ui/build/build.go b/ui/build/build.go
-index 03d839237..9a9eccd7d 100644
+index 28c32849c..b6ac9dfea 100644
 --- a/ui/build/build.go
 +++ b/ui/build/build.go
 @@ -21,6 +21,7 @@ import (
@@ -22,9 +22,9 @@ index 03d839237..9a9eccd7d 100644
  	"text/template"
 +	"time"
  
+ 	"android/soong/elf"
  	"android/soong/ui/metrics"
- )
-@@ -65,12 +66,9 @@ func SetupOutDir(ctx Context, config Config) {
+@@ -66,12 +67,9 @@ func SetupOutDir(ctx Context, config Config) {
  	// (to allow for source control that uses something other than numbers),
  	// but must be a single word and a valid file name.
  	//
@@ -40,11 +40,11 @@ index 03d839237..9a9eccd7d 100644
  	buildNumber, ok := config.environ.Get("BUILD_NUMBER")
  	if ok {
  		writeValueIfChanged(ctx, config, config.OutDir(), "file_name_tag.txt", buildNumber)
-@@ -79,7 +77,7 @@ func SetupOutDir(ctx Context, config Config) {
+@@ -80,7 +78,7 @@ func SetupOutDir(ctx Context, config Config) {
  		if username, ok = config.environ.Get("BUILD_USERNAME"); !ok {
  			ctx.Fatalln("Missing BUILD_USERNAME")
  		}
--		buildNumber = fmt.Sprintf("eng.%.6s.00000000.000000", username)
+-		buildNumber = fmt.Sprintf("eng.%.6s", username)
 +		buildNumber = fmt.Sprintf("eng.%.6s.%s", username, time.Now().Format("20060102.150405" /* YYYYMMDD.HHMMSS */))
  		writeValueIfChanged(ctx, config, config.OutDir(), "file_name_tag.txt", username)
  	}

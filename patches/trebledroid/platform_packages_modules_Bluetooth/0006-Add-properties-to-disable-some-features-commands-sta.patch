@@ -1,4 +1,4 @@
-From a88d76dfc38245be6b72065c2a8305e7e590582f Mon Sep 17 00:00:00 2001
+From f0158f8a9d0e97b7e97168524ba3a670af0a6073 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 27 May 2023 06:41:32 -0400
 Subject: [PATCH 6/9] Add properties to disable some features/commands/states
@@ -9,7 +9,7 @@ Subject: [PATCH 6/9] Add properties to disable some features/commands/states
  1 file changed, 69 insertions(+), 4 deletions(-)
 
 diff --git a/system/gd/hci/controller.cc b/system/gd/hci/controller.cc
-index 328babd385..3d46c46d6b 100644
+index 3a4ab17dfb..292c2e4f24 100644
 --- a/system/gd/hci/controller.cc
 +++ b/system/gd/hci/controller.cc
 @@ -19,6 +19,7 @@
@@ -20,7 +20,7 @@ index 328babd385..3d46c46d6b 100644
  #include <future>
  #include <memory>
  #include <string>
-@@ -37,6 +38,8 @@
+@@ -36,6 +37,8 @@
  #include "sysprops/sysprops_module.h"
  #endif
  
@@ -29,7 +29,7 @@ index 328babd385..3d46c46d6b 100644
  namespace bluetooth {
  namespace hci {
  
-@@ -331,7 +334,23 @@ struct Controller::impl {
+@@ -350,7 +353,23 @@ struct Controller::impl {
      ASSERT(complete_view.IsValid());
      ErrorCode status = complete_view.GetStatus();
      log::assert_that(status == ErrorCode::SUCCESS, "Status {}", ErrorCodeText(status));
@@ -53,8 +53,8 @@ index 328babd385..3d46c46d6b 100644
 +    local_supported_commands_ = local_commands;
    }
  
-   void read_local_extended_features_complete_handler(std::promise<void> promise, CommandCompleteView view) {
-@@ -340,7 +359,25 @@ struct Controller::impl {
+   void read_local_extended_features_complete_handler(std::promise<void> promise,
+@@ -360,7 +379,25 @@ struct Controller::impl {
      ErrorCode status = complete_view.GetStatus();
      log::assert_that(status == ErrorCode::SUCCESS, "Status {}", ErrorCodeText(status));
      uint8_t page_number = complete_view.GetPageNumber();
@@ -78,10 +78,10 @@ index 328babd385..3d46c46d6b 100644
 +    }
 +    extended_lmp_features_array_.push_back(lmp_features);
 +
-     bluetooth::os::LogMetricBluetoothLocalSupportedFeatures(page_number, complete_view.GetExtendedLmpFeatures());
-     // Query all extended features
-     if (page_number < complete_view.GetMaximumPageNumber()) {
-@@ -492,7 +529,21 @@ struct Controller::impl {
+     if (page_number == 0 && local_version_information_.manufacturer_name_ == LMP_COMPID_INTEL &&
+         local_version_information_.lmp_version_ == LmpVersion::V_4_2 &&
+         local_version_information_.lmp_subversion_ == LMP_SUBVERSION_INTEL_AC7265) {
+@@ -523,7 +560,21 @@ struct Controller::impl {
      ASSERT(complete_view.IsValid());
      ErrorCode status = complete_view.GetStatus();
      log::assert_that(status == ErrorCode::SUCCESS, "Status {}", status, ErrorCodeText(status));
@@ -104,7 +104,7 @@ index 328babd385..3d46c46d6b 100644
    }
  
    void le_read_supported_states_handler(CommandCompleteView view) {
-@@ -500,7 +551,21 @@ struct Controller::impl {
+@@ -531,7 +582,21 @@ struct Controller::impl {
      ASSERT(complete_view.IsValid());
      ErrorCode status = complete_view.GetStatus();
      log::assert_that(status == ErrorCode::SUCCESS, "Status {}", ErrorCodeText(status));

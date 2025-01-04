@@ -1,4 +1,4 @@
-From 37c0f1d23c2e5e31da51768b7f9b6a27a9a777d1 Mon Sep 17 00:00:00 2001
+From fac137c830a194dc303833bed6336effcb8a3442 Mon Sep 17 00:00:00 2001
 From: LuK1337 <priv.luk@gmail.com>
 Date: Mon, 19 Feb 2024 16:20:04 +0100
 Subject: [PATCH 49/52] Allow signature spoofing for microG Companion/Services
@@ -41,7 +41,7 @@ index cc4c2b5bf893..57263da936d6 100644
                              || newPkg.isForceQueryable()
                              || ArrayUtils.contains(mForceQueryableByDevicePackageNames,
 diff --git a/services/core/java/com/android/server/pm/ComputerEngine.java b/services/core/java/com/android/server/pm/ComputerEngine.java
-index ee0159d722b1..7eb8dc4ca266 100644
+index 4665a72b0b06..878d10835bf2 100644
 --- a/services/core/java/com/android/server/pm/ComputerEngine.java
 +++ b/services/core/java/com/android/server/pm/ComputerEngine.java
 @@ -102,6 +102,7 @@ import android.content.pm.UserPackage;

@@ -1,4 +1,4 @@
-From cc2bdd0056d90c70cf9234470d558aa2df1e21a1 Mon Sep 17 00:00:00 2001
+From a2d9e6be70fd3919644e58e47c896872633a87e9 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 25 Oct 2019 13:29:20 +0200
 Subject: [PATCH 07/11] Fix boot on Moto devices using unknown class
@@ -31,50 +31,50 @@ Change-Id: I66339857634ebfdba359f12a99dfd0bff709d80b
  1 file changed, 24 insertions(+)
 
 diff --git a/libsepol/cil/src/cil_build_ast.c b/libsepol/cil/src/cil_build_ast.c
-index 118de1f5..77e130d1 100644
+index 6e9dae82..0c9e80be 100644
 --- a/libsepol/cil/src/cil_build_ast.c
 +++ b/libsepol/cil/src/cil_build_ast.c
-@@ -462,6 +462,14 @@ int cil_gen_class(struct cil_db *db, struct cil_tree_node *parse_current, struct
+@@ -584,6 +584,14 @@ int cil_gen_class(struct cil_db *db, struct cil_tree_node *parse_current, struct
  	struct cil_tree_node *perms = NULL;
  	int rc = SEPOL_ERR;
  
-+    {
-+        const char* path = cil_tree_get_cil_path(parse_current);
-+        if(strstr(path, "vendor/")) {
-+            cil_clear_node(ast_node);
-+            return SEPOL_OK;
++        {
++            const char* path = cil_tree_get_cil_path(parse_current);
++            if(strstr(path, "vendor/")) {
++                cil_clear_node(ast_node);
++                return SEPOL_OK;
++            }
 +        }
-+    }
 +
  	rc = __cil_verify_syntax(parse_current, syntax, syntax_len);
  	if (rc != SEPOL_OK) {
  		goto exit;
-@@ -530,6 +538,14 @@ int cil_gen_classorder(struct cil_db *db, struct cil_tree_node *parse_current, s
- 	struct cil_list_item *head = NULL;
- 	int rc = SEPOL_ERR;
+@@ -879,6 +887,14 @@ int cil_gen_classpermission(struct cil_db *db, struct cil_tree_node *parse_curre
+ 	};
+ 	size_t syntax_len = sizeof(syntax)/sizeof(*syntax);
  
-+    {
-+        const char* path = cil_tree_get_cil_path(parse_current);
-+        if(strstr(path, "vendor/")) {
-+            cil_clear_node(ast_node);
-+            return SEPOL_OK;
++        {
++            const char* path = cil_tree_get_cil_path(parse_current);
++            if(strstr(path, "vendor/")) {
++                cil_clear_node(ast_node);
++                return SEPOL_OK;
++            }
 +        }
-+    }
 +
  	if (db == NULL || parse_current == NULL || ast_node == NULL) {
  		goto exit;
  	}
-@@ -2115,6 +2131,14 @@ int cil_gen_avrule(struct cil_tree_node *parse_current, struct cil_tree_node *as
+@@ -2109,6 +2125,14 @@ int cil_gen_avrule(struct cil_tree_node *parse_current, struct cil_tree_node *as
  	rule->src_str = parse_current->next->data;
  	rule->tgt_str = parse_current->next->next->data;
  
-+    {
-+        const char *classname = parse_current->next->next->next->cl_head->data;
-+        if(strcmp(classname, "keystore_moto_key") == 0) {
-+            cil_clear_node(ast_node);
-+            return SEPOL_OK;
++        {
++            const char *classname = parse_current->next->next->next->cl_head->data;
++            if(strcmp(classname, "keystore_moto_key") == 0) {
++                cil_clear_node(ast_node);
++                return SEPOL_OK;
++            }
 +        }
-+    }
 +
  	rc = cil_fill_classperms_list(parse_current->next->next->next, &rule->perms.classperms);
  	if (rc != SEPOL_OK) {

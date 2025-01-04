@@ -1,0 +1,37 @@
+From 4ccfc277b6a3a2b534dc331eada45b15a154a55c Mon Sep 17 00:00:00 2001
+From: Danny Lin <danny@kdrag0n.dev>
+Date: Tue, 5 Oct 2021 22:40:58 -0700
+Subject: [PATCH 4/4] Add permission for launcher preview rendering
+
+Change-Id: Ie707dcd98161e8f5993b0504295fddc3f395cd20
+---
+ AndroidManifest.xml                         | 1 +
+ privapp_whitelist_com.android.wallpaper.xml | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index 555d3b6..02fa70f 100755
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -13,6 +13,7 @@
+     <uses-permission android:name="android.permission.CHANGE_OVERLAY_PACKAGES"/>
+     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
+     <uses-permission android:name="android.permission.SET_WALLPAPER_COMPONENT" />
++    <uses-permission android:name="android.permission.BIND_WALLPAPER" />
+     <uses-permission android:name="android.permission.READ_DEVICE_CONFIG" />
+     <uses-permission android:name="android.permission.MODIFY_DAY_NIGHT_MODE" />
+     <uses-permission android:name="android.permission.CUSTOMIZE_SYSTEM_UI" />
+diff --git a/privapp_whitelist_com.android.wallpaper.xml b/privapp_whitelist_com.android.wallpaper.xml
+index e3f3b65..47133be 100644
+--- a/privapp_whitelist_com.android.wallpaper.xml
++++ b/privapp_whitelist_com.android.wallpaper.xml
+@@ -20,5 +20,6 @@
+         <permission name="android.permission.MODIFY_DAY_NIGHT_MODE"/>
+         <permission name="android.permission.CHANGE_OVERLAY_PACKAGES"/>
+         <permission name="android.permission.WRITE_SECURE_SETTINGS" />
++        <permission name="android.permission.BIND_WALLPAPER"/>
+     </privapp-permissions>
+ </permissions>
+-- 
+2.44.0
+

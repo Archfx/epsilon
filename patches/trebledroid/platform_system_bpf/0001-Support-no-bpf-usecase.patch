@@ -1,27 +1,27 @@
-From 98fbb468badfe666b6ceeb699e20094493e439d4 Mon Sep 17 00:00:00 2001
+From a019cea30f9795adcedc207e9937cc507f8a1419 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 13 Oct 2021 10:56:52 -0400
 Subject: [PATCH] Support no-bpf usecase
 
 Change-Id: I75a427a2a41aa4ab1104ad88a891bef0dc2d9c91
 ---
- loader/BpfLoader.cpp | 3 +--
+ loader/Loader.cpp | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/loader/BpfLoader.cpp b/loader/BpfLoader.cpp
-index 3f13291..2cdae52 100644
---- a/loader/BpfLoader.cpp
-+++ b/loader/BpfLoader.cpp
-@@ -155,8 +155,7 @@ int main(int __unused argc, char** argv, char * const envp[]) {
+diff --git a/loader/Loader.cpp b/loader/Loader.cpp
+index cf6bf36..d3606a8 100644
+--- a/loader/Loader.cpp
++++ b/loader/Loader.cpp
+@@ -1002,8 +1002,7 @@ void legacyBpfLoader() {
              ALOGE("If this triggers randomly, you might be hitting some memory allocation "
                    "problems or startup script race.");
              ALOGE("--- DO NOT EXPECT SYSTEM TO BOOT SUCCESSFULLY ---");
 -            sleep(20);
--            return 120;
-+            return 0;
+-            exit(121);
++            return;
          }
      }
- 
+ }
 -- 
 2.34.1
 

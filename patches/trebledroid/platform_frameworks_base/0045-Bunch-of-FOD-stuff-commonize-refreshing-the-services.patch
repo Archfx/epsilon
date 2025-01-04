@@ -1,4 +1,4 @@
-From 8a9c47dd10c5d7e38f1fd161829a79beb0686a25 Mon Sep 17 00:00:00 2001
+From 550b7a6cffac58c044f6c0ce19bb86163e18be0e Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 29 Jan 2024 17:15:38 -0500
 Subject: [PATCH 45/52] Bunch of FOD stuff -- commonize refreshing the
@@ -9,7 +9,7 @@ Subject: [PATCH 45/52] Bunch of FOD stuff -- commonize refreshing the
  1 file changed, 137 insertions(+), 19 deletions(-)
 
 diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
-index f1bfcf7af178..bebd34944a8c 100644
+index 5694a5a73747..7383afb19244 100644
 --- a/services/core/java/com/android/server/biometrics/AuthService.java
 +++ b/services/core/java/com/android/server/biometrics/AuthService.java
 @@ -43,6 +43,7 @@ import android.hardware.biometrics.IAuthService;
@@ -173,7 +173,7 @@ index f1bfcf7af178..bebd34944a8c 100644
                      Slog.d("PHH-Enroll", "New actual mask brightness is " + actualMask);
                      try {
                          int eventReq = 0;
-@@ -1133,22 +1220,53 @@ public class AuthService extends SystemService {
+@@ -1151,22 +1238,53 @@ public class AuthService extends SystemService {
              udfpsProps[2] = (int)mW;
  
              try {

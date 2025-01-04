@@ -1,4 +1,4 @@
-From d9d85ec3525eaa28e4436238f53a18ec67b17b8c Mon Sep 17 00:00:00 2001
+From 52f8abeab5d7cbbbcd2722116aa5b0d413c340c9 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 27 Dec 2021 18:00:43 -0500
 Subject: [PATCH 07/14] powermanager: Add support Samsung miscpower HAL
@@ -317,17 +317,17 @@ index bd6685cbad..82a623dd8b 100644
  
  } // namespace power
 diff --git a/services/surfaceflinger/CompositionEngine/Android.bp b/services/surfaceflinger/CompositionEngine/Android.bp
-index 7fa58dfef8..89ba8438cf 100644
+index b4ac9ba741..b2aae239f5 100644
 --- a/services/surfaceflinger/CompositionEngine/Android.bp
 +++ b/services/surfaceflinger/CompositionEngine/Android.bp
-@@ -39,6 +39,7 @@ cc_defaults {
+@@ -40,6 +40,7 @@ cc_defaults {
          "libSurfaceFlingerProp",
          "libui",
          "libutils",
 +        "vendor.samsung.hardware.miscpower@2.0",
      ],
      static_libs: [
-         "liblayers_proto",
+         "libmath",
 -- 
 2.34.1
 

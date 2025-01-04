@@ -1,0 +1,86 @@
+From db9fdfe26b4b012d6b56740fd8b2d47dbec3b1c6 Mon Sep 17 00:00:00 2001
+From: LuK1337 <priv.luk@gmail.com>
+Date: Tue, 15 Sep 2020 03:27:19 +0200
+Subject: [PATCH 2/4] Add wallpaper default permissions
+
+Change-Id: If43a594da31fbab9280ce45b049737f6c534b620
+---
+ Android.bp                                    | 13 ++++++-
+ default_permissions_com.android.wallpaper.xml | 37 +++++++++++++++++++
+ 2 files changed, 49 insertions(+), 1 deletion(-)
+ create mode 100644 default_permissions_com.android.wallpaper.xml
+
+diff --git a/Android.bp b/Android.bp
+index 40e2241..614739a 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -140,7 +140,10 @@ android_app {
+     platform_apis: true,
+     manifest: "AndroidManifest.xml",
+     additional_manifests: [":WallpaperPicker2_Manifest"],
+-    required: ["privapp_whitelist_com.android.wallpaper.xml"],
++    required: [
++        "privapp_whitelist_com.android.wallpaper.xml",
++        "default_permissions_com.android.wallpaper.xml",
++    ],
+     overrides: ["WallpaperPicker", "WallpaperPicker2"],
+     static_libs: ["ThemePickerApplicationLib"],
+ }
+@@ -152,3 +155,11 @@ prebuilt_etc_xml {
+     filename_from_src: true,
+     sub_dir: "permissions",
+ }
++
++prebuilt_etc_xml {
++    name: "default_permissions_com.android.wallpaper.xml",
++    src: "default_permissions_com.android.wallpaper.xml",
++    system_ext_specific: true,
++    filename_from_src: true,
++    sub_dir: "default-permissions",
++}
+diff --git a/default_permissions_com.android.wallpaper.xml b/default_permissions_com.android.wallpaper.xml
+new file mode 100644
+index 0000000..41b23ce
+--- /dev/null
++++ b/default_permissions_com.android.wallpaper.xml
+@@ -0,0 +1,37 @@
++<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
++<!--
++     Copyright (C) 2019-2020 The LineageOS Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++
++<!--
++    This file contains permissions to be granted by default. Default
++    permissions are granted to special platform components and to apps
++    that are approved to get default grants. The special components
++    are apps that are expected to work out-of-the-box as they provide
++    core use cases such as default dialer, default email, etc. These
++    grants are managed by the platform. The apps that are additionally
++    approved for default grants are ones that provide carrier specific
++    functionality, ones legally required at some location, ones providing
++    alternative disclosure and opt-out UI, ones providing highlight features
++    of a dedicated device, etc. This file contains only the latter exceptions.
++    Fixed permissions cannot be controlled by the user and need a special
++    approval. Typically these are to ensure either legally mandated functions
++    or the app is considered a part of the OS.
++-->
++<exceptions>
++    <exception package="com.android.wallpaper">
++        <permission name="android.permission.READ_EXTERNAL_STORAGE" fixed="false"/>
++    </exception>
++</exceptions>
+-- 
+2.44.0
+
