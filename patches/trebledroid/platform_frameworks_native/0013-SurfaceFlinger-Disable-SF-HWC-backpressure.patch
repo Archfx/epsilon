@@ -1,4 +1,4 @@
-From 7fb4b38eda196e55ba0251b86cd85e3bc522636a Mon Sep 17 00:00:00 2001
+From fbe65c054ad756e69da213f4f8b0c5b3a8045bbd Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Sun, 26 May 2024 21:34:17 +0800
 Subject: [PATCH 13/14] SurfaceFlinger: Disable SF HWC backpressure
@@ -8,14 +8,14 @@ Subject: [PATCH 13/14] SurfaceFlinger: Disable SF HWC backpressure
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/services/surfaceflinger/SurfaceFlinger.cpp b/services/surfaceflinger/SurfaceFlinger.cpp
-index 2d90d4041a..2414aa6c7f 100644
+index 65a0ed3065..1319ad50af 100644
 --- a/services/surfaceflinger/SurfaceFlinger.cpp
 +++ b/services/surfaceflinger/SurfaceFlinger.cpp
-@@ -2630,7 +2630,8 @@ bool SurfaceFlinger::commit(PhysicalDisplayId pacesetterId,
+@@ -2574,7 +2574,8 @@ bool SurfaceFlinger::commit(PhysicalDisplayId pacesetterId,
          }
      }
  
--    if (pacesetterFrameTarget.isFramePending()) {
+-    if (pacesetterFrameTarget.wouldBackpressureHwc()) {
 +    if (base::GetBoolProperty("persist.sys.phh.enable_sf_hwc_backpressure"s, true)
 +            && pacesetterFrameTarget.isFramePending()) {
          if (mBackpressureGpuComposition || pacesetterFrameTarget.didMissHwcFrame()) {

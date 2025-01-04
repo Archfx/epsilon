@@ -1,4 +1,4 @@
-From 0ec24b2b368d337447b04794ae705cf0882cafed Mon Sep 17 00:00:00 2001
+From 0df56eaaf8123d70ef456d9f990dd95ed194dea2 Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Sun, 5 Mar 2023 17:54:25 +0000
 Subject: [PATCH 08/10] permissions: Pre-grant google restore permissions
@@ -9,7 +9,7 @@ Change-Id: I241886b63e0660ef01e7801b273045c3c91d44ea
  1 file changed, 19 insertions(+)
 
 diff --git a/services/core/java/com/android/server/pm/permission/DefaultPermissionGrantPolicy.java b/services/core/java/com/android/server/pm/permission/DefaultPermissionGrantPolicy.java
-index 5eda6deb0eb0..748e5a2c51af 100644
+index 6e7a009f58ce..2f62175a91d0 100644
 --- a/services/core/java/com/android/server/pm/permission/DefaultPermissionGrantPolicy.java
 +++ b/services/core/java/com/android/server/pm/permission/DefaultPermissionGrantPolicy.java
 @@ -217,6 +217,15 @@ final class DefaultPermissionGrantPolicy {
@@ -28,7 +28,7 @@ index 5eda6deb0eb0..748e5a2c51af 100644
      private static final Set<String> STORAGE_PERMISSIONS = new ArraySet<>();
      static {
          STORAGE_PERMISSIONS.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-@@ -939,6 +948,16 @@ final class DefaultPermissionGrantPolicy {
+@@ -945,6 +954,16 @@ final class DefaultPermissionGrantPolicy {
          String commonServiceAction = "android.adservices.AD_SERVICES_COMMON_SERVICE";
          grantPermissionsToSystemPackage(pm, getDefaultSystemHandlerServicePackage(pm,
                          commonServiceAction, userId), userId, NOTIFICATION_PERMISSIONS);

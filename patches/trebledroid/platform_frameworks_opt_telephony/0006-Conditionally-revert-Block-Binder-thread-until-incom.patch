@@ -1,4 +1,4 @@
-From 1a1bba4ebef19da65238258e00b1aca614fc5460 Mon Sep 17 00:00:00 2001
+From 96c1503252281213a1bb6b97848e69e1312b3bc2 Mon Sep 17 00:00:00 2001
 From: ExactExampl <exactxmpl@pixelexperience.org>
 Date: Tue, 11 Oct 2022 12:38:00 +0300
 Subject: [PATCH 06/10] Conditionally revert "Block Binder thread until
@@ -17,7 +17,7 @@ Change-Id: I55a8f3bbca4a2b9a6bc7511e9fe2d0884a8818e5
  1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java b/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java
-index e73eafd7e1..2cf59c71a6 100644
+index 26b6e1826d..c6b3355ad4 100644
 --- a/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java
 +++ b/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java
 @@ -70,6 +70,7 @@ import android.os.Registrant;
@@ -25,10 +25,10 @@ index e73eafd7e1..2cf59c71a6 100644
  import android.os.RemoteException;
  import android.os.SystemClock;
 +import android.os.SystemProperties;
+ import android.os.UserHandle;
  import android.preference.PreferenceManager;
  import android.provider.Settings;
- import android.sysprop.TelephonyProperties;
-@@ -389,7 +390,19 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
+@@ -390,7 +391,19 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
          @Nullable
          public IImsCallSessionListener onIncomingCall(
                  @NonNull IImsCallSession c, @Nullable String callId, @Nullable Bundle extras) {

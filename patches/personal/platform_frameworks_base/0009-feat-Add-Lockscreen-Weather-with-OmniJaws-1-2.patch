@@ -1,4 +1,4 @@
-From 6a8c42412cef246a07ed05b4a653f6a5d1b65f6a Mon Sep 17 00:00:00 2001
+From 825a4049a7fc97d8ca5fa4ed01ef7ce0c8e3152b Mon Sep 17 00:00:00 2001
 From: maxwen <max.weninger@gmail.com>
 Date: Fri, 22 Oct 2021 14:55:26 +0200
 Subject: [PATCH 09/10] feat: Add Lockscreen Weather with OmniJaws (1/2)
@@ -19,10 +19,10 @@ Co-authored-by: Pranav Vashi <neobuddy89@gmail.com>
  create mode 100644 core/java/com/android/internal/util/crdroid/OmniJawsClient.java
 
 diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
-index 5c392ae6bd2c..e9f87249f389 100644
+index ef8b3d738154..16a0f3d4810a 100644
 --- a/core/java/android/provider/Settings.java
 +++ b/core/java/android/provider/Settings.java
-@@ -6249,6 +6249,11 @@ public final class Settings {
+@@ -6309,6 +6309,11 @@ public final class Settings {
           * the setting value. See an example above.
           */
  
@@ -482,7 +482,7 @@ index 000000000000..2bbd51ffab8c
 +    }
 +}
 diff --git a/data/etc/com.android.systemui.xml b/data/etc/com.android.systemui.xml
-index a115c659d85a..d001b0329650 100644
+index 38ea4ac8d109..0ceaa3d4fb26 100644
 --- a/data/etc/com.android.systemui.xml
 +++ b/data/etc/com.android.systemui.xml
 @@ -16,6 +16,7 @@
@@ -494,10 +494,10 @@ index a115c659d85a..d001b0329650 100644
          <permission name="android.permission.ALLOW_SLIPPERY_TOUCHES"/>
          <permission name="android.permission.BATTERY_STATS"/>
 diff --git a/packages/SystemUI/AndroidManifest.xml b/packages/SystemUI/AndroidManifest.xml
-index e47dde0c1af1..ef993a4472de 100644
+index d8ddda49dbd9..db424bc30073 100644
 --- a/packages/SystemUI/AndroidManifest.xml
 +++ b/packages/SystemUI/AndroidManifest.xml
-@@ -383,6 +383,10 @@
+@@ -391,6 +391,10 @@
      <protected-broadcast android:name="com.android.systemui.action.ACTION_LAUNCH_MEDIA_OUTPUT_BROADCAST_DIALOG" />
      <protected-broadcast android:name="com.android.systemui.STARTED" />
  

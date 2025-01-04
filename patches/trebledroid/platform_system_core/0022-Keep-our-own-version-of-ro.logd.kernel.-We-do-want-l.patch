@@ -1,4 +1,4 @@
-From 90add1da0df58a27540668174188513b58742c64 Mon Sep 17 00:00:00 2001
+From d7b92ae01a8af84ec6094e9fb8f774039854e747 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 25 Nov 2023 09:51:14 -0500
 Subject: [PATCH 22/27] Keep our own version of ro.logd.kernel. We do want
@@ -9,10 +9,10 @@ Subject: [PATCH 22/27] Keep our own version of ro.logd.kernel. We do want
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/init/property_service.cpp b/init/property_service.cpp
-index 9d8bb508a..25aaf41b0 100644
+index 8c0cc6442..554f61771 100644
 --- a/init/property_service.cpp
 +++ b/init/property_service.cpp
-@@ -819,7 +819,7 @@ static void LoadProperties(char* data, const char* filter, const char* filename,
+@@ -815,7 +815,7 @@ static void LoadProperties(char* data, const char* filter, const char* filename,
                                   << "' with new value '" << value << "'";
                      if(strcmp("ro.apex.updatable", key) == 0 && !kernel_supports_capex()) {
                          LOG(WARNING) << "... Ignored apex by kernel version";

@@ -1,4 +1,4 @@
-From 68db4a42f6796bb3b98e326758b8c99b58173af0 Mon Sep 17 00:00:00 2001
+From efdd0dc917852ff779a3102c1a7b79149680702e Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Wed, 8 Dec 2021 07:04:53 +0000
 Subject: [PATCH 1/3] Remove init.vndk-nodef.rc
@@ -59,7 +59,7 @@ index 1b141a05e7..0000000000
 -    # Reboot if BOARD_VNDK_VERSION is not defined
 -    exec - root -- /system/bin/reboot bootloader
 diff --git a/target/product/gsi_release.mk b/target/product/gsi_release.mk
-index da1284e7b8..61337e1e19 100644
+index 39428d2cfe..d15fbc6d46 100644
 --- a/target/product/gsi_release.mk
 +++ b/target/product/gsi_release.mk
 @@ -48,8 +48,6 @@ PRODUCT_USE_DYNAMIC_PARTITION_SIZE := true
@@ -69,7 +69,7 @@ index da1284e7b8..61337e1e19 100644
 -    init.vndk-nodef.rc \
 -
  
- # Overlay the GSI specific SystemUI setting
+ # Overlay the GSI specific setting for framework and SystemUI
  ifneq ($(PRODUCT_IS_AUTOMOTIVE),true)
 -- 
 2.34.1

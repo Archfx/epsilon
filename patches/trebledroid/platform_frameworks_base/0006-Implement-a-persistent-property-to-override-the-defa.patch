@@ -1,4 +1,4 @@
-From 829a1ca41ba4d5554b902a81d9b5824bdbb4f31f Mon Sep 17 00:00:00 2001
+From 15630ac4f42f8fc8bb29c6acea1ab87dfada6d92 Mon Sep 17 00:00:00 2001
 From: Peter Cai <peter@typeblog.net>
 Date: Wed, 1 Jun 2022 16:56:20 -0400
 Subject: [PATCH 06/52] Implement a persistent property to override the default
@@ -11,10 +11,10 @@ Change-Id: I49b45d00bf71d7932591b3516d49a680e1b6568b
  2 files changed, 15 insertions(+)
 
 diff --git a/core/java/android/hardware/Camera.java b/core/java/android/hardware/Camera.java
-index 32d2a6f803d6..45710c9070ca 100644
+index ca3e3d2ad61b..4bef5c4d00e4 100644
 --- a/core/java/android/hardware/Camera.java
 +++ b/core/java/android/hardware/Camera.java
-@@ -48,6 +48,7 @@ import android.os.Message;
+@@ -50,6 +50,7 @@ import android.os.Parcel;
  import android.os.Process;
  import android.os.RemoteException;
  import android.os.ServiceManager;
@@ -22,7 +22,7 @@ index 32d2a6f803d6..45710c9070ca 100644
  import android.text.TextUtils;
  import android.util.Log;
  import android.view.Surface;
-@@ -466,6 +467,11 @@ public class Camera {
+@@ -486,6 +487,11 @@ public class Camera {
       * @see #open(int)
       */
      public static Camera open() {
@@ -35,10 +35,10 @@ index 32d2a6f803d6..45710c9070ca 100644
          CameraInfo cameraInfo = new CameraInfo();
          for (int i = 0; i < numberOfCameras; i++) {
 diff --git a/core/java/android/hardware/camera2/CameraManager.java b/core/java/android/hardware/camera2/CameraManager.java
-index 708f8a173aba..e1bf800a4575 100644
+index 21627920f598..e2aa460c1165 100644
 --- a/core/java/android/hardware/camera2/CameraManager.java
 +++ b/core/java/android/hardware/camera2/CameraManager.java
-@@ -2358,6 +2358,15 @@ public final class CameraManager {
+@@ -2424,6 +2424,15 @@ public final class CameraManager {
                              return s1.compareTo(s2);
                          }
                      }});

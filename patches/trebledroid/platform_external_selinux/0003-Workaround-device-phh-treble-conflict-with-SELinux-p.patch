@@ -1,4 +1,4 @@
-From e44850652ba048621cd5977b489540f99d5e84bd Mon Sep 17 00:00:00 2001
+From 613eea002a11f50d9008b5543a08400ed49333c9 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 31 Mar 2021 23:32:37 +0200
 Subject: [PATCH 03/11] Workaround device/phh/treble conflict with SELinux
@@ -18,7 +18,7 @@ simply ignore them.
  3 files changed, 28 insertions(+), 6 deletions(-)
 
 diff --git a/libsepol/cil/src/cil_binary.c b/libsepol/cil/src/cil_binary.c
-index 40615db2..74a52956 100644
+index c8144a5a..a4010342 100644
 --- a/libsepol/cil/src/cil_binary.c
 +++ b/libsepol/cil/src/cil_binary.c
 @@ -511,13 +511,17 @@ int cil_typealias_to_policydb(policydb_t *pdb, struct cil_alias *cil_alias)
@@ -40,7 +40,7 @@ index 40615db2..74a52956 100644
  		goto exit;
  	}
  	sepol_alias->s.value = sepol_type->s.value;
-@@ -3995,7 +3999,7 @@ static int __cil_node_to_policydb(struct cil_tree_node *node, void *extra_args)
+@@ -4074,7 +4078,7 @@ static int __cil_node_to_policydb(struct cil_tree_node *node, void *extra_args)
  
  exit:
  	if (rc != SEPOL_OK) {
@@ -50,10 +50,10 @@ index 40615db2..74a52956 100644
  	return rc;
  }
 diff --git a/libsepol/cil/src/cil_build_ast.c b/libsepol/cil/src/cil_build_ast.c
-index 4177c9f6..118de1f5 100644
+index 56dac891..6e9dae82 100644
 --- a/libsepol/cil/src/cil_build_ast.c
 +++ b/libsepol/cil/src/cil_build_ast.c
-@@ -116,7 +116,7 @@ int cil_add_decl_to_symtab(struct cil_db *db, symtab_t *symtab, hashtab_key_t ke
+@@ -161,7 +161,7 @@ int cil_add_decl_to_symtab(struct cil_db *db, symtab_t *symtab, hashtab_key_t ke
  
  	rc = cil_symtab_insert(symtab, key, datum, node);
  	if (rc == SEPOL_EEXIST) {
@@ -62,7 +62,7 @@ index 4177c9f6..118de1f5 100644
  		rc = cil_symtab_get_datum(symtab, key, &prev);
  		if (rc != SEPOL_OK) {
  			cil_log(CIL_ERR, "Re-declaration of %s %s, but previous declaration could not be found\n",cil_node_to_string(node), key);
-@@ -129,7 +129,14 @@ int cil_add_decl_to_symtab(struct cil_db *db, symtab_t *symtab, hashtab_key_t ke
+@@ -174,7 +174,14 @@ int cil_add_decl_to_symtab(struct cil_db *db, symtab_t *symtab, hashtab_key_t ke
  				cil_node_to_string(node), key);
  			cil_tree_log(node, CIL_ERR, "Previous declaration of %s",
  				     cil_node_to_string(n));
@@ -79,10 +79,10 @@ index 4177c9f6..118de1f5 100644
  		/* multiple_decls is enabled and works for this datum type, add node */
  		cil_list_append(prev->nodes, CIL_NODE, node);
 diff --git a/libsepol/cil/src/cil_resolve_ast.c b/libsepol/cil/src/cil_resolve_ast.c
-index 91fa1075..d20fb7ee 100644
+index b8ca533b..db34dd0f 100644
 --- a/libsepol/cil/src/cil_resolve_ast.c
 +++ b/libsepol/cil/src/cil_resolve_ast.c
-@@ -522,7 +522,13 @@ static int cil_resolve_aliasactual(struct cil_tree_node *current, void *extra_ar
+@@ -519,7 +519,13 @@ static int cil_resolve_aliasactual(struct cil_tree_node *current, struct cil_db
  	}
  	if (FLAVOR(alias_datum) != alias_flavor) {
  		cil_log(CIL_ERR, "%s is not an alias\n",alias_datum->name);
@@ -97,7 +97,7 @@ index 91fa1075..d20fb7ee 100644
  		goto exit;
  	}
  
-@@ -563,7 +569,12 @@ static int cil_resolve_alias_to_actual(struct cil_tree_node *current, enum cil_f
+@@ -562,7 +568,12 @@ static int cil_resolve_alias_to_actual(struct cil_tree_node *current, enum cil_f
  	int limit = 2;
  
  	if (alias->actual == NULL) {

@@ -1,4 +1,4 @@
-From dc14c72ec488188ee9f29f2565fd80fbf0440ffa Mon Sep 17 00:00:00 2001
+From 150816dfe6aeb109dcb087064fae7653415748b8 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 25 Nov 2023 08:15:28 -0500
 Subject: [PATCH 09/14] Add MTK GED KPI support to fix broken Mediatek gpufreq
@@ -17,15 +17,15 @@ than just standard DVFS.
 Thanks @sarthakroy2002 for the help and support (other people helped as
 well)
 ---
- libs/gui/Surface.cpp           | 202 +++++++++++++++++++++++++++++++++
+ libs/gui/Surface.cpp           | 203 +++++++++++++++++++++++++++++++++
  libs/gui/include/gui/Surface.h |   3 +
- 2 files changed, 205 insertions(+)
+ 2 files changed, 206 insertions(+)
 
 diff --git a/libs/gui/Surface.cpp b/libs/gui/Surface.cpp
-index 87fd448f0c..8896973284 100644
+index 66e7ddd915..b2607387ed 100644
 --- a/libs/gui/Surface.cpp
 +++ b/libs/gui/Surface.cpp
-@@ -24,6 +24,9 @@
+@@ -26,6 +26,9 @@
  #include <deque>
  #include <mutex>
  #include <thread>
@@ -45,10 +45,10 @@ index 87fd448f0c..8896973284 100644
  
  #include <com_android_graphics_libgui_flags.h>
  
-@@ -76,6 +82,37 @@ bool isInterceptorRegistrationOp(int op) {
+@@ -93,6 +99,38 @@ void Surface::ProducerDeathListenerProxy::binderDied(const wp<IBinder>&) {
  }
+ #endif // COM_ANDROID_GRAPHICS_LIBGUI_FLAGS(WB_PLATFORM_API_IMPROVEMENTS)
  
- } // namespace
 +  //
 +#define GED_MAGIC 'g'
 +#define GED_BRIDGE_COMMAND_GPU_TIMESTAMP      103
@@ -80,10 +80,11 @@ index 87fd448f0c..8896973284 100644
 +
 +static int doMtkGedKpi = -1;
 +static int ged_fd = -1;
- 
++
  Surface::Surface(const sp<IGraphicBufferProducer>& bufferProducer, bool controlledByApp,
                   const sp<IBinder>& surfaceControlHandle)
-@@ -128,6 +165,47 @@ Surface::Surface(const sp<IGraphicBufferProducer>& bufferProducer, bool controll
+       : mGraphicBufferProducer(bufferProducer),
+@@ -147,6 +185,47 @@ Surface::Surface(const sp<IGraphicBufferProducer>& bufferProducer, bool controll
      mSwapIntervalZero = false;
      mMaxBufferCount = NUM_BUFFER_SLOTS;
      mSurfaceControlHandle = surfaceControlHandle;
@@ -131,7 +132,7 @@ index 87fd448f0c..8896973284 100644
  }
  
  Surface::~Surface() {
-@@ -668,6 +746,36 @@ int Surface::dequeueBuffer(android_native_buffer_t** buffer, int* fenceFd) {
+@@ -699,6 +778,36 @@ int Surface::dequeueBuffer(android_native_buffer_t** buffer, int* fenceFd) {
          }
      }
  
@@ -168,7 +169,7 @@ index 87fd448f0c..8896973284 100644
      if (fence->isValid()) {
          *fenceFd = fence->dup();
          if (*fenceFd == -1) {
-@@ -1111,6 +1219,60 @@ void Surface::onBufferQueuedLocked(int slot, sp<Fence> fence,
+@@ -1187,6 +1296,60 @@ void Surface::onBufferQueuedLocked(int slot, sp<Fence> fence,
      }
  
      mQueueBufferCondition.broadcast();
@@ -229,16 +230,16 @@ index 87fd448f0c..8896973284 100644
  
      if (CC_UNLIKELY(atrace_is_tag_enabled(ATRACE_TAG_GRAPHICS))) {
          static gui::FenceMonitor gpuCompletionThread("GPU completion");
-@@ -1899,6 +2061,46 @@ int Surface::connect(
- 
-         mConsumerRunningBehind = (output.numPendingBuffers >= 2);
+@@ -2111,6 +2274,46 @@ int Surface::connect(int api, const sp<SurfaceListener>& listener, bool reportBu
+         }
+ #endif // COM_ANDROID_GRAPHICS_LIBGUI_FLAGS(WB_PLATFORM_API_IMPROVEMENTS)
      }
 +
 +    // For MTK GED KPI, we need to grab the Surface owner's PID
 +    // and also know whether that owner is surfaceflinger
 +    if (api == NATIVE_WINDOW_API_EGL && ged_fd >= 0) {
 +        IPCThreadState *ipc = IPCThreadState::selfOrNull();
-+        const sp<IBinder>& token = listener->asBinder(listener);
++        const sp<IBinder>& token = IInterface::asBinder(mGraphicBufferProducer);
 +        mPid =  (token != NULL && NULL != token->localBinder())
 +            ? getpid()
 +            : (ipc != nullptr)?ipc->getCallingPid():-1;
@@ -277,10 +278,10 @@ index 87fd448f0c..8896973284 100644
          mConnectedToCpu = true;
          // Clear the dirty region in case we're switching from a non-CPU API
 diff --git a/libs/gui/include/gui/Surface.h b/libs/gui/include/gui/Surface.h
-index bdcaaf2866..7cb27fca88 100644
+index 14a351316d..e0843a8016 100644
 --- a/libs/gui/include/gui/Surface.h
 +++ b/libs/gui/include/gui/Surface.h
-@@ -649,6 +649,9 @@ protected:
+@@ -742,6 +742,9 @@ protected:
  
      // Buffers that are successfully dequeued/attached and handed to clients
      std::unordered_set<int> mDequeuedSlots;

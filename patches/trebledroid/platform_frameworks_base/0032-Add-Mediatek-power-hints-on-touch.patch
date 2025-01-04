@@ -1,4 +1,4 @@
-From 0540470b0394c021f5791f47950ea28806a4b366 Mon Sep 17 00:00:00 2001
+From 05d6f2324c91d20aa1f86e151fb164c75be1edaf Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 17 Jun 2023 08:31:55 -0400
 Subject: [PATCH 32/52] Add Mediatek power hints on touch
@@ -27,13 +27,13 @@ Change-Id: I9f1eac5a20b98920a5d0c8204fe4d165ba069f5a
  2 files changed, 52 insertions(+), 1 deletion(-)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 413667cce657..b4a0343e9d50 100644
+index f3025ba96c3b..e4fa38ef2127 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -228,7 +228,9 @@ java_library_static {
-         "dreams_flags_lib",
+@@ -239,7 +239,9 @@ java_library_static {
          "aconfig_new_storage_flags_lib",
          "powerstats_flags_lib",
+         "locksettings_flags_lib",
 -        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL
 +        // HIDL
 +        "vendor.mediatek.hardware.mtkpower-V1.1-java",
@@ -42,7 +42,7 @@ index 413667cce657..b4a0343e9d50 100644
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/wm/DisplayPolicy.java b/services/core/java/com/android/server/wm/DisplayPolicy.java
-index 4a59fc2a8f15..a53dba282ab7 100644
+index 0fa1a2138e35..e9d53c4b9904 100644
 --- a/services/core/java/com/android/server/wm/DisplayPolicy.java
 +++ b/services/core/java/com/android/server/wm/DisplayPolicy.java
 @@ -219,6 +219,9 @@ public class DisplayPolicy {

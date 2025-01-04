@@ -1,4 +1,4 @@
-From 521ce63d3f0e73aa09c39896a89db3358178fe2c Mon Sep 17 00:00:00 2001
+From 9c11446e07a78c2c57639c586fa269e5390d99d4 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 6 Oct 2023 08:20:48 -0400
 Subject: [PATCH 17/27] Ignore dm-verity setup issues
@@ -14,10 +14,10 @@ We don't care much about dm-verity so let's just ignore this
  1 file changed, 1 deletion(-)
 
 diff --git a/init/first_stage_mount.cpp b/init/first_stage_mount.cpp
-index 55cce6eaa..2d68fb4ce 100644
+index c26b31e93..f23f3411e 100644
 --- a/init/first_stage_mount.cpp
 +++ b/init/first_stage_mount.cpp
-@@ -438,7 +438,6 @@ bool FirstStageMountVBootV2::MountPartition(const Fstab::iterator& begin, bool e
+@@ -458,7 +458,6 @@ bool FirstStageMountVBootV2::MountPartition(const Fstab::iterator& begin, bool e
      }
      if (!SetUpDmVerity(&(*begin))) {
          PLOG(ERROR) << "Failed to setup verity for '" << begin->mount_point << "'";

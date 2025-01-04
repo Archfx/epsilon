@@ -1,4 +1,4 @@
-From 9b4ee8d5884ce71f964cd58fad56aede2ac9f8f5 Mon Sep 17 00:00:00 2001
+From 16a7daf3c2ec677c9a2faf7d9bba9f40a4e94cc5 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 2 Apr 2024 16:53:08 -0400
 Subject: [PATCH 26/27] Flattened apexes no longer exist, we'll deal with it
@@ -9,10 +9,10 @@ Subject: [PATCH 26/27] Flattened apexes no longer exist, we'll deal with it
  1 file changed, 1 insertion(+), 21 deletions(-)
 
 diff --git a/init/property_service.cpp b/init/property_service.cpp
-index 966ff8ee1..88fea930f 100644
+index b414946bb..08b839242 100644
 --- a/init/property_service.cpp
 +++ b/init/property_service.cpp
-@@ -710,26 +710,6 @@ uint32_t InitPropertySet(const std::string& name, const std::string& value) {
+@@ -706,26 +706,6 @@ uint32_t InitPropertySet(const std::string& name, const std::string& value) {
  static Result<void> load_properties_from_file(const char*, const char*,
                                                std::map<std::string, std::string>*);
  
@@ -39,7 +39,7 @@ index 966ff8ee1..88fea930f 100644
  /*
   * Filter is used to decide which properties to load: NULL loads all keys,
   * "ro.foo.*" is a prefix match, and "ro.foo.bar" is an exact match.
-@@ -825,7 +805,7 @@ static void LoadProperties(char* data, const char* filter, const char* filename,
+@@ -821,7 +801,7 @@ static void LoadProperties(char* data, const char* filter, const char* filename,
                  const char *new_value = value;
  
                  if(strcmp("ro.apex.updatable", key) == 0) {

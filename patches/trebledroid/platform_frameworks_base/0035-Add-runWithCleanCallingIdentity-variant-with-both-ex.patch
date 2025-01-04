@@ -1,4 +1,4 @@
-From 92ab423fbcf8a9bccba8dee7ea646073574b75a6 Mon Sep 17 00:00:00 2001
+From af2136440c3fe2827f211935595c585d70f03a47 Mon Sep 17 00:00:00 2001
 From: Andy CrossGate Yan <GeForce8800Ultra@gmail.com>
 Date: Sat, 12 Aug 2023 20:11:17 +0800
 Subject: [PATCH 35/52] Add runWithCleanCallingIdentity variant with both
@@ -12,7 +12,7 @@ Change-Id: If444290787025e130dce4bdeaf92372ae32793fe
  1 file changed, 30 insertions(+)
 
 diff --git a/telephony/common/com/android/internal/telephony/util/TelephonyUtils.java b/telephony/common/com/android/internal/telephony/util/TelephonyUtils.java
-index f31a87f2b1bf..3f29d4bae9c9 100644
+index 4224338918f4..3bbecf0f2065 100644
 --- a/telephony/common/com/android/internal/telephony/util/TelephonyUtils.java
 +++ b/telephony/common/com/android/internal/telephony/util/TelephonyUtils.java
 @@ -47,7 +47,9 @@ import com.android.internal.telephony.ITelephony;
@@ -25,7 +25,7 @@ index f31a87f2b1bf..3f29d4bae9c9 100644
  import java.util.concurrent.Executor;
  import java.util.concurrent.TimeUnit;
  import java.util.function.Supplier;
-@@ -158,6 +160,34 @@ public final class TelephonyUtils {
+@@ -159,6 +161,34 @@ public final class TelephonyUtils {
          }
      }
  

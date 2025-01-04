@@ -1,4 +1,4 @@
-From 259aa101e8e5b1ee997886257f61a400e2e33671 Mon Sep 17 00:00:00 2001
+From 786eefc26e983d310691ed02d3303fa3d77a1fea Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 6 Oct 2023 08:25:11 -0400
 Subject: [PATCH 1/2] Revert "Remove 28.0 compat support"
@@ -8,6 +8,7 @@ This reverts commit d16612cd8aed0de2ca889174f1a7033137260ecd.
 Change-Id: I2b0c61ced1f9651f74da85d1228d7260cc782c80
 ---
  compat/Android.bp                             |   62 +
+ prebuilts/api/28.0/Android.bp                 |  111 +
  prebuilts/api/28.0/private/access_vectors     |  726 +++++
  prebuilts/api/28.0/private/adbd.te            |  148 +
  prebuilts/api/28.0/private/app.te             |    7 +
@@ -354,7 +355,8 @@ Change-Id: I2b0c61ced1f9651f74da85d1228d7260cc782c80
  private/compat/28.0/28.0.cil                  | 1745 +++++++++++
  private/compat/28.0/28.0.compat.cil           |   15 +
  private/compat/28.0/28.0.ignore.cil           |  160 +
- 347 files changed, 31579 insertions(+)
+ 348 files changed, 31690 insertions(+)
+ create mode 100644 prebuilts/api/28.0/Android.bp
  create mode 100644 prebuilts/api/28.0/private/access_vectors
  create mode 100644 prebuilts/api/28.0/private/adbd.te
  create mode 100644 prebuilts/api/28.0/private/app.te
@@ -831,6 +833,123 @@ index f09fb2137..a71a68b95 100644
  se_compat_cil {
      name: "system_ext_29.0.compat.cil",
      srcs: [":29.0.board.compat.cil{.system_ext_private}"],
+diff --git a/prebuilts/api/28.0/Android.bp b/prebuilts/api/28.0/Android.bp
+new file mode 100644
+index 000000000..31b5f6c89
+--- /dev/null
++++ b/prebuilts/api/28.0/Android.bp
+@@ -0,0 +1,111 @@
++// Copyright (C) 2023 The Android Open Source Project
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//     http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++se_policy_conf {
++    name: "28.0_reqd_policy_mask.conf",
++    defaults: ["se_policy_conf_flags_defaults"],
++    srcs: reqd_mask_policy,
++    installable: false,
++    build_variant: "user",
++    board_api_level: "28",
++}
++
++se_policy_cil {
++    name: "28.0_reqd_policy_mask.cil",
++    src: ":28.0_reqd_policy_mask.conf",
++    secilc_check: false,
++    installable: false,
++}
++
++se_policy_conf {
++    name: "28.0_plat_pub_policy.conf",
++    defaults: ["se_policy_conf_flags_defaults"],
++    srcs: [
++        ":se_build_files{.plat_public_28.0}",
++        ":se_build_files{.reqd_mask}",
++    ],
++    installable: false,
++    build_variant: "user",
++    board_api_level: "28",
++}
++
++se_policy_cil {
++    name: "28.0_plat_pub_policy.cil",
++    src: ":28.0_plat_pub_policy.conf",
++    filter_out: [":28.0_reqd_policy_mask.cil"],
++    secilc_check: false,
++    installable: false,
++}
++
++se_policy_conf {
++    name: "28.0_product_pub_policy.conf",
++    defaults: ["se_policy_conf_flags_defaults"],
++    srcs: [
++        ":se_build_files{.plat_public_28.0}",
++        ":se_build_files{.system_ext_public_28.0}",
++        ":se_build_files{.product_public_28.0}",
++        ":se_build_files{.reqd_mask}",
++    ],
++    installable: false,
++    build_variant: "user",
++    board_api_level: "28",
++}
++
++se_policy_cil {
++    name: "28.0_product_pub_policy.cil",
++    src: ":28.0_product_pub_policy.conf",
++    filter_out: [":28.0_reqd_policy_mask.cil"],
++    secilc_check: false,
++    installable: false,
++}
++
++se_versioned_policy {
++    name: "28.0_plat_pub_versioned.cil",
++    base: ":28.0_product_pub_policy.cil",
++    target_policy: ":28.0_product_pub_policy.cil",
++    version: "28.0",
++    installable: false,
++}
++
++se_policy_conf {
++    name: "28.0_plat_policy.conf",
++    defaults: ["se_policy_conf_flags_defaults"],
++    srcs: [
++        ":se_build_files{.plat_public_28.0}",
++        ":se_build_files{.plat_private_28.0}",
++        ":se_build_files{.system_ext_public_28.0}",
++        ":se_build_files{.system_ext_private_28.0}",
++        ":se_build_files{.product_public_28.0}",
++        ":se_build_files{.product_private_28.0}",
++    ],
++    installable: false,
++    build_variant: "user",
++    board_api_level: "28",
++}
++
++se_policy_cil {
++    name: "28.0_plat_policy.cil",
++    src: ":28.0_plat_policy.conf",
++    additional_cil_files: [":sepolicy_technical_debt{.plat_private_28.0}"],
++    installable: false,
++}
++
++se_policy_binary {
++    name: "28.0_plat_policy",
++    srcs: [":28.0_plat_policy.cil"],
++    installable: false,
++    dist: {
++        targets: ["base-sepolicy-files-for-mapping"],
++    },
++}
 diff --git a/prebuilts/api/28.0/private/access_vectors b/prebuilts/api/28.0/private/access_vectors
 new file mode 100644
 index 000000000..898c884cd

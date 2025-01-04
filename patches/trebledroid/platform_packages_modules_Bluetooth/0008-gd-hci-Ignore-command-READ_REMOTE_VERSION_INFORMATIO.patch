@@ -1,4 +1,4 @@
-From 4d8f39572d57bdb602153e75a28810565282ce73 Mon Sep 17 00:00:00 2001
+From e082a6619f541879b3c1db1256abebcacae69d9e Mon Sep 17 00:00:00 2001
 From: wbs306 <wbs306@gmail.com>
 Date: Fri, 20 Jan 2023 17:07:41 +0800
 Subject: [PATCH 8/9] gd: hci: Ignore command READ_REMOTE_VERSION_INFORMATION
@@ -14,10 +14,10 @@ It means this command isn't in the command_queue_, we can just ignore it.
  1 file changed, 4 insertions(+)
 
 diff --git a/system/gd/hci/hci_layer.cc b/system/gd/hci/hci_layer.cc
-index 9c411fb31f..803ab382b1 100644
+index ffe44065d1..e8a6ef4f87 100644
 --- a/system/gd/hci/hci_layer.cc
 +++ b/system/gd/hci/hci_layer.cc
-@@ -402,6 +402,10 @@ struct HciLayer::impl {
+@@ -403,6 +403,10 @@ struct HciLayer::impl {
          auto view = CommandCompleteView::Create(event);
          log::assert_that(view.IsValid(), "assert failed: view.IsValid()");
          auto op_code = view.GetCommandOpCode();
@@ -25,9 +25,9 @@ index 9c411fb31f..803ab382b1 100644
 +            log::warn("OpCode 0x%02hx (%s) is not in the command queue, skipped.", op_code, OpCodeText(op_code).c_str());
 +            return;
 +        }
-         log::assert_that(
-             op_code == OpCode::NONE,
-             "Received {} event with OpCode {} without a waiting command(is the HAL "
+         log::assert_that(op_code == OpCode::NONE,
+                          "Received {} event with OpCode {} without a waiting command(is the HAL "
+                          "sending commands, but not handling the events?)",
 -- 
 2.34.1
 

@@ -1,7 +1,7 @@
-From 10b4f27cdb462a29888b97ef53713dcb39cb8c86 Mon Sep 17 00:00:00 2001
+From f2a6b99ec1d018651e97cff5de97aef19e2bf1ce Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 29 Nov 2024 20:11:52 -0500
-Subject: [PATCH 25/25] Tell Unihertz/Agold we are not a GSI. Fixes aux cam on
+Subject: [PATCH 24/24] Tell Unihertz/Agold we are not a GSI. Fixes aux cam on
  Jelly Max
 
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH 25/25] Tell Unihertz/Agold we are not a GSI. Fixes aux cam on
  2 files changed, 11 insertions(+)
 
 diff --git a/services/camera/libcameraservice/Android.bp b/services/camera/libcameraservice/Android.bp
-index 5e7a9cf51a..fb2a880953 100644
+index b2807ecd08..0fc7485789 100644
 --- a/services/camera/libcameraservice/Android.bp
 +++ b/services/camera/libcameraservice/Android.bp
-@@ -112,6 +112,7 @@ cc_defaults {
+@@ -113,6 +113,7 @@ cc_defaults {
          "android.hardware.camera.provider@2.6",
          "android.hardware.camera.provider@2.7",
          "android.hardware.camera.provider-V3-ndk",
@@ -22,7 +22,7 @@ index 5e7a9cf51a..fb2a880953 100644
          "vendor.samsung.hardware.camera.provider@4.0",
          "vendor.samsung.hardware.camera.provider-V1-ndk",
 diff --git a/services/camera/libcameraservice/common/aidl/AidlProviderInfo.cpp b/services/camera/libcameraservice/common/aidl/AidlProviderInfo.cpp
-index d877bca05f..07da29b770 100644
+index a640286a0a..d6ab9508f9 100644
 --- a/services/camera/libcameraservice/common/aidl/AidlProviderInfo.cpp
 +++ b/services/camera/libcameraservice/common/aidl/AidlProviderInfo.cpp
 @@ -34,6 +34,7 @@
@@ -33,7 +33,7 @@ index d877bca05f..07da29b770 100644
  
  namespace {
  const bool kEnableLazyHal(property_get_bool("ro.camera.enableLazyHal", false));
-@@ -160,6 +161,15 @@ status_t AidlProviderInfo::initializeAidlProvider(
+@@ -157,6 +158,15 @@ status_t AidlProviderInfo::initializeAidlProvider(
              __FUNCTION__, mProviderName.c_str(), mDeviceState);
      notifyDeviceStateChange(currentDeviceState);
  

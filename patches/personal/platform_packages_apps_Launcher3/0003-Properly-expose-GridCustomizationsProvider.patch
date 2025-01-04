@@ -1,0 +1,28 @@
+From a75d769d962e2356d2685dde26141edb312c8e00 Mon Sep 17 00:00:00 2001
+From: Luca Stefani <luca.stefani.ge1@gmail.com>
+Date: Fri, 1 Nov 2019 23:17:59 +0100
+Subject: [PATCH 3/3] Properly expose GridCustomizationsProvider
+
+Change-Id: I8268a215257ae0e399c56ac8b44cdfdff8cc92a0
+---
+ AndroidManifest-common.xml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
+index 80d2eac..53bdfff 100644
+--- a/AndroidManifest-common.xml
++++ b/AndroidManifest-common.xml
+@@ -138,7 +138,9 @@
+         <provider
+             android:name="com.android.launcher3.graphics.GridCustomizationsProvider"
+             android:authorities="${applicationId}.grid_control"
+-            android:exported="true" />
++            android:exported="true"
++            android:writePermission="${packageName}.permission.WRITE_SETTINGS"
++            android:readPermission="${packageName}.permission.READ_SETTINGS" />
+ 
+         <!--
+         The settings activity. To extend point settings_fragment_name to appropriate fragment class
+-- 
+2.44.0
+
