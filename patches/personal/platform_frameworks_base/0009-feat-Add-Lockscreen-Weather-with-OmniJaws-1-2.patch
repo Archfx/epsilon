@@ -1,4 +1,4 @@
-From 825a4049a7fc97d8ca5fa4ed01ef7ce0c8e3152b Mon Sep 17 00:00:00 2001
+From 7e1c4b412bd079e49c2ef3abdad016e3e5632d1c Mon Sep 17 00:00:00 2001
 From: maxwen <max.weninger@gmail.com>
 Date: Fri, 22 Oct 2021 14:55:26 +0200
 Subject: [PATCH 09/10] feat: Add Lockscreen Weather with OmniJaws (1/2)
@@ -561,7 +561,7 @@ index d8be862e19ac..130f984be3db 100644
              for (Drawable drawable : getCompoundDrawables()) {
                  if (drawable != null) {
 diff --git a/packages/SystemUI/src/com/android/systemui/keyguard/KeyguardSliceProvider.java b/packages/SystemUI/src/com/android/systemui/keyguard/KeyguardSliceProvider.java
-index 68a252b2caba..9d93ed73c621 100644
+index 68a252b2caba..c490ec277da1 100644
 --- a/packages/SystemUI/src/com/android/systemui/keyguard/KeyguardSliceProvider.java
 +++ b/packages/SystemUI/src/com/android/systemui/keyguard/KeyguardSliceProvider.java
 @@ -24,6 +24,7 @@ import android.content.ContentResolver;
@@ -665,14 +665,14 @@ index 68a252b2caba..9d93ed73c621 100644
      }
  
      @AnyThread
-@@ -227,6 +268,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
+@@ -224,6 +265,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
+                 } else {
+                     builder.addRow(new RowBuilder(mDateUri).setTitle(mLastText));
+                 }
++                addWeatherLocked(builder);
                  addNextAlarmLocked(builder);
                  addZenModeLocked(builder);
                  addPrimaryActionLocked(builder);
-+                addWeatherLocked(builder);
-                 slice = builder.build();
-             }
-         } catch (IllegalStateException e) {
 @@ -292,6 +334,17 @@ public class KeyguardSliceProvider extends SliceProvider implements
          builder.addRow(alarmRowBuilder);
      }
