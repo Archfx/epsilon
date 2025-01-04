@@ -1,4 +1,4 @@
-From 40d849d1d60cb49b3c336dff19738b2a8ff9e6a8 Mon Sep 17 00:00:00 2001
+From 6744fcfb20d29070174c658fb98cf5202422c77b Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Thu, 9 Nov 2023 12:33:55 +0100
 Subject: [PATCH 01/10] gmscompat: Change attestation and instrumentation to
@@ -46,7 +46,7 @@ index 93a9489849af..1f19fd277453 100644
  
 diff --git a/core/java/com/android/internal/gmscompat/AttestationHooks.java b/core/java/com/android/internal/gmscompat/AttestationHooks.java
 new file mode 100644
-index 000000000000..0841fe83c389
+index 000000000000..e3e47b4fdedc
 --- /dev/null
 +++ b/core/java/com/android/internal/gmscompat/AttestationHooks.java
 @@ -0,0 +1,89 @@
@@ -111,8 +111,8 @@ index 000000000000..0841fe83c389
 +        setPropValue("MANUFACTURER", "Google");
 +        setPropValue("BRAND", "google");
 +        setPropValue("MODEL", "Pixel 9 Pro Fold");
-+        setPropValue("FINGERPRINT", "google/comet_beta/comet:Baklava/BP21.241018.009/12628839:user/release-keys");
-+        setPropValue("VERSION.SECURITY_PATCH", "2024-11-05");
++        setPropValue("FINGERPRINT", "google/comet_beta/comet:Baklava/BP21.241121.009/12787338:user/release-keys");
++        setPropValue("VERSION.SECURITY_PATCH", "2024-12-05");
 +        setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "32");
 +    }
 +
