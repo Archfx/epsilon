@@ -1,0 +1,26 @@
+From 3cdbed6a05724beff6104f6fa0bb20ff9b4e9a37 Mon Sep 17 00:00:00 2001
+From: Peter Cai <peter@typeblog.net>
+Date: Fri, 7 Jul 2023 18:13:32 -0400
+Subject: [PATCH 2/3] Disable QSB in BuildConfig
+
+Change-Id: I3150ef1d9b8c161ed2a6569d1ae75bba0060b36f
+---
+ src_build_config/com/android/launcher3/BuildConfig.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src_build_config/com/android/launcher3/BuildConfig.java b/src_build_config/com/android/launcher3/BuildConfig.java
+index 6d4f56d..2630ec1 100644
+--- a/src_build_config/com/android/launcher3/BuildConfig.java
++++ b/src_build_config/com/android/launcher3/BuildConfig.java
+@@ -24,7 +24,7 @@ public final class BuildConfig {
+      * Flag to state if the QSB is on the first screen and placed on the top,
+      * this can be overwritten in other launchers with a different value, if needed.
+      */
+-    public static final boolean QSB_ON_FIRST_SCREEN = true;
++    public static final boolean QSB_ON_FIRST_SCREEN = false;
+ 
+     /**
+      * Flag to state if the widget on the top of the first screen should be shown.
+-- 
+2.44.0
+

@@ -1,4 +1,4 @@
-From 039b70945756e26c0ff9ac242198202e46bf974a Mon Sep 17 00:00:00 2001
+From 9c73c6ddab2c6baf4bcf616f052f05e1abb87c37 Mon Sep 17 00:00:00 2001
 From: LuK1337 <priv.luk@gmail.com>
 Date: Fri, 27 May 2022 01:13:39 +0200
 Subject: [PATCH 06/10] SystemUI: Add left padding for keyguard slices

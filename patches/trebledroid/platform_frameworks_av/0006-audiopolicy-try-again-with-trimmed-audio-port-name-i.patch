@@ -1,7 +1,7 @@
-From 32cbfd752da5f599fbf218cb49920014f1000707 Mon Sep 17 00:00:00 2001
+From 637eb57d1657c4f4353fbef40c422b8c29698827 Mon Sep 17 00:00:00 2001
 From: Peter Cai <peter@typeblog.net>
 Date: Thu, 23 Jan 2020 11:13:43 +0800
-Subject: [PATCH 06/25] audiopolicy: try again with trimmed audio port name if
+Subject: [PATCH 06/24] audiopolicy: try again with trimmed audio port name if
  not found
 
 * In Spreadtrum BSP, some audio routes may contain ports with extra

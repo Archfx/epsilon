@@ -18,12 +18,6 @@
   <project name="ponces/vendor_gapps" path="vendor/gapps" remote="gitlab" revision="android-15.0" clone-depth="1" />
   <project name="ponces/vendor_ponces" path="vendor/ponces" remote="github" revision="android-15.0" />
   
-  <!-- LineageOS -->
-  <remove-project name="platform/packages/apps/Launcher3" />
-  <remove-project name="platform/packages/apps/ThemePicker" />
-  <project name="LineageOS/android_packages_apps_Trebuchet" path="packages/apps/Trebuchet" remote="github" revision="lineage-22.0" />
-  <project name="LineageOS/android_packages_apps_ThemePicker" path="packages/apps/ThemePicker" remote="github" revision="lineage-22.0" />
-
   <!-- duo specifics -->
   <project name="Archfx/duoOverlays" path="packages/thain/rro_overlays" remote="github" revision="main" />
   <project name="Archfx/duoVendor" path="vendor/surface" remote="github" revision="main" />

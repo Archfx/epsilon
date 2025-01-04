@@ -1,17 +1,17 @@
-From 6f87ca1338f1456df67c402b1a4861540bf50ae0 Mon Sep 17 00:00:00 2001
+From 452c713a6867a7c57370a1690dd7b9c99b783169 Mon Sep 17 00:00:00 2001
 From: Michael Bestas <mkbestas@gmail.com>
 Date: Fri, 15 Mar 2024 14:59:21 +0200
 Subject: [PATCH 5/8] netd: Remove <4.14 kernel restrictions
 
 Change-Id: I4d4abbacd6b9589260de06663e2143bc37d8ea0f
 ---
- netd/BpfHandler.cpp | 9 ---------
+ bpf/netd/BpfHandler.cpp | 9 ---------
  1 file changed, 9 deletions(-)
 
-diff --git a/netd/BpfHandler.cpp b/netd/BpfHandler.cpp
-index 3c68b27126..6226bd9582 100644
---- a/netd/BpfHandler.cpp
-+++ b/netd/BpfHandler.cpp
+diff --git a/bpf/netd/BpfHandler.cpp b/bpf/netd/BpfHandler.cpp
+index deee1867bb..0f0c35f825 100644
+--- a/bpf/netd/BpfHandler.cpp
++++ b/bpf/netd/BpfHandler.cpp
 @@ -76,15 +76,6 @@ static Status initPrograms(const char* cg2_path) {
      // This code was mainlined in T, so this should be trivially satisfied.
      if (!modules::sdklevel::IsAtLeastT()) return Status("S- platform is unsupported");

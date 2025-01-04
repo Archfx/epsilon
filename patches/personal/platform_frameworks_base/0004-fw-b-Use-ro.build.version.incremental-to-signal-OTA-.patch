@@ -1,4 +1,4 @@
-From b1bbf476df05bc5b648da52ec7c4e134ca8d11df Mon Sep 17 00:00:00 2001
+From bf0c0040e4c1c93506723ed45f6d530fc60ee841 Mon Sep 17 00:00:00 2001
 From: dhacker29 <dhackerdvm@gmail.com>
 Date: Tue, 24 Nov 2015 01:53:47 -0500
 Subject: [PATCH 04/10] fw/b: Use ro.build.version.incremental to signal OTA
@@ -54,10 +54,10 @@ index ff80e614be58..da3b68ecf789 100644
      }
  
 diff --git a/services/appwidget/java/com/android/server/appwidget/AppWidgetXmlUtil.java b/services/appwidget/java/com/android/server/appwidget/AppWidgetXmlUtil.java
-index d781cd8d58d8..c1b2c5824b51 100644
+index ce9130ad5cbf..737ecae1cc94 100644
 --- a/services/appwidget/java/com/android/server/appwidget/AppWidgetXmlUtil.java
 +++ b/services/appwidget/java/com/android/server/appwidget/AppWidgetXmlUtil.java
-@@ -100,7 +100,7 @@ public class AppWidgetXmlUtil {
+@@ -117,7 +117,7 @@ public class AppWidgetXmlUtil {
          out.attributeInt(null, ATTR_WIDGET_FEATURES, info.widgetFeatures);
          out.attributeInt(null, ATTR_DESCRIPTION_RES, info.descriptionRes);
          out.attributeBoolean(null, ATTR_PROVIDER_INHERITANCE, info.isExtendedFromAppWidgetProvider);
@@ -66,7 +66,7 @@ index d781cd8d58d8..c1b2c5824b51 100644
      }
  
      /**
-@@ -111,7 +111,7 @@ public class AppWidgetXmlUtil {
+@@ -128,7 +128,7 @@ public class AppWidgetXmlUtil {
              @NonNull final TypedXmlPullParser parser) {
          Objects.requireNonNull(parser);
          final String fingerprint = parser.getAttributeValue(null, ATTR_OS_FINGERPRINT);
@@ -76,10 +76,10 @@ index d781cd8d58d8..c1b2c5824b51 100644
          }
          final AppWidgetProviderInfo info = new AppWidgetProviderInfo();
 diff --git a/services/core/java/com/android/server/pm/PackageManagerService.java b/services/core/java/com/android/server/pm/PackageManagerService.java
-index c0b8034b9a56..dd7d5cea82a8 100644
+index 611e0d86202a..0e343e18ab34 100644
 --- a/services/core/java/com/android/server/pm/PackageManagerService.java
 +++ b/services/core/java/com/android/server/pm/PackageManagerService.java
-@@ -2229,7 +2229,8 @@ public class PackageManagerService implements PackageSender, TestUtilityService
+@@ -2239,7 +2239,8 @@ public class PackageManagerService implements PackageSender, TestUtilityService
              if (mIsUpgrade) {
                  PackageManagerServiceUtils.logCriticalInfo(Log.INFO,
                          "Upgrading from " + ver.fingerprint + " (" + ver.buildFingerprint + ") to "
@@ -89,7 +89,7 @@ index c0b8034b9a56..dd7d5cea82a8 100644
              }
              mPriorSdkVersion = mIsUpgrade ? ver.sdkVersion : -1;
              mInitAppsHelper = new InitAppsHelper(this, mApexManager, mInstallPackageHelper,
-@@ -2387,7 +2388,7 @@ public class PackageManagerService implements PackageSender, TestUtilityService
+@@ -2397,7 +2398,7 @@ public class PackageManagerService implements PackageSender, TestUtilityService
                                          | Installer.FLAG_CLEAR_APP_DATA_KEEP_ART_PROFILES);
                      }
                  }
@@ -99,10 +99,10 @@ index c0b8034b9a56..dd7d5cea82a8 100644
              }
  
 diff --git a/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java b/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java
-index ff8abf879487..0babd99a511b 100644
+index b6c0e0cc2614..f41841c59712 100644
 --- a/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java
 +++ b/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java
-@@ -1399,8 +1399,6 @@ public class PackageManagerServiceUtils {
+@@ -1411,8 +1411,6 @@ public class PackageManagerServiceUtils {
          // that starts with "eng." to signify that this is an engineering build and not
          // destined for release.
          if (isUserDebugBuild && incrementalVersion.startsWith("eng.")) {
@@ -111,7 +111,7 @@ index ff8abf879487..0babd99a511b 100644
              // Heuristic: If the /system directory has been modified recently due to an "adb sync"
              // or a regular make, then blow away the cache. Note that mtimes are *NOT* reliable
              // in general and should not be used for production changes. In this specific case,
-@@ -1408,6 +1406,7 @@ public class PackageManagerServiceUtils {
+@@ -1420,6 +1418,7 @@ public class PackageManagerServiceUtils {
              File frameworkDir =
                      new File(Environment.getRootDirectory(), "framework");
              if (cacheDir.lastModified() < frameworkDir.lastModified()) {
@@ -120,10 +120,10 @@ index ff8abf879487..0babd99a511b 100644
                  cacheDir = FileUtils.createDir(cacheBaseDir, cacheName);
              }
 diff --git a/services/core/java/com/android/server/pm/Settings.java b/services/core/java/com/android/server/pm/Settings.java
-index 39565526f33e..d410f237fd07 100644
+index 1f672a093b38..bef67a838f27 100644
 --- a/services/core/java/com/android/server/pm/Settings.java
 +++ b/services/core/java/com/android/server/pm/Settings.java
-@@ -484,7 +484,7 @@ public final class Settings implements Watchable, Snappable, ResilientAtomicFile
+@@ -485,7 +485,7 @@ public final class Settings implements Watchable, Snappable, ResilientAtomicFile
          public void forceCurrent() {
              sdkVersion = Build.VERSION.SDK_INT;
              databaseVersion = CURRENT_DATABASE_VERSION;
@@ -133,10 +133,10 @@ index 39565526f33e..d410f237fd07 100644
          }
      }
 diff --git a/services/core/java/com/android/server/pm/ShortcutService.java b/services/core/java/com/android/server/pm/ShortcutService.java
-index 1cd77ffcedaa..b918cfa56f40 100644
+index 5518bfae8277..e26eec659d3e 100644
 --- a/services/core/java/com/android/server/pm/ShortcutService.java
 +++ b/services/core/java/com/android/server/pm/ShortcutService.java
-@@ -5248,7 +5248,7 @@ public class ShortcutService extends IShortcutService.Stub {
+@@ -5259,7 +5259,7 @@ public class ShortcutService extends IShortcutService.Stub {
  
      // Injection point.
      String injectBuildFingerprint() {

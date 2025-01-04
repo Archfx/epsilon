@@ -1,4 +1,4 @@
-From ae9567050ae047e4628b0a445fd4876427bedc4a Mon Sep 17 00:00:00 2001
+From 4713203a4088961cdabf968cec271fd76de22d60 Mon Sep 17 00:00:00 2001
 From: TogoFire <italomellopereira@gmail.com>
 Date: Fri, 6 Aug 2021 08:54:07 -0300
 Subject: [PATCH 3/4] Revert "[Wi-Fi] Remove 'Do not validate' option in CA
@@ -50,10 +50,10 @@ index dbd3e673913..930de40f882 100644
                            android:layout_width="match_parent"
                            android:layout_height="wrap_content"
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index f92fd2aca84..866acdae9e9 100644
+index 7e363e6f238..d74c416d9e9 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -2257,6 +2257,10 @@
+@@ -2340,6 +2340,10 @@
      <string name="wifi_use_system_certs">Use system certificates</string>
      <!-- Menu option for not providing an EAP user certificate -->
      <string name="wifi_do_not_provide_eap_user_cert">Do not provide</string>
@@ -186,7 +186,7 @@ index 39c77a17924..7a565d8480d 100644
          }
  
 diff --git a/src/com/android/settings/wifi/WifiConfigController2.java b/src/com/android/settings/wifi/WifiConfigController2.java
-index 70e08eb9033..1c479b55268 100644
+index 1ea0103c28e..347e943f45e 100644
 --- a/src/com/android/settings/wifi/WifiConfigController2.java
 +++ b/src/com/android/settings/wifi/WifiConfigController2.java
 @@ -178,6 +178,7 @@ public class WifiConfigController2 implements TextWatcher,

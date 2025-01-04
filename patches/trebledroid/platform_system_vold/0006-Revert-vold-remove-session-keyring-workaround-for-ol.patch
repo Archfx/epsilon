@@ -1,4 +1,4 @@
-From b0dcacebec5727ccf1954488a8f3da0266383e39 Mon Sep 17 00:00:00 2001
+From e95143750b31315cd782b23acc08ca70af0970ab Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 18 Oct 2024 17:26:04 -0400
 Subject: [PATCH 6/6] Revert "vold: remove session keyring workaround for old

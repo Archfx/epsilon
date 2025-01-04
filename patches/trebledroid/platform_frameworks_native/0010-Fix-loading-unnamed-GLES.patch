@@ -1,4 +1,4 @@
-From 5912b50d6d5a52c650764d5946e2db392571423e Mon Sep 17 00:00:00 2001
+From 794a14ea974767a5a95b50a336dfaa7a31758e5b Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 20 Dec 2023 09:48:04 -0500
 Subject: [PATCH 10/14] Fix loading unnamed GLES
@@ -22,7 +22,7 @@ Test:
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/opengl/libs/EGL/Loader.cpp b/opengl/libs/EGL/Loader.cpp
-index ec7b190c74..c5ee5547d4 100644
+index bf0e38e986..d82af56606 100644
 --- a/opengl/libs/EGL/Loader.cpp
 +++ b/opengl/libs/EGL/Loader.cpp
 @@ -321,8 +321,7 @@ void* Loader::open(egl_connection_t* cnx) {
