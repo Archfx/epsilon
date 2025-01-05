@@ -1,6 +1,6 @@
-From b9c27e955cd166cd574ecb7ee2a620bfbd3e1763 Mon Sep 17 00:00:00 2001
+From e22a67ef10063404a9aefcf1c46b3123430efed2 Mon Sep 17 00:00:00 2001
 From: Archfx <cybx@live.com>
-Date: Mon, 14 Oct 2024 22:39:30 -0400
+Date: Sun, 5 Jan 2025 00:00:36 -0500
 Subject: [PATCH] ARCHFX/DUO-DE posture processor integration
 
 Change-Id: I4525b14c3cd6944547a7e3dc800642016c674c95
@@ -71,8 +71,8 @@ index b7c02b0d0720..527a232e742e 100644
      // DMS. This should be deleted in V release.
 diff --git a/libs/WindowManager/Jetpack/src/androidx/window/common/CommonFoldingFeature.java b/libs/WindowManager/Jetpack/src/androidx/window/common/CommonFoldingFeature.java
 index e37dea4dfd69..9803ba1f0af8 100644
---- a/libs/WindowManager/Jetpack/src/androidx/window/common/CommonFoldingFeature.java
-+++ b/libs/WindowManager/Jetpack/src/androidx/window/common/CommonFoldingFeature.java
+--- a/libs/WindowManager/Jetpack/src/androidx/window/common/layout/CommonFoldingFeature.java
++++ b/libs/WindowManager/Jetpack/src/androidx/window/common/layout/CommonFoldingFeature.java
 @@ -213,7 +213,7 @@ public final class CommonFoldingFeature {
      private final Rect mRect;
  
@@ -83,12 +83,12 @@ index e37dea4dfd69..9803ba1f0af8 100644
          this.mState = state;
          if (rect.width() == 0 && rect.height() == 0) {
 diff --git a/services/core/java/com/android/server/display/DisplayManagerService.java b/services/core/java/com/android/server/display/DisplayManagerService.java
-index 670d59c09e06..940dccfd4c1c 100644
+index ae33b83b49dc..dd17b0108e66 100644
 --- a/services/core/java/com/android/server/display/DisplayManagerService.java
 +++ b/services/core/java/com/android/server/display/DisplayManagerService.java
-@@ -4667,6 +4667,25 @@ public final class DisplayManagerService extends SystemService {
-             DisplayManagerService.this.mDisplayModeDirector.requestDisplayModes(
-                     token, displayId, modeIds);
+@@ -4874,6 +4874,25 @@ public final class DisplayManagerService extends SystemService {
+             }
+             return ddc.getDefaultDozeBrightness();
          }
 +
 +        @Override
@@ -108,10 +108,10 @@ index 670d59c09e06..940dccfd4c1c 100644
 +                    scheduleTraversalLocked(false);
 +                }
 +            }
-+        }    
++        }   
      }
  
-     private static boolean isValidBrightness(float brightness) {
+     @VisibleForTesting
 diff --git a/services/core/java/com/android/server/policy/DeviceStateProviderImpl.java b/services/core/java/com/android/server/policy/DeviceStateProviderImpl.java
 index 453c6ef41437..ec7fcecdf573 100644
 --- a/services/core/java/com/android/server/policy/DeviceStateProviderImpl.java
