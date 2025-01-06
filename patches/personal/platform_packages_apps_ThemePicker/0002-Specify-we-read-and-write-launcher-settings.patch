@@ -1,7 +1,7 @@
-From b78e135aa16d74add63252ed718e6079afcde7f3 Mon Sep 17 00:00:00 2001
+From 943c46e64b767cf3e55c8e47481108c0cdb65cbe Mon Sep 17 00:00:00 2001
 From: Luca Stefani <luca.stefani.ge1@gmail.com>
 Date: Fri, 1 Nov 2019 23:17:08 +0100
-Subject: [PATCH 3/4] Specify we read and write launcher settings
+Subject: [PATCH 2/3] Specify we read and write launcher settings
 
 Change-Id: Ifc8196588443b007602118389ca76d34ab531f14
 ---
@@ -9,7 +9,7 @@ Change-Id: Ifc8196588443b007602118389ca76d34ab531f14
  1 file changed, 3 insertions(+)
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
-index 6e5844d..555d3b6 100755
+index f89ff6e3..95f5b0ef 100755
 --- a/AndroidManifest.xml
 +++ b/AndroidManifest.xml
 @@ -60,6 +60,9 @@
@@ -23,5 +23,5 @@ index 6e5844d..555d3b6 100755
          tools:replace="android:icon,android:name"
          android:extractNativeLibs="false"
 -- 
-2.44.0
+2.34.1
 

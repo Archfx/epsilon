@@ -1,7 +1,7 @@
 From 3f73c1c3c3a1b2686a6e340a2852cb2bb6a39b78 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 17 Apr 2024 04:49:18 -0400
-Subject: [PATCH 50/52] Don't crash system_server if we fail to parse dynamic
+Subject: [PATCH 50/53] Don't crash system_server if we fail to parse dynamic
  udfps position
 
 ---

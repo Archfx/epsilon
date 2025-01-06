@@ -1,0 +1,4381 @@
+From 2a1172b9978b881b0df6cc000447088f915b02c8 Mon Sep 17 00:00:00 2001
+From: Anay Wadhera <anay1018@gmail.com>
+Date: Tue, 28 Dec 2021 19:34:15 +0900
+Subject: [PATCH 3/3] ThemePicker: Bring back fonts, icon pack, shape
+ customization
+
+ * Based on android 11 impl
+ * Sections moved to new UI for Android 14
+
+Co-authored-by: Adithya R <gh0strider.2k18.reborn@gmail.com>
+Co-authored-by: Ido Ben-Hur <idoybh2@gmail.com>
+Co-authored-by: palaych <palaych@arrowos.net>
+Co-authored-by: Tommy Webb <tommy@calyxinstitute.org>
+Change-Id: I60b24f0cd8e898cb6d43ad190cad99a73cb7b2bb
+---
+ AndroidManifest.xml                           |   1 +
+ res/drawable/check_circle_accent_24dp.xml     |  24 +
+ res/drawable/check_circle_grey_large.xml      |  31 ++
+ res/drawable/ic_check_24dp.xml                |   9 +
+ res/layout/font_preview_card.xml              |  37 ++
+ res/layout/font_section_view.xml              |  46 ++
+ res/layout/fragment_font_picker.xml           |  85 ++++
+ res/layout/fragment_icon_pack_picker.xml      |  85 ++++
+ res/layout/fragment_icon_shape_picker.xml     |  85 ++++
+ res/layout/icon_preview_card.xml              |  34 ++
+ res/layout/icon_section_view.xml              |  36 ++
+ res/layout/icon_shape_preview_card.xml        |  34 ++
+ res/layout/icon_shape_section_view.xml        |  44 ++
+ res/layout/preview_card_font_content.xml      |  55 ++
+ res/layout/preview_card_icon_content.xml      |  91 ++++
+ res/layout/preview_card_shape_content.xml     | 127 +++++
+ res/layout/theme_font_option.xml              |  54 ++
+ res/layout/theme_icon_option.xml              |  51 ++
+ res/layout/theme_shape_option.xml             |  46 ++
+ res/values/dimens.xml                         |   1 +
+ .../model/ResourceConstants.java              |   2 -
+ .../customization/model/font/FontManager.java | 149 ++++++
+ .../customization/model/font/FontOption.java  | 102 ++++
+ .../model/font/FontOptionProvider.java        | 102 ++++
+ .../model/font/FontSectionController.java     | 110 ++++
+ .../model/iconpack/IconPackManager.java       | 141 ++++++
+ .../model/iconpack/IconPackOption.java        | 167 +++++++
+ .../iconpack/IconPackOptionProvider.java      | 145 ++++++
+ .../iconpack/IconPackSectionController.java   | 109 ++++
+ .../model/iconshape/IconShapeManager.java     | 137 +++++
+ .../model/iconshape/IconShapeOption.java      | 140 ++++++
+ .../iconshape/IconShapeOptionProvider.java    | 163 ++++++
+ .../iconshape/IconShapeSectionController.java |  95 ++++
+ .../model/theme/ShapeAppIcon.java             |  32 ++
+ .../module/DefaultCustomizationSections.java  |  22 +
+ .../picker/WallpaperPreviewer.java            | 279 +++++++++++
+ .../picker/font/FontFragment.java             | 206 ++++++++
+ .../picker/font/FontSectionView.java          |  12 +
+ .../picker/iconpack/IconPackFragment.java     | 205 ++++++++
+ .../picker/iconpack/IconPackSectionView.java  |  12 +
+ .../picker/iconshape/IconShapeFragment.java   | 202 ++++++++
+ .../iconshape/IconShapeSectionView.java       |  12 +
+ .../widget/OptionSelectorController.java      | 470 ++++++++++++++++++
+ 43 files changed, 3988 insertions(+), 2 deletions(-)
+ create mode 100644 res/drawable/check_circle_accent_24dp.xml
+ create mode 100644 res/drawable/check_circle_grey_large.xml
+ create mode 100644 res/drawable/ic_check_24dp.xml
+ create mode 100644 res/layout/font_preview_card.xml
+ create mode 100644 res/layout/font_section_view.xml
+ create mode 100644 res/layout/fragment_font_picker.xml
+ create mode 100644 res/layout/fragment_icon_pack_picker.xml
+ create mode 100644 res/layout/fragment_icon_shape_picker.xml
+ create mode 100644 res/layout/icon_preview_card.xml
+ create mode 100644 res/layout/icon_section_view.xml
+ create mode 100644 res/layout/icon_shape_preview_card.xml
+ create mode 100644 res/layout/icon_shape_section_view.xml
+ create mode 100644 res/layout/preview_card_font_content.xml
+ create mode 100644 res/layout/preview_card_icon_content.xml
+ create mode 100644 res/layout/preview_card_shape_content.xml
+ create mode 100644 res/layout/theme_font_option.xml
+ create mode 100644 res/layout/theme_icon_option.xml
+ create mode 100644 res/layout/theme_shape_option.xml
+ create mode 100644 src/com/android/customization/model/font/FontManager.java
+ create mode 100644 src/com/android/customization/model/font/FontOption.java
+ create mode 100644 src/com/android/customization/model/font/FontOptionProvider.java
+ create mode 100644 src/com/android/customization/model/font/FontSectionController.java
+ create mode 100644 src/com/android/customization/model/iconpack/IconPackManager.java
+ create mode 100644 src/com/android/customization/model/iconpack/IconPackOption.java
+ create mode 100644 src/com/android/customization/model/iconpack/IconPackOptionProvider.java
+ create mode 100644 src/com/android/customization/model/iconpack/IconPackSectionController.java
+ create mode 100644 src/com/android/customization/model/iconshape/IconShapeManager.java
+ create mode 100644 src/com/android/customization/model/iconshape/IconShapeOption.java
+ create mode 100644 src/com/android/customization/model/iconshape/IconShapeOptionProvider.java
+ create mode 100644 src/com/android/customization/model/iconshape/IconShapeSectionController.java
+ create mode 100644 src/com/android/customization/model/theme/ShapeAppIcon.java
+ create mode 100644 src/com/android/customization/picker/WallpaperPreviewer.java
+ create mode 100644 src/com/android/customization/picker/font/FontFragment.java
+ create mode 100644 src/com/android/customization/picker/font/FontSectionView.java
+ create mode 100644 src/com/android/customization/picker/iconpack/IconPackFragment.java
+ create mode 100644 src/com/android/customization/picker/iconpack/IconPackSectionView.java
+ create mode 100644 src/com/android/customization/picker/iconshape/IconShapeFragment.java
+ create mode 100644 src/com/android/customization/picker/iconshape/IconShapeSectionView.java
+ create mode 100644 src/com/android/customization/widget/OptionSelectorController.java
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index 95f5b0ef..d5c18f4d 100755
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -21,6 +21,7 @@
+     <uses-permission android:name="android.permission.READ_WALLPAPER_INTERNAL"/>
+     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+     <uses-permission android:name="android.permission.SET_WALLPAPER_DIM_AMOUNT" />
++    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+ 
+     <queries>
+         <package android:name="android"/>
+diff --git a/res/drawable/check_circle_accent_24dp.xml b/res/drawable/check_circle_accent_24dp.xml
+new file mode 100644
+index 00000000..4372a27d
+--- /dev/null
++++ b/res/drawable/check_circle_accent_24dp.xml
+@@ -0,0 +1,24 @@
++<!--
++     Copyright (C) 2020 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
++    <item>
++        <shape android:shape="oval">
++            <size android:width="24dp" android:height="24dp" />
++            <solid android:color="@color/color_accent_primary" />
++        </shape>
++    </item>
++    <item android:drawable="@drawable/ic_check_24dp" android:gravity="fill" />
++</layer-list>
+diff --git a/res/drawable/check_circle_grey_large.xml b/res/drawable/check_circle_grey_large.xml
+new file mode 100644
+index 00000000..f22c9103
+--- /dev/null
++++ b/res/drawable/check_circle_grey_large.xml
+@@ -0,0 +1,31 @@
++<!--
++     Copyright (C) 2021 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
++    <item>
++        <shape android:shape="oval">
++            <size android:width="@dimen/center_check_size"
++                android:height="@dimen/center_check_size" />
++            <solid android:color="@color/color_accent_primary_variant" />
++        </shape>
++    </item>
++    <item>
++        <inset android:drawable="@drawable/ic_check_24dp"
++            android:insetTop="@dimen/center_check_padding"
++            android:insetRight="@dimen/center_check_padding"
++            android:insetBottom="@dimen/center_check_padding"
++            android:insetLeft="@dimen/center_check_padding"/>
++    </item>
++</layer-list>
+diff --git a/res/drawable/ic_check_24dp.xml b/res/drawable/ic_check_24dp.xml
+new file mode 100644
+index 00000000..63c2a0c8
+--- /dev/null
++++ b/res/drawable/ic_check_24dp.xml
+@@ -0,0 +1,9 @@
++<vector xmlns:android="http://schemas.android.com/apk/res/android"
++    android:width="24dp"
++    android:height="24dp"
++    android:viewportWidth="24"
++    android:viewportHeight="24">
++  <path
++      android:fillColor="?android:textColorPrimaryInverse"
++      android:pathData="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41,-1.41L9,16.17z"/>
++</vector>
+diff --git a/res/layout/font_preview_card.xml b/res/layout/font_preview_card.xml
+new file mode 100644
+index 00000000..aa5c276c
+--- /dev/null
++++ b/res/layout/font_preview_card.xml
+@@ -0,0 +1,37 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<androidx.cardview.widget.CardView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    style="@style/FullContentPreviewCard"
++    android:id="@+id/font_preview_card"
++    android:contentDescription="@string/font_preview_content_description"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:layout_gravity="center">
++
++    <FrameLayout
++        android:id="@+id/theme_preview_card_body_container"
++        android:layout_width="match_parent"
++        android:layout_height="@dimen/preview_theme_content_max_height"
++        android:layout_marginTop="@dimen/preview_theme_content_margin"
++        android:clipChildren="false"
++        android:importantForAccessibility="noHideDescendants">
++
++        <include layout="@layout/preview_card_font_content" />
++
++   </FrameLayout>
++</androidx.cardview.widget.CardView>
+diff --git a/res/layout/font_section_view.xml b/res/layout/font_section_view.xml
+new file mode 100644
+index 00000000..fe46aac7
+--- /dev/null
++++ b/res/layout/font_section_view.xml
+@@ -0,0 +1,46 @@
++<?xml version="1.0" encoding="utf-8"?>
++<com.android.customization.picker.font.FontSectionView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    android:orientation="horizontal"
++    android:paddingBottom="@dimen/section_bottom_padding"
++    android:paddingHorizontal="@dimen/section_horizontal_padding"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content">
++
++    <LinearLayout
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_weight="1"
++        android:orientation="vertical">
++
++        <TextView
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:text="@string/preview_name_font"
++            style="@style/SectionTitleTextStyle" />
++
++        <TextView
++            android:id="@+id/font_section_description"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            style="@style/SectionSubtitleTextStyle"/>
++    </LinearLayout>
++
++    <FrameLayout
++        android:id="@+id/font_section_tile"
++        android:layout_width="@dimen/option_tile_width"
++        android:layout_height="@dimen/option_tile_width"
++        android:scaleType="center"
++        android:background="@drawable/option_border_color">
++        <TextView
++            android:id="@+id/thumbnail_text"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_gravity="center"
++            android:textSize="@dimen/font_comonent_option_thumbnail_size"
++            android:textAlignment="center"
++            android:textColor="?android:attr/colorForeground"
++            android:text="@string/font_component_option_thumbnail"/>
++    </FrameLayout>
++
++</com.android.customization.picker.font.FontSectionView>
+diff --git a/res/layout/fragment_font_picker.xml b/res/layout/fragment_font_picker.xml
+new file mode 100644
+index 00000000..8138462a
+--- /dev/null
++++ b/res/layout/fragment_font_picker.xml
+@@ -0,0 +1,85 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++    <include layout="@layout/section_header"/>
++
++    <FrameLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <androidx.constraintlayout.widget.ConstraintLayout
++            android:id="@+id/content_section"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent">
++
++            <FrameLayout
++                android:id="@+id/preview_card_container"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:clipToPadding="false"
++                android:paddingTop="@dimen/preview_page_top_margin"
++                android:paddingBottom="@dimen/preview_page_bottom_margin"
++                app:layout_constrainedHeight="true"
++                app:layout_constraintBottom_toTopOf="@+id/options_container"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="parent">
++
++                <include layout="@layout/font_preview_card" />
++            </FrameLayout>
++
++            <androidx.recyclerview.widget.RecyclerView
++                android:id="@+id/options_container"
++                android:layout_width="match_parent"
++                android:layout_height="@dimen/options_container_height"
++                android:layout_marginBottom="@dimen/grid_options_container_bottom_margin"
++                android:paddingHorizontal="@dimen/grid_options_container_horizontal_margin"
++                android:clipToPadding="false"
++                app:layout_constraintBottom_toBottomOf="parent"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent" />
++        </androidx.constraintlayout.widget.ConstraintLayout>
++
++        <androidx.core.widget.ContentLoadingProgressBar
++            android:id="@+id/loading_indicator"
++            style="@android:style/Widget.DeviceDefault.ProgressBar"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="200dp"
++            android:layout_gravity="center_horizontal|top"
++            android:indeterminate="true"/>
++        <FrameLayout
++            android:id="@+id/error_section"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:visibility="gone">
++            <TextView
++                android:id="@+id/error_message"
++                style="@style/TitleTextAppearance"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_gravity="center"
++                android:gravity="center"
++                android:text="@string/something_went_wrong"/>
++        </FrameLayout>
++    </FrameLayout>
++</LinearLayout>
+diff --git a/res/layout/fragment_icon_pack_picker.xml b/res/layout/fragment_icon_pack_picker.xml
+new file mode 100644
+index 00000000..d4472a77
+--- /dev/null
++++ b/res/layout/fragment_icon_pack_picker.xml
+@@ -0,0 +1,85 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++    <include layout="@layout/section_header"/>
++
++    <FrameLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <androidx.constraintlayout.widget.ConstraintLayout
++            android:id="@+id/content_section"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent">
++
++            <FrameLayout
++                android:id="@+id/preview_card_container"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:clipToPadding="false"
++                android:paddingTop="@dimen/preview_page_top_margin"
++                android:paddingBottom="@dimen/preview_page_bottom_margin"
++                app:layout_constrainedHeight="true"
++                app:layout_constraintBottom_toTopOf="@+id/options_container"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="parent">
++
++                <include layout="@layout/icon_preview_card" />
++            </FrameLayout>
++
++            <androidx.recyclerview.widget.RecyclerView
++                android:id="@+id/options_container"
++                android:layout_width="match_parent"
++                android:layout_height="@dimen/options_container_height"
++                android:layout_marginBottom="@dimen/grid_options_container_bottom_margin"
++                android:paddingHorizontal="@dimen/grid_options_container_horizontal_margin"
++                android:clipToPadding="false"
++                app:layout_constraintBottom_toBottomOf="parent"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent" />
++        </androidx.constraintlayout.widget.ConstraintLayout>
++
++        <androidx.core.widget.ContentLoadingProgressBar
++            android:id="@+id/loading_indicator"
++            style="@android:style/Widget.DeviceDefault.ProgressBar"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="200dp"
++            android:layout_gravity="center_horizontal|top"
++            android:indeterminate="true"/>
++        <FrameLayout
++            android:id="@+id/error_section"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:visibility="gone">
++            <TextView
++                android:id="@+id/error_message"
++                style="@style/TitleTextAppearance"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_gravity="center"
++                android:gravity="center"
++                android:text="@string/something_went_wrong"/>
++        </FrameLayout>
++    </FrameLayout>
++</LinearLayout>
+diff --git a/res/layout/fragment_icon_shape_picker.xml b/res/layout/fragment_icon_shape_picker.xml
+new file mode 100644
+index 00000000..a573c84b
+--- /dev/null
++++ b/res/layout/fragment_icon_shape_picker.xml
+@@ -0,0 +1,85 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++    <include layout="@layout/section_header"/>
++
++    <FrameLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <androidx.constraintlayout.widget.ConstraintLayout
++            android:id="@+id/content_section"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent">
++
++            <FrameLayout
++                android:id="@+id/preview_card_container"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:clipToPadding="false"
++                android:paddingTop="@dimen/preview_page_top_margin"
++                android:paddingBottom="@dimen/preview_page_bottom_margin"
++                app:layout_constrainedHeight="true"
++                app:layout_constraintBottom_toTopOf="@+id/options_container"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="parent">
++
++                <include layout="@layout/icon_shape_preview_card" />
++            </FrameLayout>
++
++            <androidx.recyclerview.widget.RecyclerView
++                android:id="@+id/options_container"
++                android:layout_width="match_parent"
++                android:layout_height="@dimen/options_container_height"
++                android:layout_marginBottom="@dimen/grid_options_container_bottom_margin"
++                android:paddingHorizontal="@dimen/grid_options_container_horizontal_margin"
++                android:clipToPadding="false"
++                app:layout_constraintBottom_toBottomOf="parent"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent" />
++        </androidx.constraintlayout.widget.ConstraintLayout>
++
++        <androidx.core.widget.ContentLoadingProgressBar
++            android:id="@+id/loading_indicator"
++            style="@android:style/Widget.DeviceDefault.ProgressBar"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="200dp"
++            android:layout_gravity="center_horizontal|top"
++            android:indeterminate="true"/>
++        <FrameLayout
++            android:id="@+id/error_section"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:visibility="gone">
++            <TextView
++                android:id="@+id/error_message"
++                style="@style/TitleTextAppearance"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_gravity="center"
++                android:gravity="center"
++                android:text="@string/something_went_wrong"/>
++        </FrameLayout>
++    </FrameLayout>
++</LinearLayout>
+diff --git a/res/layout/icon_preview_card.xml b/res/layout/icon_preview_card.xml
+new file mode 100644
+index 00000000..9c0183f8
+--- /dev/null
++++ b/res/layout/icon_preview_card.xml
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++          http://www.apache.org/licenses/LICENSE-2.0
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<androidx.cardview.widget.CardView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    style="@style/FullContentPreviewCard"
++    android:id="@+id/icon_preview_card"
++    android:contentDescription="@string/icon_preview_content_description"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:layout_gravity="center">
++
++    <FrameLayout
++        android:id="@+id/theme_preview_card_body_container"
++        android:layout_width="match_parent"
++        android:layout_height="@dimen/preview_theme_content_max_height"
++        android:layout_marginTop="@dimen/preview_theme_content_margin"
++        android:clipChildren="false"
++        android:importantForAccessibility="noHideDescendants">
++
++        <include layout="@layout/preview_card_icon_content" />
++
++   </FrameLayout>
++</androidx.cardview.widget.CardView>
+diff --git a/res/layout/icon_section_view.xml b/res/layout/icon_section_view.xml
+new file mode 100644
+index 00000000..8e0c404f
+--- /dev/null
++++ b/res/layout/icon_section_view.xml
+@@ -0,0 +1,36 @@
++<?xml version="1.0" encoding="utf-8"?>
++<com.android.customization.picker.iconpack.IconPackSectionView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    android:orientation="horizontal"
++    android:paddingBottom="@dimen/section_bottom_padding"
++    android:paddingHorizontal="@dimen/section_horizontal_padding"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content">
++
++    <LinearLayout
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_weight="1"
++        android:orientation="vertical">
++
++        <TextView
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:text="@string/preview_name_icon"
++            style="@style/SectionTitleTextStyle" />
++
++        <TextView
++            android:id="@+id/icon_section_description"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            style="@style/SectionSubtitleTextStyle"/>
++    </LinearLayout>
++
++    <ImageView
++        android:id="@+id/icon_section_tile"
++        android:layout_width="@dimen/option_tile_width"
++        android:layout_height="@dimen/option_tile_width"
++        android:scaleType="center"
++        android:background="@drawable/option_border_color" />
++
++</com.android.customization.picker.iconpack.IconPackSectionView>
+diff --git a/res/layout/icon_shape_preview_card.xml b/res/layout/icon_shape_preview_card.xml
+new file mode 100644
+index 00000000..7c70ec37
+--- /dev/null
++++ b/res/layout/icon_shape_preview_card.xml
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++          http://www.apache.org/licenses/LICENSE-2.0
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<androidx.cardview.widget.CardView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    style="@style/FullContentPreviewCard"
++    android:id="@+id/icon_shape_preview_card"
++    android:contentDescription="@string/shape_preview_content_description"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:layout_gravity="center">
++
++    <FrameLayout
++        android:id="@+id/theme_preview_card_body_container"
++        android:layout_width="match_parent"
++        android:layout_height="@dimen/preview_theme_content_max_height"
++        android:layout_marginTop="@dimen/preview_theme_content_margin"
++        android:clipChildren="false"
++        android:importantForAccessibility="noHideDescendants">
++
++        <include layout="@layout/preview_card_shape_content" />
++
++   </FrameLayout>
++</androidx.cardview.widget.CardView>
+diff --git a/res/layout/icon_shape_section_view.xml b/res/layout/icon_shape_section_view.xml
+new file mode 100644
+index 00000000..fc9c8d6d
+--- /dev/null
++++ b/res/layout/icon_shape_section_view.xml
+@@ -0,0 +1,44 @@
++<?xml version="1.0" encoding="utf-8"?>
++<com.android.customization.picker.iconshape.IconShapeSectionView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    android:orientation="horizontal"
++    android:paddingBottom="@dimen/section_bottom_padding"
++    android:paddingHorizontal="@dimen/section_horizontal_padding"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content">
++
++    <LinearLayout
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_weight="1"
++        android:orientation="vertical">
++
++        <TextView
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:text="@string/preview_name_shape"
++            style="@style/SectionTitleTextStyle" />
++
++        <TextView
++            android:id="@+id/icon_section_description"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            style="@style/SectionSubtitleTextStyle"/>
++    </LinearLayout>
++
++    <FrameLayout
++        android:id="@+id/icon_option_tile"
++        android:layout_width="@dimen/option_tile_width"
++        android:layout_height="@dimen/option_tile_width"
++        android:layout_gravity="center_horizontal"
++        android:paddingHorizontal="@dimen/option_tile_padding_horizontal"
++        android:paddingVertical="@dimen/option_tile_padding_vertical"
++        android:background="@drawable/option_border_color">
++        <ImageView
++            android:id="@+id/icon_section_tile"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_gravity="center"/>
++    </FrameLayout>
++
++</com.android.customization.picker.iconshape.IconShapeSectionView>
+diff --git a/res/layout/preview_card_font_content.xml b/res/layout/preview_card_font_content.xml
+new file mode 100644
+index 00000000..408778ee
+--- /dev/null
++++ b/res/layout/preview_card_font_content.xml
+@@ -0,0 +1,55 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:layout_gravity="center"
++    android:orientation="vertical"
++    tools:showIn="@layout/theme_preview_card">
++    <TextView
++        style="@style/FontCardTitleStyle"
++        android:id="@+id/font_card_title"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_gravity="center"
++        android:gravity="center_horizontal"
++        android:maxLines="1"
++        android:text="@string/font_card_title"/>
++    <Space
++        android:layout_width="match_parent"
++        android:layout_height="0dp"
++        android:layout_weight="1"/>
++    <View
++        android:id="@+id/font_card_divider"
++        android:layout_width="16dp"
++        android:layout_height="2dp"
++        android:layout_gravity="center"
++        android:background="?android:colorAccent"/>
++    <Space
++        android:layout_width="match_parent"
++        android:layout_height="0dp"
++        android:layout_weight="1"/>
++    <TextView
++        style="@style/FontCardBodyTextStyle"
++        android:id="@+id/font_card_body"
++        android:layout_height="wrap_content"
++        android:layout_gravity="bottom|center_horizontal"
++        android:gravity="center_horizontal"
++        android:text="@string/font_card_body"/>
++</LinearLayout>
+\ No newline at end of file
+diff --git a/res/layout/preview_card_icon_content.xml b/res/layout/preview_card_icon_content.xml
+new file mode 100644
+index 00000000..29620c82
+--- /dev/null
++++ b/res/layout/preview_card_icon_content.xml
+@@ -0,0 +1,91 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:layout_gravity="center"
++    android:gravity="center_horizontal"
++    android:orientation="vertical">
++    <LinearLayout
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:gravity="center_horizontal"
++        android:orientation="horizontal">
++        <ImageView
++            android:id="@+id/preview_icon_0"
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="@dimen/preview_theme_icon_size"
++            android:layout_weight="1"
++            android:tint="@color/theme_preview_icon_color"/>
++        <Space
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="match_parent"
++            android:layout_weight="0" />
++        <ImageView
++            android:id="@+id/preview_icon_1"
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="@dimen/preview_theme_icon_size"
++            android:layout_weight="1"
++            android:tint="@color/theme_preview_icon_color"/>
++        <Space
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="match_parent"
++            android:layout_weight="0" />
++        <ImageView
++            android:id="@+id/preview_icon_2"
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="@dimen/preview_theme_icon_size"
++            android:layout_weight="1"
++            android:tint="@color/theme_preview_icon_color"/>
++    </LinearLayout>
++    <Space
++        android:layout_width="match_parent"
++        android:layout_height="68dp" />
++    <LinearLayout
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:gravity="bottom|center_horizontal"
++        android:orientation="horizontal">
++        <ImageView
++            android:id="@+id/preview_icon_3"
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="@dimen/preview_theme_icon_size"
++            android:layout_weight="1"
++            android:tint="@color/theme_preview_icon_color"/>
++        <Space
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="match_parent"
++            android:layout_weight="0" />
++        <ImageView
++            android:id="@+id/preview_icon_4"
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="@dimen/preview_theme_icon_size"
++            android:layout_weight="1"
++            android:tint="@color/theme_preview_icon_color"/>
++        <Space
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="match_parent"
++            android:layout_weight="0" />
++        <ImageView
++            android:id="@+id/preview_icon_5"
++            android:layout_width="@dimen/preview_theme_icon_size"
++            android:layout_height="@dimen/preview_theme_icon_size"
++            android:layout_weight="1"
++            android:tint="@color/theme_preview_icon_color"/>
++    </LinearLayout>
++</LinearLayout>
+\ No newline at end of file
+diff --git a/res/layout/preview_card_shape_content.xml b/res/layout/preview_card_shape_content.xml
+new file mode 100644
+index 00000000..0afa6bce
+--- /dev/null
++++ b/res/layout/preview_card_shape_content.xml
+@@ -0,0 +1,127 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:layout_gravity="center"
++    android:gravity="center_horizontal"
++    android:orientation="vertical">
++        <LinearLayout
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:gravity="center_horizontal"
++            android:orientation="horizontal">
++                <FrameLayout
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_weight="1">
++                        <ImageView
++                            android:id="@+id/shape_preview_icon_0"
++                            android:layout_width="@dimen/preview_theme_shape_size"
++                            android:layout_height="@dimen/preview_theme_shape_size"
++                            android:layout_gravity="center_horizontal"
++                            android:layout_margin="4dp"
++                            android:elevation="4dp"/>
++                </FrameLayout>
++                <Space
++                    android:layout_width="@dimen/preview_theme_shape_size"
++                    android:layout_height="match_parent"
++                    android:layout_weight="0" />
++                <FrameLayout
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_weight="1">
++                        <ImageView
++                            android:id="@+id/shape_preview_icon_1"
++                            android:layout_width="@dimen/preview_theme_shape_size"
++                            android:layout_height="@dimen/preview_theme_shape_size"
++                            android:layout_gravity="center_horizontal"
++                            android:layout_margin="4dp"
++                            android:elevation="4dp"/>
++                </FrameLayout>
++                <Space
++                    android:layout_width="@dimen/preview_theme_shape_size"
++                    android:layout_height="match_parent"
++                    android:layout_weight="0" />
++                <FrameLayout
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_weight="1">
++                        <ImageView
++                            android:id="@+id/shape_preview_icon_2"
++                            android:layout_width="@dimen/preview_theme_shape_size"
++                            android:layout_height="@dimen/preview_theme_shape_size"
++                            android:layout_gravity="center_horizontal"
++                            android:layout_margin="4dp"
++                            android:elevation="4dp"/>
++                </FrameLayout>
++        </LinearLayout>
++        <Space
++            android:layout_width="match_parent"
++            android:layout_height="60dp" />
++        <LinearLayout
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:gravity="bottom|center_horizontal"
++            android:orientation="horizontal">
++                <FrameLayout
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_weight="1">
++                        <ImageView
++                            android:id="@+id/shape_preview_icon_3"
++                            android:layout_width="@dimen/preview_theme_shape_size"
++                            android:layout_height="@dimen/preview_theme_shape_size"
++                            android:layout_gravity="center_horizontal"
++                            android:layout_margin="4dp"
++                            android:elevation="4dp"/>
++                </FrameLayout>
++                <Space
++                    android:layout_width="@dimen/preview_theme_shape_size"
++                    android:layout_height="match_parent"
++                    android:layout_weight="0" />
++                <FrameLayout
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_weight="1">
++                        <ImageView
++                            android:id="@+id/shape_preview_icon_4"
++                            android:layout_width="@dimen/preview_theme_shape_size"
++                            android:layout_height="@dimen/preview_theme_shape_size"
++                            android:layout_gravity="center_horizontal"
++                            android:layout_margin="4dp"
++                            android:elevation="4dp"/>
++                </FrameLayout>
++                <Space
++                    android:layout_width="@dimen/preview_theme_shape_size"
++                    android:layout_height="match_parent"
++                    android:layout_weight="0" />
++                <FrameLayout
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_weight="1">
++                        <ImageView
++                            android:id="@+id/shape_preview_icon_5"
++                            android:layout_width="@dimen/preview_theme_shape_size"
++                            android:layout_height="@dimen/preview_theme_shape_size"
++                            android:layout_margin="4dp"
++                            android:layout_gravity="center_horizontal"
++                            android:elevation="4dp"/>
++                </FrameLayout>
++        </LinearLayout>
++</LinearLayout>
+\ No newline at end of file
+diff --git a/res/layout/theme_font_option.xml b/res/layout/theme_font_option.xml
+new file mode 100644
+index 00000000..583ddde2
+--- /dev/null
++++ b/res/layout/theme_font_option.xml
+@@ -0,0 +1,54 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++              android:layout_width="wrap_content"
++              android:layout_height="wrap_content"
++              android:orientation="vertical">
++
++    <FrameLayout
++        android:id="@+id/option_tile"
++        android:layout_width="@dimen/option_tile_width"
++        android:layout_height="@dimen/option_tile_width"
++        android:layout_gravity="center_horizontal"
++        android:paddingHorizontal="@dimen/option_tile_padding_horizontal"
++        android:paddingVertical="@dimen/option_tile_padding_vertical"
++        android:layout_marginHorizontal="@dimen/component_options_margin_horizontal"
++        android:background="@drawable/option_border">
++        <TextView
++            android:id="@+id/thumbnail_text"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_gravity="center"
++            android:textSize="@dimen/font_comonent_option_thumbnail_size"
++            android:textAlignment="center"
++            android:textColor="?android:attr/colorForeground"
++            android:text="@string/font_component_option_thumbnail"/>
++    </FrameLayout>
++
++    <TextView
++        android:id="@+id/option_label"
++        android:layout_width="@dimen/option_label_width"
++        android:layout_height="24dp"
++        android:layout_gravity="center_horizontal"
++        android:layout_marginTop="@dimen/theme_option_label_margin"
++        android:gravity="center"
++        android:textAppearance="@style/OptionTitleTextAppearance"
++        android:singleLine="true"
++        android:scrollHorizontally="true"
++        android:ellipsize="marquee"
++        android:marqueeRepeatLimit="marquee_forever"/>
++</LinearLayout>
+diff --git a/res/layout/theme_icon_option.xml b/res/layout/theme_icon_option.xml
+new file mode 100644
+index 00000000..0c613728
+--- /dev/null
++++ b/res/layout/theme_icon_option.xml
+@@ -0,0 +1,51 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++              android:layout_width="wrap_content"
++              android:layout_height="wrap_content"
++              android:orientation="vertical">
++
++    <FrameLayout
++        android:id="@+id/option_tile"
++        android:layout_width="@dimen/option_tile_width"
++        android:layout_height="@dimen/option_tile_width"
++        android:layout_gravity="center_horizontal"
++        android:paddingHorizontal="@dimen/option_tile_padding_horizontal"
++        android:paddingVertical="@dimen/option_tile_padding_vertical"
++        android:layout_marginHorizontal="@dimen/component_options_margin_horizontal"
++        android:background="@drawable/option_border">
++        <ImageView
++            android:id="@+id/option_icon"
++            android:layout_width="@dimen/component_icon_thumb_size"
++            android:layout_height="@dimen/component_icon_thumb_size"
++            android:layout_gravity="center"
++            android:tint="?android:colorForeground"/>
++    </FrameLayout>
++
++    <TextView
++        android:id="@+id/option_label"
++        android:layout_width="@dimen/option_label_width"
++        android:layout_height="24dp"
++        android:layout_gravity="center_horizontal"
++        android:layout_marginTop="@dimen/theme_option_label_margin"
++        android:gravity="center"
++        android:textAppearance="@style/OptionTitleTextAppearance"
++        android:singleLine="true"
++        android:scrollHorizontally="true"
++        android:ellipsize="marquee"
++        android:marqueeRepeatLimit="marquee_forever"/>
++</LinearLayout>
+diff --git a/res/layout/theme_shape_option.xml b/res/layout/theme_shape_option.xml
+new file mode 100644
+index 00000000..850714f3
+--- /dev/null
++++ b/res/layout/theme_shape_option.xml
+@@ -0,0 +1,46 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++     Copyright (C) 2019 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++              android:layout_width="wrap_content"
++              android:layout_height="wrap_content"
++              android:orientation="vertical">
++    <FrameLayout
++        android:id="@+id/option_tile"
++        android:layout_width="@dimen/option_tile_width"
++        android:layout_height="@dimen/option_tile_width"
++        android:layout_gravity="center"
++        android:layout_marginHorizontal="@dimen/component_options_margin_horizontal">
++        <ImageView
++            android:id="@+id/shape_thumbnail"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:layout_gravity="center"/>
++    </FrameLayout>
++
++    <TextView
++        android:id="@+id/option_label"
++        android:layout_width="@dimen/option_label_width"
++        android:layout_height="24dp"
++        android:layout_gravity="center_horizontal"
++        android:layout_marginTop="@dimen/theme_option_label_margin"
++        android:gravity="center"
++        android:textAppearance="@style/OptionTitleTextAppearance"
++        android:singleLine="true"
++        android:scrollHorizontally="true"
++        android:ellipsize="marquee"
++        android:marqueeRepeatLimit="marquee_forever"/>
++</LinearLayout>
+diff --git a/res/values/dimens.xml b/res/values/dimens.xml
+index 6a923d9a..910eb7e7 100644
+--- a/res/values/dimens.xml
++++ b/res/values/dimens.xml
+@@ -33,6 +33,7 @@
+     <dimen name="options_container_width">0dp</dimen>
+     <dimen name="option_bottom_margin">8dp</dimen>
+     <dimen name="option_padding_horizontal">2dp</dimen>
++    <dimen name="option_label_width">100dp</dimen>
+     <dimen name="option_tile_width">80dp</dimen>
+     <dimen name="option_tile_radius">20dp</dimen>
+     <dimen name="option_tile_margin_horizontal">6dp</dimen>
+diff --git a/src/com/android/customization/model/ResourceConstants.java b/src/com/android/customization/model/ResourceConstants.java
+index c1cff13b..2e67650b 100644
+--- a/src/com/android/customization/model/ResourceConstants.java
++++ b/src/com/android/customization/model/ResourceConstants.java
+@@ -108,8 +108,6 @@ public interface ResourceConstants {
+         if (sTargetPackages.isEmpty()) {
+             sTargetPackages.addAll(Arrays.asList(ANDROID_PACKAGE, SETTINGS_PACKAGE,
+                     SYSUI_PACKAGE));
+-            sTargetPackages.add(getLauncherPackage(context));
+-            sTargetPackages.add(context.getPackageName());
+         }
+         return sTargetPackages.toArray(new String[0]);
+     }
+diff --git a/src/com/android/customization/model/font/FontManager.java b/src/com/android/customization/model/font/FontManager.java
+new file mode 100644
+index 00000000..0f51b24c
+--- /dev/null
++++ b/src/com/android/customization/model/font/FontManager.java
+@@ -0,0 +1,149 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.font;
++
++import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_FONT;
++
++import android.content.Context;
++import android.os.Bundle;
++import android.os.UserHandle;
++import android.provider.Settings;
++import android.text.TextUtils;
++import android.util.Log;
++import android.widget.Toast;
++
++import androidx.annotation.Nullable;
++
++import com.android.customization.model.CustomizationManager;
++import com.android.customization.model.theme.OverlayManagerCompat;
++
++import java.util.Map;
++import java.util.List;
++
++import org.json.JSONException;
++import org.json.JSONObject;
++
++public class FontManager implements CustomizationManager<FontOption> {
++
++    private static FontManager sFontOptionManager;
++    private Context mContext;
++    private FontOption mActiveOption;
++    private OverlayManagerCompat mOverlayManager;
++    private FontOptionProvider mProvider;
++    private static final String TAG = "FontManager";
++    private static final String KEY_STATE_CURRENT_SELECTION = "FontManager.currentSelection";
++
++    FontManager(Context context, OverlayManagerCompat overlayManager, FontOptionProvider provider) {
++        mContext = context;
++        mProvider = provider;
++        mOverlayManager = overlayManager;
++    }
++
++    @Override
++    public boolean isAvailable() {
++        return mOverlayManager.isAvailable();
++    }
++
++    @Override
++    public void apply(FontOption option, @Nullable Callback callback) {
++        if (!persistOverlay(option)) {
++            Toast failed = Toast.makeText(mContext, "Failed to apply font, reboot to try again.", Toast.LENGTH_SHORT);
++            failed.show();
++            if (callback != null) {
++                callback.onError(null);
++            }
++            return;
++        }
++        if (option.getPackageName() == null) {
++            if (mActiveOption.getPackageName() == null) return;
++            for (String overlay : mOverlayManager.getOverlayPackagesForCategory(
++                    OVERLAY_CATEGORY_FONT, UserHandle.myUserId(), ANDROID_PACKAGE)) {
++                mOverlayManager.disableOverlay(overlay, UserHandle.myUserId());
++            }
++        } else {
++            mOverlayManager.setEnabledExclusiveInCategory(option.getPackageName(), UserHandle.myUserId());
++        }
++        if (callback != null) {
++            callback.onSuccess();
++        }
++        mActiveOption = option;
++    }
++
++    @Override
++    public void fetchOptions(OptionsFetchedListener<FontOption> callback, boolean reload) {
++        List<FontOption> options = mProvider.getOptions(reload);
++        for (FontOption option : options) {
++            if (isActive(option)) {
++                mActiveOption = option;
++                break;
++            }
++        }
++        callback.onOptionsLoaded(options);
++    }
++
++    public OverlayManagerCompat getOverlayManager() {
++        return mOverlayManager;
++    }
++
++    public boolean isActive(FontOption option) {
++        String enabledPkg = mOverlayManager.getEnabledPackageName(ANDROID_PACKAGE, OVERLAY_CATEGORY_FONT);
++        if (enabledPkg != null) {
++            return enabledPkg.equals(option.getPackageName());
++        } else {
++            return option.getPackageName() == null;
++        }
++    }
++
++    private boolean persistOverlay(FontOption toPersist) {
++        String value = Settings.Secure.getStringForUser(mContext.getContentResolver(),
++                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES, UserHandle.myUserId());
++        JSONObject json;
++        if (value == null) {
++            json = new JSONObject();
++        } else {
++            try {
++                json = new JSONObject(value);
++            } catch (JSONException e) {
++                Log.e(TAG, "Error parsing current settings value:\n" + e.getMessage());
++                return false;
++            }
++        }
++        // removing all currently enabled overlays from the json
++        json.remove(OVERLAY_CATEGORY_FONT);
++        // adding the new ones
++        try {
++            json.put(OVERLAY_CATEGORY_FONT, toPersist.getPackageName());
++        } catch (JSONException e) {
++            Log.e(TAG, "Error adding new settings value:\n" + e.getMessage());
++            return false;
++        }
++        // updating the setting
++        Settings.Secure.putStringForUser(mContext.getContentResolver(),
++                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
++                json.toString(), UserHandle.myUserId());
++        return true;
++    }
++
++    public static FontManager getInstance(Context context, OverlayManagerCompat overlayManager) {
++        if (sFontOptionManager == null) {
++            Context applicationContext = context.getApplicationContext();
++            sFontOptionManager = new FontManager(context, overlayManager, new FontOptionProvider(applicationContext, overlayManager));
++        }
++        return sFontOptionManager;
++    }
++
++}
+diff --git a/src/com/android/customization/model/font/FontOption.java b/src/com/android/customization/model/font/FontOption.java
+new file mode 100644
+index 00000000..05e3ad4a
+--- /dev/null
++++ b/src/com/android/customization/model/font/FontOption.java
+@@ -0,0 +1,102 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.font;
++
++import android.content.Context;
++import android.content.res.Resources;
++import android.graphics.PorterDuff.Mode;
++import android.graphics.Typeface;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.TextView;
++
++import com.android.wallpaper.R;
++import com.android.wallpaper.util.ResourceUtils;
++
++import com.android.customization.model.CustomizationManager;
++import com.android.customization.model.CustomizationOption;
++import com.android.customization.model.ResourceConstants;
++import com.android.customization.model.theme.OverlayManagerCompat;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++import java.util.Objects;
++
++public class FontOption implements CustomizationOption<FontOption> {
++
++    private final Typeface mHeadlineFont;
++    private final Typeface mBodyFont;
++    private String mTitle;
++    private String mOverlayPackage;
++
++    public FontOption(String overlayPackage, String label, Typeface headlineFont, Typeface bodyFont) {
++        mTitle = label;
++        mHeadlineFont = headlineFont;
++        mBodyFont = bodyFont;
++        mOverlayPackage = overlayPackage;
++    }
++
++    @Override
++    public void bindThumbnailTile(View view) {
++        Resources res = view.getContext().getResources();
++        ((TextView) view.findViewById(R.id.thumbnail_text)).setTypeface(
++                mHeadlineFont);
++        int colorFilter = ResourceUtils.getColorAttr(view.getContext(),
++                view.isActivated() || view.getId() == R.id.font_section_tile
++                        ? android.R.attr.textColorPrimary
++                        : android.R.attr.textColorTertiary);
++        ((TextView) view.findViewById(R.id.thumbnail_text)).setTextColor(colorFilter);
++        view.setContentDescription(mTitle);
++    }
++
++    @Override
++    public boolean isActive(CustomizationManager<FontOption> manager) {
++        FontManager fontManager = (FontManager) manager;
++        return fontManager.isActive(this);
++    }
++
++    @Override
++    public int getLayoutResId() {
++        return R.layout.theme_font_option;
++    }
++
++    @Override
++    public String getTitle() {
++        return mTitle;
++    }
++
++    public String getPackageName() {
++        return mOverlayPackage;
++    }
++
++    public void bindPreview(ViewGroup container) {
++        ViewGroup cardBody = container.findViewById(R.id.theme_preview_card_body_container);
++        if (cardBody.getChildCount() == 0) {
++            LayoutInflater.from(container.getContext()).inflate(
++                    R.layout.preview_card_font_content, cardBody, true);
++        }
++        TextView title = container.findViewById(R.id.font_card_title);
++        title.setTypeface(mHeadlineFont);
++        TextView bodyText = container.findViewById(R.id.font_card_body);
++        bodyText.setTypeface(mBodyFont);
++        container.findViewById(R.id.font_card_divider).setBackgroundColor(
++                title.getCurrentTextColor());
++    }
++}
+diff --git a/src/com/android/customization/model/font/FontOptionProvider.java b/src/com/android/customization/model/font/FontOptionProvider.java
+new file mode 100644
+index 00000000..226fcdf8
+--- /dev/null
++++ b/src/com/android/customization/model/font/FontOptionProvider.java
+@@ -0,0 +1,102 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.font;
++
++import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
++import static com.android.customization.model.ResourceConstants.CONFIG_BODY_FONT_FAMILY;
++import static com.android.customization.model.ResourceConstants.CONFIG_HEADLINE_FONT_FAMILY;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_FONT;
++
++import android.content.Context;
++import android.content.pm.PackageManager;
++import android.content.pm.PackageManager.NameNotFoundException;
++import android.content.res.Resources;
++import android.content.res.Resources.NotFoundException;
++import android.graphics.Typeface;
++import android.os.UserHandle;
++import android.util.Log;
++
++import com.android.customization.model.ResourceConstants;
++import com.android.customization.model.theme.OverlayManagerCompat;
++import com.android.wallpaper.R;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++public class FontOptionProvider {
++
++    private static final String TAG = "FontOptionProvider";
++
++    private Context mContext;
++    private PackageManager mPm;
++    private final List<String> mOverlayPackages;
++    private final List<FontOption> mOptions = new ArrayList<>();
++    private String mActiveOverlay;
++
++    public FontOptionProvider(Context context, OverlayManagerCompat manager) {
++        mContext = context;
++        mPm = context.getPackageManager();
++        mOverlayPackages = new ArrayList<>();
++        mOverlayPackages.addAll(manager.getOverlayPackagesForCategory(OVERLAY_CATEGORY_FONT,
++                UserHandle.myUserId(), ResourceConstants.getPackagesToOverlay(mContext)));
++        mActiveOverlay = manager.getEnabledPackageName(ANDROID_PACKAGE, OVERLAY_CATEGORY_FONT);
++    }
++
++    public List<FontOption> getOptions(boolean reload) {
++        if (reload) mOptions.clear();
++        if (mOptions.isEmpty()) loadOptions();
++        return mOptions;
++    }
++
++    private void loadOptions() {
++        addDefault();
++        for (String overlayPackage : mOverlayPackages) {
++            try {
++                Resources overlayRes = mPm.getResourcesForApplication(overlayPackage);
++                Typeface headlineFont = Typeface.create(
++                        getFontFamily(overlayPackage, overlayRes, CONFIG_HEADLINE_FONT_FAMILY),
++                        Typeface.NORMAL);
++                Typeface bodyFont = Typeface.create(
++                        getFontFamily(overlayPackage, overlayRes, CONFIG_BODY_FONT_FAMILY),
++                        Typeface.NORMAL);
++                String label = mPm.getApplicationInfo(overlayPackage, 0).loadLabel(mPm).toString();
++                mOptions.add(new FontOption(overlayPackage, label, headlineFont, bodyFont));
++            } catch (NameNotFoundException | NotFoundException e) {
++                Log.w(TAG, String.format("Couldn't load font overlay %s, will skip it",
++                        overlayPackage), e);
++            }
++        }
++    }
++
++    private void addDefault() {
++        Resources system = Resources.getSystem();
++        Typeface headlineFont = Typeface.create(system.getString(system.getIdentifier(
++                ResourceConstants.CONFIG_HEADLINE_FONT_FAMILY,"string", ANDROID_PACKAGE)),
++                Typeface.NORMAL);
++        Typeface bodyFont = Typeface.create(system.getString(system.getIdentifier(
++                ResourceConstants.CONFIG_BODY_FONT_FAMILY,
++                "string", ANDROID_PACKAGE)),
++                Typeface.NORMAL);
++        mOptions.add(new FontOption(null, mContext.getString(R.string.default_theme_title),
++                headlineFont, bodyFont));
++    }
++
++    private String getFontFamily(String overlayPackage, Resources overlayRes, String configName) {
++        return overlayRes.getString(overlayRes.getIdentifier(configName, "string", overlayPackage));
++    }
++}
+diff --git a/src/com/android/customization/model/font/FontSectionController.java b/src/com/android/customization/model/font/FontSectionController.java
+new file mode 100644
+index 00000000..95c2c9b7
+--- /dev/null
++++ b/src/com/android/customization/model/font/FontSectionController.java
+@@ -0,0 +1,110 @@
++/*
++ * Copyright (C) 2021 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.font;
++
++import android.content.Context;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.TextView;
++
++import androidx.annotation.Nullable;
++
++import com.android.customization.model.CustomizationManager.Callback;
++import com.android.customization.model.CustomizationManager.OptionsFetchedListener;
++import com.android.customization.model.CustomizationOption;
++import com.android.customization.widget.OptionSelectorController;
++import com.android.customization.widget.OptionSelectorController.OptionSelectedListener;
++
++import com.android.wallpaper.R;
++import com.android.wallpaper.model.CustomizationSectionController;
++import com.android.wallpaper.util.LaunchUtils;
++
++import com.android.customization.picker.font.FontFragment;
++import com.android.customization.picker.font.FontSectionView;
++
++import java.util.List;
++
++/** A {@link CustomizationSectionController} for system fonts. */
++
++public class FontSectionController implements CustomizationSectionController<FontSectionView> {
++
++    private static final String TAG = "FontSectionController";
++
++    private final FontManager mFontOptionsManager;
++    private final CustomizationSectionNavigationController mSectionNavigationController;
++    private final Callback mApplyFontCallback = new Callback() {
++        @Override
++        public void onSuccess() {
++        }
++
++        @Override
++        public void onError(@Nullable Throwable throwable) {
++        }
++    };
++
++    public FontSectionController(FontManager fontOptionsManager,
++            CustomizationSectionNavigationController sectionNavigationController) {
++        mFontOptionsManager = fontOptionsManager;
++        mSectionNavigationController = sectionNavigationController;
++    }
++
++    @Override
++    public boolean isAvailable(Context context) {
++        return mFontOptionsManager.isAvailable();
++    }
++
++    @Override
++    public FontSectionView createView(Context context) {
++        FontSectionView fontSectionView = (FontSectionView) LayoutInflater.from(context)
++                .inflate(R.layout.font_section_view, /* root= */ null);
++
++        TextView sectionDescription = fontSectionView.findViewById(R.id.font_section_description);
++        View sectionTile = fontSectionView.findViewById(R.id.font_section_tile);
++
++        mFontOptionsManager.fetchOptions(new OptionsFetchedListener<FontOption>() {
++            @Override
++            public void onOptionsLoaded(List<FontOption> options) {
++                FontOption activeOption = getActiveOption(options);
++                sectionDescription.setText(activeOption.getTitle());
++                activeOption.bindThumbnailTile(sectionTile);
++            }
++
++            @Override
++            public void onError(@Nullable Throwable throwable) {
++                if (throwable != null) {
++                    Log.e(TAG, "Error loading font options", throwable);
++                }
++                sectionDescription.setText(R.string.something_went_wrong);
++                sectionTile.setVisibility(View.GONE);
++            }
++        }, /* reload= */ true);
++
++        fontSectionView.setOnClickListener(v -> mSectionNavigationController.navigateTo(
++                FontFragment.newInstance(context.getString(R.string.preview_name_font))));
++
++        return fontSectionView;
++    }
++
++    private FontOption getActiveOption(List<FontOption> options) {
++        return options.stream()
++                .filter(option -> mFontOptionsManager.isActive(option))
++                .findAny()
++                // For development only, as there should always be a grid set.
++                .orElse(options.get(0));
++    }
++}
+diff --git a/src/com/android/customization/model/iconpack/IconPackManager.java b/src/com/android/customization/model/iconpack/IconPackManager.java
+new file mode 100644
+index 00000000..affdc73e
+--- /dev/null
++++ b/src/com/android/customization/model/iconpack/IconPackManager.java
+@@ -0,0 +1,141 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.iconpack;
++
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_ANDROID;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SETTINGS;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SYSUI;
++
++import android.content.Context;
++import android.os.Bundle;
++import android.os.UserHandle;
++import android.provider.Settings;
++import android.text.TextUtils;
++import android.util.Log;
++import android.widget.Toast;
++
++import androidx.annotation.Nullable;
++
++import com.android.customization.model.CustomizationManager;
++import com.android.customization.model.theme.OverlayManagerCompat;
++
++import java.util.Map;
++import java.util.List;
++
++import org.json.JSONException;
++import org.json.JSONObject;
++
++public class IconPackManager implements CustomizationManager<IconPackOption> {
++
++    private static IconPackManager sIconPackOptionManager;
++    private Context mContext;
++    private IconPackOption mActiveOption;
++    private OverlayManagerCompat mOverlayManager;
++    private IconPackOptionProvider mProvider;
++    private static final String TAG = "IconPackManager";
++    private static final String KEY_STATE_CURRENT_SELECTION = "IconPackManager.currentSelection";
++    private static final String[] mCurrentCategories = new String[]{OVERLAY_CATEGORY_ICON_ANDROID, OVERLAY_CATEGORY_ICON_SETTINGS, OVERLAY_CATEGORY_ICON_SYSUI};
++
++    IconPackManager(Context context, OverlayManagerCompat overlayManager, IconPackOptionProvider provider) {
++        mContext = context;
++        mProvider = provider;
++        mOverlayManager = overlayManager;
++    }
++
++    @Override
++    public boolean isAvailable() {
++        return mOverlayManager.isAvailable();
++    }
++
++    @Override
++    public void apply(IconPackOption option, @Nullable Callback callback) {
++        if (!persistOverlay(option)) {
++            Toast failed = Toast.makeText(mContext, "Failed to apply icon pack, reboot to try again.", Toast.LENGTH_SHORT);
++            failed.show();
++            if (callback != null) {
++                callback.onError(null);
++            }
++            return;
++        }
++        if (option.isDefault()) {
++            if (mActiveOption.isDefault()) return;
++            mActiveOption.getOverlayPackages().forEach((category, overlay) -> mOverlayManager.disableOverlay(overlay, UserHandle.myUserId()));
++        }
++        if (callback != null) {
++            callback.onSuccess();
++        }
++        mActiveOption = option;
++    }
++
++    @Override
++    public void fetchOptions(OptionsFetchedListener<IconPackOption> callback, boolean reload) {
++        List<IconPackOption> options = mProvider.getOptions();
++        for (IconPackOption option : options) {
++            if (option.isActive(this)) {
++                mActiveOption = option;
++                break;
++            }
++        }
++        callback.onOptionsLoaded(options);
++    }
++
++    public OverlayManagerCompat getOverlayManager() {
++        return mOverlayManager;
++    }
++
++    private boolean persistOverlay(IconPackOption toPersist) {
++        String value = Settings.Secure.getStringForUser(mContext.getContentResolver(),
++                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES, UserHandle.myUserId());
++        JSONObject json;
++        if (value == null) {
++            json = new JSONObject();
++        } else {
++            try {
++                json = new JSONObject(value);
++            } catch (JSONException e) {
++                Log.e(TAG, "Error parsing current settings value:\n" + e.getMessage());
++                return false;
++            }
++        }
++        // removing all currently enabled overlays from the json
++        for (String categoryName : mCurrentCategories) {
++            json.remove(categoryName);
++        }
++        // adding the new ones
++        for (String categoryName : mCurrentCategories) {
++            try {
++                json.put(categoryName, toPersist.getOverlayPackages().get(categoryName));
++            } catch (JSONException e) {
++                Log.e(TAG, "Error adding new settings value:\n" + e.getMessage());
++                return false;
++            }
++        }
++        // updating the setting
++        Settings.Secure.putStringForUser(mContext.getContentResolver(),
++                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
++                json.toString(), UserHandle.myUserId());
++        return true;
++    }
++
++    public static IconPackManager getInstance(Context context, OverlayManagerCompat overlayManager) {
++        if (sIconPackOptionManager == null) {
++            Context applicationContext = context.getApplicationContext();
++            sIconPackOptionManager = new IconPackManager(context, overlayManager, new IconPackOptionProvider(applicationContext, overlayManager));
++        }
++        return sIconPackOptionManager;
++    }
++
++}
+diff --git a/src/com/android/customization/model/iconpack/IconPackOption.java b/src/com/android/customization/model/iconpack/IconPackOption.java
+new file mode 100644
+index 00000000..ba83e1ad
+--- /dev/null
++++ b/src/com/android/customization/model/iconpack/IconPackOption.java
+@@ -0,0 +1,167 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.iconpack;
++
++import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
++import static com.android.customization.model.ResourceConstants.SETTINGS_PACKAGE;
++import static com.android.customization.model.ResourceConstants.SYSUI_PACKAGE;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_ANDROID;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SETTINGS;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SYSUI;
++
++import android.content.Context;
++import android.content.res.Resources;
++import android.graphics.drawable.Drawable;
++import android.graphics.PorterDuff.Mode;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.TextView;
++
++import com.android.wallpaper.R;
++import com.android.wallpaper.util.ResourceUtils;
++
++import com.android.customization.model.CustomizationManager;
++import com.android.customization.model.CustomizationOption;
++import com.android.customization.model.ResourceConstants;
++import com.android.customization.model.theme.OverlayManagerCompat;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++import java.util.Objects;
++
++public class IconPackOption implements CustomizationOption<IconPackOption> {
++
++    public static final int THUMBNAIL_ICON_POSITION = 0;
++    private static int[] mIconIds = {
++            R.id.preview_icon_0, R.id.preview_icon_1, R.id.preview_icon_2, R.id.preview_icon_3,
++            R.id.preview_icon_4, R.id.preview_icon_5
++    };
++
++    private List<Drawable> mIcons = new ArrayList<>();
++    private String mTitle;
++    private boolean mIsDefault;
++
++    // Mapping from category to overlay package name
++    private final Map<String, String> mOverlayPackageNames = new HashMap<>();
++
++    public IconPackOption(String title, boolean isDefault) {
++        mTitle = title;
++        mIsDefault = isDefault;
++    }
++
++    public IconPackOption(String title) {
++        this(title, false);
++    }
++
++    @Override
++    public void bindThumbnailTile(View view) {
++        Resources res = view.getContext().getResources();
++        Drawable icon = mIcons.get(THUMBNAIL_ICON_POSITION)
++                .getConstantState().newDrawable().mutate();
++        int colorFilter = ResourceUtils.getColorAttr(view.getContext(),
++                android.R.attr.textColorPrimary);
++        int resId = R.id.icon_section_tile;
++        if (view.findViewById(R.id.option_icon) != null) {
++            resId = R.id.option_icon;
++            colorFilter = ResourceUtils.getColorAttr(view.getContext(),
++                view.isActivated() ? android.R.attr.textColorPrimary :
++                android.R.attr.textColorTertiary);
++        }
++        icon.setColorFilter(colorFilter, Mode.SRC_ATOP);
++        ((ImageView) view.findViewById(resId)).setImageDrawable(icon);
++        view.setContentDescription(mTitle);
++    }
++
++    @Override
++    public boolean isActive(CustomizationManager<IconPackOption> manager) {
++        IconPackManager iconManager = (IconPackManager) manager;
++        OverlayManagerCompat overlayManager = iconManager.getOverlayManager();
++        if (mIsDefault) {
++            return overlayManager.getEnabledPackageName(SYSUI_PACKAGE, OVERLAY_CATEGORY_ICON_SYSUI) == null &&
++                    overlayManager.getEnabledPackageName(SETTINGS_PACKAGE, OVERLAY_CATEGORY_ICON_SETTINGS) == null &&
++                    overlayManager.getEnabledPackageName(ANDROID_PACKAGE, OVERLAY_CATEGORY_ICON_ANDROID) == null;
++        }
++        for (Map.Entry<String, String> overlayEntry : getOverlayPackages().entrySet()) {
++            if (overlayEntry.getValue() == null || !overlayEntry.getValue().equals(overlayManager.getEnabledPackageName(determinePackage(overlayEntry.getKey()), overlayEntry.getKey()))) {
++                return false;
++            }
++        }
++        return true;
++    }
++
++    @Override
++    public int getLayoutResId() {
++        return R.layout.theme_icon_option;
++    }
++
++    @Override
++    public String getTitle() {
++        return mTitle;
++    }
++
++    public void bindPreview(ViewGroup container) {
++        ViewGroup cardBody = container.findViewById(R.id.theme_preview_card_body_container);
++        if (cardBody.getChildCount() == 0) {
++            LayoutInflater.from(container.getContext()).inflate(
++                    R.layout.preview_card_icon_content, cardBody, true);
++        }
++        for (int i = 0; i < mIconIds.length && i < mIcons.size(); i++) {
++            ((ImageView) container.findViewById(mIconIds[i])).setImageDrawable(
++                    mIcons.get(i));
++        }
++    }
++
++    private String determinePackage(String category) {
++       switch(category) {
++           case OVERLAY_CATEGORY_ICON_SYSUI:
++               return SYSUI_PACKAGE;
++           case OVERLAY_CATEGORY_ICON_SETTINGS:
++               return SETTINGS_PACKAGE;
++           case OVERLAY_CATEGORY_ICON_ANDROID:
++               return ANDROID_PACKAGE;
++           default:
++               return null;
++       }
++    }
++
++    public void addIcon(Drawable previewIcon) {
++        mIcons.add(previewIcon);
++    }
++
++    public void addOverlayPackage(String category, String overlayPackage) {
++        mOverlayPackageNames.put(category, overlayPackage);
++    }
++
++    public Map<String, String> getOverlayPackages() {
++        return mOverlayPackageNames;
++    }
++
++    /**
++     * @return whether this icon option has overlays and previews for all the required packages
++     */
++    public boolean isValid(Context context) {
++        return mOverlayPackageNames.keySet().size() ==
++                ResourceConstants.getPackagesToOverlay(context).length;
++    }
++
++    public boolean isDefault() {
++        return mIsDefault;
++    }
++}
+diff --git a/src/com/android/customization/model/iconpack/IconPackOptionProvider.java b/src/com/android/customization/model/iconpack/IconPackOptionProvider.java
+new file mode 100644
+index 00000000..ef251820
+--- /dev/null
++++ b/src/com/android/customization/model/iconpack/IconPackOptionProvider.java
+@@ -0,0 +1,145 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.iconpack;
++
++import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
++import static com.android.customization.model.ResourceConstants.ICONS_FOR_PREVIEW;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_ANDROID;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SETTINGS;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SYSUI;
++
++import android.content.Context;
++import android.content.pm.PackageManager;
++import android.content.pm.PackageManager.NameNotFoundException;
++import android.content.res.Resources;
++import android.content.res.Resources.NotFoundException;
++import android.graphics.drawable.Drawable;
++import android.os.UserHandle;
++import android.util.Log;
++
++import com.android.customization.model.ResourceConstants;
++import com.android.customization.model.theme.OverlayManagerCompat;
++import com.android.wallpaper.R;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++public class IconPackOptionProvider {
++
++    private static final String TAG = "IconPackOptionProvider";
++
++    private Context mContext;
++    private PackageManager mPm;
++    private final List<String> mOverlayPackages;
++    private final List<IconPackOption> mOptions = new ArrayList<>();
++    private final List<String> mSysUiIconsOverlayPackages = new ArrayList<>();
++    private final List<String> mSettingsIconsOverlayPackages = new ArrayList<>();
++
++    public IconPackOptionProvider(Context context, OverlayManagerCompat manager) {
++        mContext = context;
++        mPm = context.getPackageManager();
++        String[] targetPackages = ResourceConstants.getPackagesToOverlay(context);
++        mSysUiIconsOverlayPackages.addAll(manager.getOverlayPackagesForCategory(
++                OVERLAY_CATEGORY_ICON_SYSUI, UserHandle.myUserId(), targetPackages));
++        mSettingsIconsOverlayPackages.addAll(manager.getOverlayPackagesForCategory(
++                OVERLAY_CATEGORY_ICON_SETTINGS, UserHandle.myUserId(), targetPackages));
++        mOverlayPackages = new ArrayList<>();
++        mOverlayPackages.addAll(manager.getOverlayPackagesForCategory(OVERLAY_CATEGORY_ICON_ANDROID,
++                UserHandle.myUserId(), ResourceConstants.getPackagesToOverlay(mContext)));
++    }
++
++    public List<IconPackOption> getOptions() {
++        if (mOptions.isEmpty()) loadOptions();
++        return mOptions;
++    }
++
++    private void loadOptions() {
++        addDefault();
++
++        Map<String, IconPackOption> optionsByPrefix = new HashMap<>();
++        for (String overlayPackage : mOverlayPackages) {
++            IconPackOption option = addOrUpdateOption(optionsByPrefix, overlayPackage,
++                    OVERLAY_CATEGORY_ICON_ANDROID);
++            try{
++                for (String iconName : ICONS_FOR_PREVIEW) {
++                    option.addIcon(loadIconPreviewDrawable(iconName, overlayPackage));
++                }
++            } catch (NotFoundException | NameNotFoundException e) {
++                Log.w(TAG, String.format("Couldn't load icon overlay details for %s, will skip it",
++                        overlayPackage), e);
++            }
++        }
++
++        for (String overlayPackage : mSysUiIconsOverlayPackages) {
++            addOrUpdateOption(optionsByPrefix, overlayPackage, OVERLAY_CATEGORY_ICON_SYSUI);
++        }
++
++        for (String overlayPackage : mSettingsIconsOverlayPackages) {
++            addOrUpdateOption(optionsByPrefix, overlayPackage, OVERLAY_CATEGORY_ICON_SETTINGS);
++        }
++
++        for (IconPackOption option : optionsByPrefix.values()) {
++            if (option.isValid(mContext)) {
++                mOptions.add(option);
++            }
++        }
++    }
++
++    private IconPackOption addOrUpdateOption(Map<String, IconPackOption> optionsByPrefix,
++            String overlayPackage, String category) {
++        String prefix = overlayPackage.substring(0, overlayPackage.lastIndexOf("."));
++        IconPackOption option = null;
++        try {
++            if (!optionsByPrefix.containsKey(prefix)) {
++                option = new IconPackOption(mPm.getApplicationInfo(overlayPackage, 0).loadLabel(mPm).toString());
++                optionsByPrefix.put(prefix, option);
++            } else {
++                option = optionsByPrefix.get(prefix);
++            }
++            option.addOverlayPackage(category, overlayPackage);
++        } catch (NameNotFoundException e) {
++            Log.e(TAG, String.format("Package %s not found", overlayPackage), e);
++        }
++        return option;
++    }
++
++    private Drawable loadIconPreviewDrawable(String drawableName, String packageName)
++            throws NameNotFoundException, NotFoundException {
++        final Resources resources = ANDROID_PACKAGE.equals(packageName)
++                ? Resources.getSystem()
++                : mPm.getResourcesForApplication(packageName);
++        return resources.getDrawable(
++                resources.getIdentifier(drawableName, "drawable", packageName), null);
++    }
++
++    private void addDefault() {
++        IconPackOption option = new IconPackOption(mContext.getString(R.string.default_theme_title), true);
++        try {
++            for (String iconName : ICONS_FOR_PREVIEW) {
++                option.addIcon(loadIconPreviewDrawable(iconName, ANDROID_PACKAGE));
++            }
++        } catch (NameNotFoundException | NotFoundException e) {
++            Log.w(TAG, "Didn't find SystemUi package icons, will skip option", e);
++        }
++        option.addOverlayPackage(OVERLAY_CATEGORY_ICON_ANDROID, null);
++        option.addOverlayPackage(OVERLAY_CATEGORY_ICON_SYSUI, null);
++        option.addOverlayPackage(OVERLAY_CATEGORY_ICON_SETTINGS, null);
++        mOptions.add(option);
++    }
++
++}
+diff --git a/src/com/android/customization/model/iconpack/IconPackSectionController.java b/src/com/android/customization/model/iconpack/IconPackSectionController.java
+new file mode 100644
+index 00000000..c84d5ed9
+--- /dev/null
++++ b/src/com/android/customization/model/iconpack/IconPackSectionController.java
+@@ -0,0 +1,109 @@
++/*
++ * Copyright (C) 2021 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.iconpack;
++
++import android.content.Context;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.TextView;
++
++import androidx.annotation.Nullable;
++
++import com.android.customization.model.CustomizationManager.Callback;
++import com.android.customization.model.CustomizationManager.OptionsFetchedListener;
++import com.android.customization.model.CustomizationOption;
++import com.android.customization.picker.iconpack.IconPackFragment;
++import com.android.customization.picker.iconpack.IconPackSectionView;
++import com.android.customization.widget.OptionSelectorController;
++import com.android.customization.widget.OptionSelectorController.OptionSelectedListener;
++
++import com.android.wallpaper.R;
++import com.android.wallpaper.model.CustomizationSectionController;
++import com.android.wallpaper.util.LaunchUtils;
++
++import java.util.List;
++
++/** A {@link CustomizationSectionController} for system icons. */
++
++public class IconPackSectionController implements CustomizationSectionController<IconPackSectionView> {
++
++    private static final String TAG = "IconPackSectionController";
++
++    private final IconPackManager mIconPackOptionsManager;
++    private final CustomizationSectionNavigationController mSectionNavigationController;
++    private final Callback mApplyIconCallback = new Callback() {
++        @Override
++        public void onSuccess() {
++        }
++
++        @Override
++        public void onError(@Nullable Throwable throwable) {
++        }
++    };
++
++    public IconPackSectionController(IconPackManager iconPackOptionsManager,
++            CustomizationSectionNavigationController sectionNavigationController) {
++        mIconPackOptionsManager = iconPackOptionsManager;
++        mSectionNavigationController = sectionNavigationController;
++    }
++
++    @Override
++    public boolean isAvailable(Context context) {
++        return mIconPackOptionsManager.isAvailable();
++    }
++
++    @Override
++    public IconPackSectionView createView(Context context) {
++        IconPackSectionView iconPackSectionView = (IconPackSectionView) LayoutInflater.from(context)
++                .inflate(R.layout.icon_section_view, /* root= */ null);
++
++        TextView sectionDescription = iconPackSectionView.findViewById(R.id.icon_section_description);
++        View sectionTile = iconPackSectionView.findViewById(R.id.icon_section_tile);
++
++        mIconPackOptionsManager.fetchOptions(new OptionsFetchedListener<IconPackOption>() {
++            @Override
++            public void onOptionsLoaded(List<IconPackOption> options) {
++                IconPackOption activeOption = getActiveOption(options);
++                sectionDescription.setText(activeOption.getTitle());
++                activeOption.bindThumbnailTile(sectionTile);
++            }
++
++            @Override
++            public void onError(@Nullable Throwable throwable) {
++                if (throwable != null) {
++                    Log.e(TAG, "Error loading icon options", throwable);
++                }
++                sectionDescription.setText(R.string.something_went_wrong);
++                sectionTile.setVisibility(View.GONE);
++            }
++        }, /* reload= */ true);
++
++        iconPackSectionView.setOnClickListener(v -> mSectionNavigationController.navigateTo(
++                IconPackFragment.newInstance(context.getString(R.string.preview_name_icon))));
++
++        return iconPackSectionView;
++    }
++
++    private IconPackOption getActiveOption(List<IconPackOption> options) {
++        return options.stream()
++                .filter(option -> option.isActive(mIconPackOptionsManager))
++                .findAny()
++                // For development only, as there should always be a grid set.
++                .orElse(options.get(0));
++    }
++}
+diff --git a/src/com/android/customization/model/iconshape/IconShapeManager.java b/src/com/android/customization/model/iconshape/IconShapeManager.java
+new file mode 100644
+index 00000000..3ab510cb
+--- /dev/null
++++ b/src/com/android/customization/model/iconshape/IconShapeManager.java
+@@ -0,0 +1,137 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.iconshape;
++
++import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_SHAPE;
++
++import android.content.Context;
++import android.os.UserHandle;
++import android.provider.Settings;
++import android.util.Log;
++import android.widget.Toast;
++
++import androidx.annotation.Nullable;
++
++import com.android.customization.model.CustomizationManager;
++import com.android.customization.model.theme.OverlayManagerCompat;
++
++import java.util.List;
++
++import org.json.JSONException;
++import org.json.JSONObject;
++
++public class IconShapeManager implements CustomizationManager<IconShapeOption> {
++
++    private static IconShapeManager sIconShapeOptionManager;
++    private Context mContext;
++    private IconShapeOption mActiveOption;
++    private OverlayManagerCompat mOverlayManager;
++    private IconShapeOptionProvider mProvider;
++    private static final String TAG = "IconShapeManager";
++    private static final String KEY_STATE_CURRENT_SELECTION = "IconShapeManager.currentSelection";
++
++    IconShapeManager(Context context, OverlayManagerCompat overlayManager, IconShapeOptionProvider provider) {
++        mContext = context;
++        mProvider = provider;
++        mOverlayManager = overlayManager;
++    }
++
++    @Override
++    public boolean isAvailable() {
++        return mOverlayManager.isAvailable();
++    }
++
++    @Override
++    public void apply(IconShapeOption option, @Nullable Callback callback) {
++        if (!persistOverlay(option)) {
++            Toast failed = Toast.makeText(mContext, "Failed to apply font, reboot to try again.", Toast.LENGTH_SHORT);
++            failed.show();
++            if (callback != null) {
++                callback.onError(null);
++            }
++            return;
++        }
++        if (option.getPackageName() == null) {
++            if (mActiveOption.getPackageName() == null) return;
++            for (String overlay : mOverlayManager.getOverlayPackagesForCategory(
++                    OVERLAY_CATEGORY_SHAPE, UserHandle.myUserId(), ANDROID_PACKAGE)) {
++                mOverlayManager.disableOverlay(overlay, UserHandle.myUserId());
++            }
++        } else {
++            mOverlayManager.setEnabledExclusiveInCategory(option.getPackageName(), UserHandle.myUserId());
++        }
++        if (callback != null) {
++            callback.onSuccess();
++        }
++        mActiveOption = option;
++    }
++
++    @Override
++    public void fetchOptions(OptionsFetchedListener<IconShapeOption> callback, boolean reload) {
++        List<IconShapeOption> options = mProvider.getOptions();
++        for (IconShapeOption option : options) {
++            if (option.isActive(this)) {
++                mActiveOption = option;
++                break;
++            }
++        }
++        callback.onOptionsLoaded(options);
++    }
++
++    public OverlayManagerCompat getOverlayManager() {
++        return mOverlayManager;
++    }
++
++    private boolean persistOverlay(IconShapeOption toPersist) {
++        String value = Settings.Secure.getStringForUser(mContext.getContentResolver(),
++                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES, UserHandle.myUserId());
++        JSONObject json;
++        if (value == null) {
++            json = new JSONObject();
++        } else {
++            try {
++                json = new JSONObject(value);
++            } catch (JSONException e) {
++                Log.e(TAG, "Error parsing current settings value:\n" + e.getMessage());
++                return false;
++            }
++        }
++        // removing all currently enabled overlays from the json
++        json.remove(OVERLAY_CATEGORY_SHAPE);
++        // adding the new ones
++        try {
++            json.put(OVERLAY_CATEGORY_SHAPE, toPersist.getPackageName());
++        } catch (JSONException e) {
++            Log.e(TAG, "Error adding new settings value:\n" + e.getMessage());
++            return false;
++        }
++        // updating the setting
++        Settings.Secure.putStringForUser(mContext.getContentResolver(),
++                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
++                json.toString(), UserHandle.myUserId());
++        return true;
++    }
++
++    public static IconShapeManager getInstance(Context context, OverlayManagerCompat overlayManager) {
++        if (sIconShapeOptionManager == null) {
++            Context applicationContext = context.getApplicationContext();
++            sIconShapeOptionManager = new IconShapeManager(context, overlayManager, new IconShapeOptionProvider(applicationContext, overlayManager));
++        }
++        return sIconShapeOptionManager;
++    }
++
++}
+diff --git a/src/com/android/customization/model/iconshape/IconShapeOption.java b/src/com/android/customization/model/iconshape/IconShapeOption.java
+new file mode 100644
+index 00000000..f9624fb9
+--- /dev/null
++++ b/src/com/android/customization/model/iconshape/IconShapeOption.java
+@@ -0,0 +1,140 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.iconshape;
++
++import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_SHAPE;
++
++import androidx.annotation.Dimension;
++import android.content.res.Resources;
++import android.content.res.TypedArray;
++import android.graphics.Path;
++import android.graphics.drawable.Drawable;
++import android.graphics.drawable.LayerDrawable;
++import android.graphics.drawable.ShapeDrawable;
++import android.view.Gravity;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++
++import androidx.core.graphics.ColorUtils;
++
++import com.android.customization.model.theme.ShapeAppIcon;
++import com.android.wallpaper.R;
++import com.android.wallpaper.util.ResourceUtils;
++
++import com.android.customization.model.CustomizationManager;
++import com.android.customization.model.CustomizationOption;
++import com.android.customization.model.theme.OverlayManagerCompat;
++
++import java.util.List;
++import java.util.Objects;
++
++public class IconShapeOption implements CustomizationOption<IconShapeOption> {
++
++    private final LayerDrawable mShape;
++    private final List<ShapeAppIcon> mAppIcons;
++    private final String mTitle;
++    private final String mOverlayPackage;
++    private final Path mPath;
++    private final int mCornerRadius;
++    private int[] mShapeIconIds = {
++            R.id.shape_preview_icon_0, R.id.shape_preview_icon_1, R.id.shape_preview_icon_2,
++            R.id.shape_preview_icon_3, R.id.shape_preview_icon_4, R.id.shape_preview_icon_5
++    };
++
++    public IconShapeOption(String packageName, String title, Path path,
++                           @Dimension int cornerRadius, Drawable shapeDrawable,
++                           List<ShapeAppIcon> appIcons) {
++        mOverlayPackage = packageName;
++        mTitle = title;
++        mAppIcons = appIcons;
++        mPath = path;
++        mCornerRadius = cornerRadius;
++        Drawable background = shapeDrawable.getConstantState().newDrawable();
++        Drawable foreground = shapeDrawable.getConstantState().newDrawable();
++        mShape = new LayerDrawable(new Drawable[]{background, foreground});
++        mShape.setLayerGravity(0, Gravity.CENTER);
++        mShape.setLayerGravity(1, Gravity.CENTER);
++    }
++
++    @Override
++    public void bindThumbnailTile(View view) {
++        Resources res = view.getContext().getResources();
++        int resId = R.id.icon_section_tile;
++        if (view.findViewById(R.id.shape_thumbnail) != null) {
++            resId = R.id.shape_thumbnail;
++        }
++
++        Resources.Theme theme = view.getContext().getTheme();
++        int borderWidth = 2 * res.getDimensionPixelSize(R.dimen.option_border_width);
++
++        Drawable background = mShape.getDrawable(0);
++        background.setTintList(res.getColorStateList(R.color.option_border_color, theme));
++
++        ShapeDrawable foreground = (ShapeDrawable) mShape.getDrawable(1);
++
++        foreground.setIntrinsicHeight(background.getIntrinsicHeight() - borderWidth);
++        foreground.setIntrinsicWidth(background.getIntrinsicWidth() - borderWidth);
++        TypedArray ta = view.getContext().obtainStyledAttributes(
++                new int[]{android.R.attr.colorPrimary});
++        int primaryColor = ta.getColor(0, 0);
++        ta.recycle();
++        int foregroundColor =
++                ResourceUtils.getColorAttr(view.getContext(), android.R.attr.textColorPrimary);
++
++        foreground.setTint(ColorUtils.blendARGB(primaryColor, foregroundColor, .05f));
++
++        ((ImageView) view.findViewById(resId)).setImageDrawable(mShape);
++        view.setContentDescription(mTitle);
++    }
++
++    @Override
++    public boolean isActive(CustomizationManager<IconShapeOption> manager) {
++        IconShapeManager iconManager = (IconShapeManager) manager;
++        OverlayManagerCompat overlayManager = iconManager.getOverlayManager();
++
++        return Objects.equals(mOverlayPackage,
++                overlayManager.getEnabledPackageName(ANDROID_PACKAGE, OVERLAY_CATEGORY_SHAPE));
++    }
++
++    @Override
++    public int getLayoutResId() {
++        return R.layout.theme_shape_option;
++    }
++
++    @Override
++    public String getTitle() {
++        return mTitle;
++    }
++
++    public String getPackageName() {
++        return mOverlayPackage;
++    }
++
++    public void bindPreview(ViewGroup container) {
++        ViewGroup cardBody = container.findViewById(R.id.theme_preview_card_body_container);
++        if (cardBody.getChildCount() == 0) {
++            LayoutInflater.from(container.getContext()).inflate(
++                    R.layout.preview_card_shape_content, cardBody, true);
++        }
++        for (int i = 0; i < mShapeIconIds.length && i < mAppIcons.size(); i++) {
++            ImageView iconView = cardBody.findViewById(mShapeIconIds[i]);
++            iconView.setBackground(mAppIcons.get(i).getDrawableCopy());
++        }
++    }
++}
+diff --git a/src/com/android/customization/model/iconshape/IconShapeOptionProvider.java b/src/com/android/customization/model/iconshape/IconShapeOptionProvider.java
+new file mode 100644
+index 00000000..6324cb2a
+--- /dev/null
++++ b/src/com/android/customization/model/iconshape/IconShapeOptionProvider.java
+@@ -0,0 +1,163 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.iconshape;
++
++import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
++import static com.android.customization.model.ResourceConstants.CONFIG_CORNERRADIUS;
++import static com.android.customization.model.ResourceConstants.CONFIG_ICON_MASK;
++import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_SHAPE;
++import static com.android.customization.model.ResourceConstants.PATH_SIZE;
++
++import android.content.Context;
++import android.content.pm.ApplicationInfo;
++import android.content.pm.PackageManager;
++import android.content.pm.PackageManager.NameNotFoundException;
++import android.content.res.Resources;
++import android.content.res.Resources.NotFoundException;
++import android.graphics.Path;
++import android.graphics.drawable.AdaptiveIconDrawable;
++import android.graphics.drawable.Drawable;
++import android.graphics.drawable.ShapeDrawable;
++import android.graphics.drawable.shapes.PathShape;
++import android.os.UserHandle;
++import android.text.TextUtils;
++import android.util.Log;
++import android.util.PathParser;
++
++import androidx.annotation.Dimension;
++
++import com.android.customization.model.ResourceConstants;
++import com.android.customization.model.theme.OverlayManagerCompat;
++import com.android.customization.model.theme.ShapeAppIcon;
++import com.android.customization.widget.DynamicAdaptiveIconDrawable;
++import com.android.wallpaper.R;
++
++import java.util.ArrayList;
++import java.util.List;
++
++public class IconShapeOptionProvider {
++
++    private static final String TAG = "IconShapeOptionProvider";
++
++    private Context mContext;
++    private final List<String> mOverlayPackages;
++    private final List<IconShapeOption> mOptions = new ArrayList<>();
++    private final String[] mShapePreviewIconPackages;
++    private int mThumbSize;
++
++    public IconShapeOptionProvider(Context context, OverlayManagerCompat manager) {
++        mContext = context;
++        mOverlayPackages = new ArrayList<>();
++        mOverlayPackages.addAll(manager.getOverlayPackagesForCategory(OVERLAY_CATEGORY_SHAPE,
++                UserHandle.myUserId(), ResourceConstants.getPackagesToOverlay(mContext)));
++
++        mShapePreviewIconPackages = context.getResources().getStringArray(
++                R.array.icon_shape_preview_packages);
++        mThumbSize = mContext.getResources().getDimensionPixelSize(
++                R.dimen.component_shape_thumb_size);
++    }
++
++    public List<IconShapeOption> getOptions() {
++        if (mOptions.isEmpty()) loadOptions();
++        return mOptions;
++    }
++
++    private void loadOptions() {
++        addDefault();
++        for (String overlayPackage : mOverlayPackages) {
++            try {
++                Path path = loadPath(mContext.getPackageManager()
++                        .getResourcesForApplication(overlayPackage), overlayPackage);
++                PackageManager pm = mContext.getPackageManager();
++                String label = pm.getApplicationInfo(overlayPackage, 0).loadLabel(pm).toString();
++                mOptions.add(new IconShapeOption(overlayPackage, label, path,
++                        loadCornerRadius(overlayPackage), createShapeDrawable(path),
++                        getShapedAppIcons(path)));
++            } catch (NameNotFoundException | NotFoundException e) {
++                Log.w(TAG, String.format("Couldn't load shape overlay %s, will skip it",
++                        overlayPackage), e);
++            }
++        }
++    }
++
++    private void addDefault() {
++        Resources system = Resources.getSystem();
++        Path path = loadPath(system, ANDROID_PACKAGE);
++        mOptions.add(new IconShapeOption(null, mContext.getString(R.string.default_theme_title), path,
++                system.getDimensionPixelOffset(
++                        system.getIdentifier(CONFIG_CORNERRADIUS,
++                                "dimen", ResourceConstants.ANDROID_PACKAGE)),
++                createShapeDrawable(path), getShapedAppIcons(path)));
++    }
++
++    private ShapeDrawable createShapeDrawable(Path path) {
++        PathShape shape = new PathShape(path, PATH_SIZE, PATH_SIZE);
++        ShapeDrawable shapeDrawable = new ShapeDrawable(shape);
++        shapeDrawable.setIntrinsicHeight(mThumbSize);
++        shapeDrawable.setIntrinsicWidth(mThumbSize);
++        return shapeDrawable;
++    }
++
++    private List<ShapeAppIcon> getShapedAppIcons(Path path) {
++        List<ShapeAppIcon> shapedAppIcons = new ArrayList<>();
++        for (String packageName : mShapePreviewIconPackages) {
++            Drawable icon = null;
++            CharSequence name = null;
++            try {
++                Drawable appIcon = mContext.getPackageManager().getApplicationIcon(packageName);
++                if (appIcon instanceof AdaptiveIconDrawable) {
++                    AdaptiveIconDrawable adaptiveIcon = (AdaptiveIconDrawable) appIcon;
++                    icon = new DynamicAdaptiveIconDrawable(adaptiveIcon.getBackground(),
++                            adaptiveIcon.getForeground(), path);
++
++                    ApplicationInfo appInfo = mContext.getPackageManager()
++                            .getApplicationInfo(packageName, /* flag= */ 0);
++                    name = mContext.getPackageManager().getApplicationLabel(appInfo);
++                }
++            } catch (NameNotFoundException e) {
++                Log.d(TAG, "Couldn't find app " + packageName
++                        + ", won't use it for icon shape preview");
++            } finally {
++                if (icon != null && !TextUtils.isEmpty(name)) {
++                    shapedAppIcons.add(new ShapeAppIcon(icon));
++                }
++            }
++        }
++        return shapedAppIcons;
++    }
++
++    private Path loadPath(Resources overlayRes, String packageName) {
++        String shape = overlayRes.getString(overlayRes.getIdentifier(CONFIG_ICON_MASK, "string",
++                packageName));
++
++        if (!TextUtils.isEmpty(shape)) {
++            return PathParser.createPathFromPathData(shape);
++        }
++        return null;
++    }
++
++    @Dimension
++    private int loadCornerRadius(String packageName)
++            throws NameNotFoundException, NotFoundException {
++
++        Resources overlayRes =
++                mContext.getPackageManager().getResourcesForApplication(
++                        packageName);
++        return overlayRes.getDimensionPixelOffset(overlayRes.getIdentifier(
++                CONFIG_CORNERRADIUS, "dimen", packageName));
++    }
++
++}
+diff --git a/src/com/android/customization/model/iconshape/IconShapeSectionController.java b/src/com/android/customization/model/iconshape/IconShapeSectionController.java
+new file mode 100644
+index 00000000..3741cc17
+--- /dev/null
++++ b/src/com/android/customization/model/iconshape/IconShapeSectionController.java
+@@ -0,0 +1,95 @@
++/*
++ * Copyright (C) 2021 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.iconshape;
++
++import android.content.Context;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.widget.TextView;
++
++import androidx.annotation.Nullable;
++
++import com.android.customization.model.CustomizationManager.Callback;
++import com.android.customization.model.CustomizationManager.OptionsFetchedListener;
++import com.android.customization.picker.iconshape.IconShapeFragment;
++import com.android.customization.picker.iconshape.IconShapeSectionView;
++
++import com.android.wallpaper.R;
++import com.android.wallpaper.model.CustomizationSectionController;
++
++import java.util.List;
++
++/** A {@link CustomizationSectionController} for system icons. */
++
++public class IconShapeSectionController implements CustomizationSectionController<IconShapeSectionView> {
++
++    private static final String TAG = "IconShapeSectionController";
++
++    private final IconShapeManager mIconShapeOptionsManager;
++    private final CustomizationSectionNavigationController mSectionNavigationController;
++
++    public IconShapeSectionController(IconShapeManager iconShapeOptionsManager,
++            CustomizationSectionNavigationController sectionNavigationController) {
++        mIconShapeOptionsManager = iconShapeOptionsManager;
++        mSectionNavigationController = sectionNavigationController;
++    }
++
++    @Override
++    public boolean isAvailable(Context context) {
++        return mIconShapeOptionsManager.isAvailable();
++    }
++
++    @Override
++    public IconShapeSectionView createView(Context context) {
++        IconShapeSectionView iconShapeSectionView = (IconShapeSectionView) LayoutInflater.from(context)
++                .inflate(R.layout.icon_shape_section_view, /* root= */ null);
++
++        TextView sectionDescription = iconShapeSectionView.findViewById(R.id.icon_section_description);
++        View sectionTile = iconShapeSectionView.findViewById(R.id.icon_section_tile);
++
++        mIconShapeOptionsManager.fetchOptions(new OptionsFetchedListener<IconShapeOption>() {
++            @Override
++            public void onOptionsLoaded(List<IconShapeOption> options) {
++                IconShapeOption activeOption = getActiveOption(options);
++                sectionDescription.setText(activeOption.getTitle());
++                activeOption.bindThumbnailTile(sectionTile);
++            }
++
++            @Override
++            public void onError(@Nullable Throwable throwable) {
++                if (throwable != null) {
++                    Log.e(TAG, "Error loading icon options", throwable);
++                }
++                sectionDescription.setText(R.string.something_went_wrong);
++                sectionTile.setVisibility(View.GONE);
++            }
++        }, /* reload= */ true);
++
++        iconShapeSectionView.setOnClickListener(v -> mSectionNavigationController.navigateTo(
++                IconShapeFragment.newInstance(context.getString(R.string.preview_name_shape))));
++
++        return iconShapeSectionView;
++    }
++
++    private IconShapeOption getActiveOption(List<IconShapeOption> options) {
++        return options.stream()
++                .filter(option -> option.isActive(mIconShapeOptionsManager))
++                .findAny()
++                // For development only, as there should always be a grid set.
++                .orElse(options.get(0));
++    }
++}
+diff --git a/src/com/android/customization/model/theme/ShapeAppIcon.java b/src/com/android/customization/model/theme/ShapeAppIcon.java
+new file mode 100644
+index 00000000..2a9ba3c7
+--- /dev/null
++++ b/src/com/android/customization/model/theme/ShapeAppIcon.java
+@@ -0,0 +1,32 @@
++/*
++ * Copyright (C) 2019 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.model.theme;
++
++import android.graphics.drawable.Drawable;
++
++/** A class to represent an App icon and its name. */
++public class ShapeAppIcon {
++    private Drawable mIconDrawable;
++
++    public ShapeAppIcon(Drawable icon) {
++        mIconDrawable = icon;
++    }
++
++    /** Returns a copy of app icon drawable. */
++    public Drawable getDrawableCopy() {
++        return mIconDrawable.getConstantState().newDrawable().mutate();
++    }
++}
+diff --git a/src/com/android/customization/module/DefaultCustomizationSections.java b/src/com/android/customization/module/DefaultCustomizationSections.java
+index e9b7b2d5..d7bc42e5 100644
+--- a/src/com/android/customization/module/DefaultCustomizationSections.java
++++ b/src/com/android/customization/module/DefaultCustomizationSections.java
+@@ -8,7 +8,14 @@ import androidx.fragment.app.FragmentActivity;
+ import androidx.lifecycle.LifecycleOwner;
+ import androidx.lifecycle.ViewModelProvider;
+ 
++import com.android.customization.model.font.FontManager;
++import com.android.customization.model.font.FontSectionController;
+ import com.android.customization.model.grid.GridOptionsManager;
++import com.android.customization.model.iconpack.IconPackManager;
++import com.android.customization.model.iconpack.IconPackSectionController;
++import com.android.customization.model.iconshape.IconShapeManager;
++import com.android.customization.model.iconshape.IconShapeSectionController;
++import com.android.customization.model.theme.OverlayManagerCompat;
+ import com.android.customization.model.themedicon.ThemedIconSectionController;
+ import com.android.customization.model.themedicon.ThemedIconSwitchProvider;
+ import com.android.customization.model.themedicon.domain.interactor.ThemedIconInteractor;
+@@ -217,6 +224,21 @@ public final class DefaultCustomizationSections implements CustomizationSections
+                                 GridOptionsManager.getInstance(activity),
+                                 sectionNavigationController,
+                                 lifecycleOwner));
++
++                // Icon pack selection section.
++                sectionControllers.add(new IconPackSectionController(
++                        IconPackManager.getInstance(activity, new OverlayManagerCompat(activity)),
++                        sectionNavigationController));
++
++                // Font selection section.
++                sectionControllers.add(new FontSectionController(
++                        FontManager.getInstance(activity, new OverlayManagerCompat(activity)),
++                        sectionNavigationController));
++
++                // Icon shape selection section.
++                sectionControllers.add(new IconShapeSectionController(
++                        IconShapeManager.getInstance(activity, new OverlayManagerCompat(activity)),
++                        sectionNavigationController));
+                 break;
+         }
+ 
+diff --git a/src/com/android/customization/picker/WallpaperPreviewer.java b/src/com/android/customization/picker/WallpaperPreviewer.java
+new file mode 100644
+index 00000000..18bc89c7
+--- /dev/null
++++ b/src/com/android/customization/picker/WallpaperPreviewer.java
+@@ -0,0 +1,279 @@
++/*
++ * Copyright (C) 2020 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.picker;
++
++import android.app.Activity;
++import android.app.WallpaperColors;
++import android.content.Intent;
++import android.graphics.Rect;
++import android.graphics.RenderEffect;
++import android.graphics.Shader.TileMode;
++import android.service.wallpaper.WallpaperService;
++import android.view.Surface;
++import android.view.SurfaceView;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++
++import androidx.annotation.MainThread;
++import androidx.annotation.Nullable;
++import androidx.cardview.widget.CardView;
++import androidx.lifecycle.Lifecycle;
++import androidx.lifecycle.LifecycleObserver;
++import androidx.lifecycle.OnLifecycleEvent;
++
++import com.android.wallpaper.model.LiveWallpaperInfo;
++import com.android.wallpaper.model.WallpaperInfo;
++import com.android.wallpaper.util.ResourceUtils;
++import com.android.wallpaper.util.ScreenSizeCalculator;
++import com.android.wallpaper.util.SizeCalculator;
++import com.android.wallpaper.util.VideoWallpaperUtils;
++import com.android.wallpaper.util.WallpaperConnection;
++import com.android.wallpaper.util.WallpaperConnection.WallpaperConnectionListener;
++import com.android.wallpaper.util.WallpaperSurfaceCallback;
++import com.android.wallpaper.widget.WallpaperColorsLoader;
++
++/** A class to load the wallpaper to the view. */
++public class WallpaperPreviewer implements LifecycleObserver {
++
++    private final Rect mPreviewLocalRect = new Rect();
++    private final Rect mPreviewGlobalRect = new Rect();
++    private final int[] mLivePreviewLocation = new int[2];
++
++    private final Activity mActivity;
++    private final ImageView mHomePreview;
++    private final SurfaceView mWallpaperSurface;
++    @Nullable private final ImageView mFadeInScrim;
++
++    private WallpaperSurfaceCallback mWallpaperSurfaceCallback;
++    private WallpaperInfo mWallpaper;
++    private WallpaperConnection mWallpaperConnection;
++    @Nullable private WallpaperColorsListener mWallpaperColorsListener;
++
++    /** Interface for getting {@link WallpaperColors} from wallpaper. */
++    public interface WallpaperColorsListener {
++        /** Gets called when wallpaper color is available or updated. */
++        void onWallpaperColorsChanged(WallpaperColors colors);
++    }
++
++    public WallpaperPreviewer(Lifecycle lifecycle, Activity activity, ImageView homePreview,
++                              SurfaceView wallpaperSurface) {
++        this(lifecycle, activity, homePreview, wallpaperSurface, null);
++    }
++
++    public WallpaperPreviewer(Lifecycle lifecycle, Activity activity, ImageView homePreview,
++                              SurfaceView wallpaperSurface, @Nullable ImageView fadeInScrim) {
++        lifecycle.addObserver(this);
++
++        mActivity = activity;
++        mHomePreview = homePreview;
++        mWallpaperSurface = wallpaperSurface;
++        mFadeInScrim = fadeInScrim;
++        mWallpaperSurfaceCallback = new WallpaperSurfaceCallback(activity, mHomePreview,
++                mWallpaperSurface, this::setUpWallpaperPreview);
++        mWallpaperSurface.setZOrderMediaOverlay(true);
++        mWallpaperSurface.getHolder().addCallback(mWallpaperSurfaceCallback);
++
++        View rootView = homePreview.getRootView();
++        rootView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
++            @Override
++            public void onLayoutChange(View v, int left, int top, int right, int bottom,
++                                       int oldLeft, int oldTop, int oldRight, int oldBottom) {
++                updatePreviewCardRadius();
++                rootView.removeOnLayoutChangeListener(this);
++            }
++        });
++    }
++
++    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
++    @MainThread
++    public void onResume() {
++        if (mWallpaperConnection != null) {
++            mWallpaperConnection.setVisibility(true);
++        }
++    }
++
++    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
++    @MainThread
++    public void onPause() {
++        if (mWallpaperConnection != null) {
++            mWallpaperConnection.setVisibility(false);
++        }
++    }
++
++    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
++    @MainThread
++    public void onStop() {
++        if (mWallpaperConnection != null) {
++            mWallpaperConnection.disconnect();
++            mWallpaperConnection = null;
++        }
++    }
++
++    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
++    @MainThread
++    public void onDestroy() {
++        if (mWallpaperConnection != null) {
++            mWallpaperConnection.disconnect();
++            mWallpaperConnection = null;
++        }
++
++        mWallpaperSurfaceCallback.cleanUp();
++        mWallpaperSurface.getHolder().removeCallback(mWallpaperSurfaceCallback);
++        Surface surface = mWallpaperSurface.getHolder().getSurface();
++        if (surface != null) {
++            surface.release();
++        }
++    }
++
++    /**
++     * Sets a wallpaper to be shown on preview screen.
++     *
++     * @param wallpaperInfo the wallpaper to preview
++     * @param listener the listener for getting the wallpaper color of {@param wallpaperInfo}
++     */
++    public void setWallpaper(WallpaperInfo wallpaperInfo,
++                             @Nullable WallpaperColorsListener listener) {
++        mWallpaper = wallpaperInfo;
++        mWallpaperColorsListener = listener;
++        if (mFadeInScrim != null && VideoWallpaperUtils.needsFadeIn(wallpaperInfo)) {
++            mFadeInScrim.animate().cancel();
++            mFadeInScrim.setAlpha(1f);
++            mFadeInScrim.setVisibility(View.VISIBLE);
++        }
++        setUpWallpaperPreview();
++    }
++
++    private void setUpWallpaperPreview() {
++        ImageView homeImageWallpaper = mWallpaperSurfaceCallback.getHomeImageWallpaper();
++        if (mWallpaper != null && homeImageWallpaper != null) {
++            homeImageWallpaper.post(() -> {
++                if (mActivity == null || mActivity.isDestroyed()) {
++                    return;
++                }
++                boolean renderInImageWallpaperSurface = !(mWallpaper instanceof LiveWallpaperInfo);
++                mWallpaper.getThumbAsset(mActivity.getApplicationContext())
++                        .loadPreviewImage(mActivity,
++                                renderInImageWallpaperSurface ? homeImageWallpaper : mHomePreview,
++                                ResourceUtils.getColorAttr(
++                                        mActivity, android.R.attr.colorSecondary),
++                                /* offsetToStart= */ true);
++                if (mWallpaper instanceof LiveWallpaperInfo) {
++                    ImageView preview = homeImageWallpaper;
++                    if (VideoWallpaperUtils.needsFadeIn(mWallpaper) && mFadeInScrim != null) {
++                        preview = mFadeInScrim;
++                        preview.setRenderEffect(
++                                RenderEffect.createBlurEffect(150f, 150f, TileMode.CLAMP));
++                    }
++                    mWallpaper.getThumbAsset(mActivity.getApplicationContext())
++                            .loadPreviewImage(
++                                    mActivity,
++                                    preview,
++                                    ResourceUtils.getColorAttr(
++                                            mActivity, android.R.attr.colorSecondary),
++                                    /* offsetToStart= */ true);
++                    setUpLiveWallpaperPreview(mWallpaper);
++                } else {
++                    // Ensure live wallpaper connection is disconnected.
++                    if (mWallpaperConnection != null) {
++                        mWallpaperConnection.disconnect();
++                        mWallpaperConnection = null;
++                    }
++
++                    // Load wallpaper color for static wallpaper.
++                    if (mWallpaperColorsListener != null) {
++                        WallpaperColorsLoader.getWallpaperColors(
++                                mActivity,
++                                mWallpaper.getThumbAsset(mActivity),
++                                mWallpaperColorsListener::onWallpaperColorsChanged);
++                    }
++                }
++            });
++        }
++    }
++
++    private void setUpLiveWallpaperPreview(WallpaperInfo homeWallpaper) {
++        if (mActivity == null || mActivity.isFinishing()) {
++            return;
++        }
++
++        if (mWallpaperConnection != null) {
++            mWallpaperConnection.disconnect();
++        }
++        if (WallpaperConnection.isPreviewAvailable()) {
++            mHomePreview.getLocationOnScreen(mLivePreviewLocation);
++            mPreviewGlobalRect.set(0, 0, mHomePreview.getMeasuredWidth(),
++                    mHomePreview.getMeasuredHeight());
++            mPreviewLocalRect.set(mPreviewGlobalRect);
++            mPreviewGlobalRect.offset(mLivePreviewLocation[0], mLivePreviewLocation[1]);
++
++            mWallpaperConnection = new WallpaperConnection(
++                    getWallpaperIntent(homeWallpaper.getWallpaperComponent()), mActivity,
++                    new WallpaperConnectionListener() {
++                        @Override
++                        public void onWallpaperColorsChanged(WallpaperColors colors,
++                                int displayId) {
++                            if (mWallpaperColorsListener != null) {
++                                mWallpaperColorsListener.onWallpaperColorsChanged(colors);
++                            }
++                        }
++
++                        @Override
++                        public void onEngineShown() {
++                            if (mFadeInScrim != null && VideoWallpaperUtils.needsFadeIn(
++                                    homeWallpaper)) {
++                                mFadeInScrim.animate().alpha(0.0f)
++                                        .setDuration(VideoWallpaperUtils.TRANSITION_MILLIS)
++                                        .withEndAction(
++                                                () -> mFadeInScrim.setVisibility(View.INVISIBLE));
++                            }
++                        }
++                    }, mWallpaperSurface, WallpaperConnection.WhichPreview.PREVIEW_CURRENT);
++
++            mWallpaperConnection.setVisibility(true);
++            mHomePreview.post(() -> {
++                if (mWallpaperConnection != null && !mWallpaperConnection.connect()) {
++                    mWallpaperConnection = null;
++                }
++            });
++        } else {
++            // Load wallpaper color from the thumbnail.
++            if (mWallpaperColorsListener != null) {
++                WallpaperColorsLoader.getWallpaperColors(
++                        mActivity,
++                        mWallpaper.getThumbAsset(mActivity),
++                        mWallpaperColorsListener::onWallpaperColorsChanged);
++            }
++        }
++    }
++
++    /** Updates the preview card view corner radius to match the device corner radius. */
++    private void updatePreviewCardRadius() {
++        final float screenAspectRatio =
++                ScreenSizeCalculator.getInstance().getScreenAspectRatio(mActivity);
++        CardView cardView = (CardView) mHomePreview.getParent();
++        final int cardWidth = (int) (cardView.getMeasuredHeight() / screenAspectRatio);
++        ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
++        layoutParams.width = cardWidth;
++        cardView.setLayoutParams(layoutParams);
++        cardView.setRadius(SizeCalculator.getPreviewCornerRadius(mActivity, cardWidth));
++    }
++
++    private static Intent getWallpaperIntent(android.app.WallpaperInfo info) {
++        return new Intent(WallpaperService.SERVICE_INTERFACE)
++                .setClassName(info.getPackageName(), info.getServiceName());
++    }
++}
+diff --git a/src/com/android/customization/picker/font/FontFragment.java b/src/com/android/customization/picker/font/FontFragment.java
+new file mode 100644
+index 00000000..fccbab8c
+--- /dev/null
++++ b/src/com/android/customization/picker/font/FontFragment.java
+@@ -0,0 +1,206 @@
++/*
++ * Copyright (C) 2018 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.picker.font;
++
++import static com.android.wallpaper.widget.BottomActionBar.BottomAction.APPLY_TEXT;
++
++import android.os.Bundle;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.SurfaceView;
++import android.view.View;
++import android.view.ViewGroup;
++
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
++import androidx.core.widget.ContentLoadingProgressBar;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.android.customization.model.CustomizationManager.Callback;
++import com.android.customization.model.CustomizationManager.OptionsFetchedListener;
++import com.android.customization.model.CustomizationOption;
++import com.android.customization.model.theme.OverlayManagerCompat;
++import com.android.customization.module.logging.ThemesUserEventLogger;
++import com.android.customization.picker.WallpaperPreviewer;
++import com.android.customization.widget.OptionSelectorController;
++import com.android.customization.widget.OptionSelectorController.CheckmarkStyle;
++import com.android.wallpaper.R;
++import com.android.wallpaper.picker.AppbarFragment;
++import com.android.wallpaper.widget.BottomActionBar;
++
++import com.android.customization.model.font.FontOption;
++import com.android.customization.model.font.FontManager;
++
++import java.util.List;
++
++/**
++ * Fragment that contains the UI for selecting and applying a FontOption.
++ */
++public class FontFragment extends AppbarFragment {
++
++    private static final String TAG = "FontFragment";
++    private static final String KEY_STATE_SELECTED_OPTION = "FontFragment.selectedOption";
++    private static final String KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE =
++            "FontFragment.bottomActionBarVisible";
++
++    public static FontFragment newInstance(CharSequence title) {
++        FontFragment fragment = new FontFragment();
++        fragment.setArguments(AppbarFragment.createArguments(title));
++        return fragment;
++    }
++
++    private RecyclerView mOptionsContainer;
++    private OptionSelectorController<FontOption> mOptionsController;
++    private FontManager mFontManager;
++    private FontOption mSelectedOption;
++    private ContentLoadingProgressBar mLoading;
++    private ViewGroup mContent;
++    private View mError;
++    private BottomActionBar mBottomActionBar;
++
++    private final Callback mApplyFontCallback = new Callback() {
++        @Override
++        public void onSuccess() {
++        }
++
++        @Override
++        public void onError(@Nullable Throwable throwable) {
++            // Since we disabled it when clicked apply button.
++            mBottomActionBar.enableActions();
++            mBottomActionBar.hide();
++            //TODO(chihhangchuang): handle
++        }
++    };
++
++    @Nullable
++    @Override
++    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
++            @Nullable Bundle savedInstanceState) {
++        View view = inflater.inflate(
++                R.layout.fragment_font_picker, container, /* attachToRoot */ false);
++        setUpToolbar(view);
++        mContent = view.findViewById(R.id.content_section);
++        mOptionsContainer = view.findViewById(R.id.options_container);
++        mLoading = view.findViewById(R.id.loading_indicator);
++        mError = view.findViewById(R.id.error_section);
++
++        // For nav bar edge-to-edge effect.
++        view.setOnApplyWindowInsetsListener((v, windowInsets) -> {
++            v.setPadding(
++                    v.getPaddingLeft(),
++                    windowInsets.getSystemWindowInsetTop(),
++                    v.getPaddingRight(),
++                    windowInsets.getSystemWindowInsetBottom());
++            return windowInsets.consumeSystemWindowInsets();
++        });
++
++        mFontManager = FontManager.getInstance(getContext(), new OverlayManagerCompat(getContext()));
++        setUpOptions(savedInstanceState);
++
++        return view;
++    }
++
++    @Override
++    public void onSaveInstanceState(@NonNull Bundle outState) {
++        super.onSaveInstanceState(outState);
++        if (mBottomActionBar != null) {
++            outState.putBoolean(KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE, mBottomActionBar.isVisible());
++        }
++    }
++
++    @Override
++    protected void onBottomActionBarReady(BottomActionBar bottomActionBar) {
++        super.onBottomActionBarReady(bottomActionBar);
++        mBottomActionBar = bottomActionBar;
++        mBottomActionBar.showActionsOnly(APPLY_TEXT);
++        mBottomActionBar.setActionClickListener(APPLY_TEXT, v -> applyFontOption(mSelectedOption));
++    }
++
++    private void applyFontOption(FontOption fontOption) {
++        mBottomActionBar.disableActions();
++        mFontManager.apply(fontOption, mApplyFontCallback);
++    }
++
++    private void setUpOptions(@Nullable Bundle savedInstanceState) {
++        hideError();
++        mLoading.show();
++        mFontManager.fetchOptions(new OptionsFetchedListener<FontOption>() {
++            @Override
++            public void onOptionsLoaded(List<FontOption> options) {
++                mLoading.hide();
++                mOptionsController = new OptionSelectorController<>(
++                        mOptionsContainer, options, /* useGrid= */ false, CheckmarkStyle.CORNER);
++                mOptionsController.initOptions(mFontManager);
++                mSelectedOption = getActiveOption(options);
++                mOptionsController.setSelectedOption(mSelectedOption);
++                onOptionSelected(mSelectedOption);
++                restoreBottomActionBarVisibility(savedInstanceState);
++
++                mOptionsController.addListener(selectedOption -> {
++                    onOptionSelected(selectedOption);
++                    mBottomActionBar.show();
++                });
++            }
++
++            @Override
++            public void onError(@Nullable Throwable throwable) {
++                if (throwable != null) {
++                    Log.e(TAG, "Error loading Font options", throwable);
++                }
++                showError();
++            }
++        }, /*reload= */ true);
++    }
++
++    private FontOption getActiveOption(List<FontOption> options) {
++        return options.stream()
++                .filter(option -> mFontManager.isActive(option))
++                .findAny()
++                // For development only, as there should always be an Font set.
++                .orElse(options.get(0));
++    }
++
++    private void hideError() {
++        mContent.setVisibility(View.VISIBLE);
++        mError.setVisibility(View.GONE);
++    }
++
++    private void showError() {
++        mLoading.hide();
++        mContent.setVisibility(View.GONE);
++        mError.setVisibility(View.VISIBLE);
++    }
++
++    private void onOptionSelected(CustomizationOption selectedOption) {
++        mSelectedOption = (FontOption) selectedOption;
++        refreshPreview();
++    }
++
++    private void refreshPreview() {
++        mSelectedOption.bindPreview(mContent);
++    }
++
++    private void restoreBottomActionBarVisibility(@Nullable Bundle savedInstanceState) {
++        boolean isBottomActionBarVisible = savedInstanceState != null
++                && savedInstanceState.getBoolean(KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE);
++        if (mBottomActionBar == null) return;
++        if (isBottomActionBarVisible) {
++            mBottomActionBar.show();
++        } else {
++            mBottomActionBar.hide();
++        }
++    }
++}
+diff --git a/src/com/android/customization/picker/font/FontSectionView.java b/src/com/android/customization/picker/font/FontSectionView.java
+new file mode 100644
+index 00000000..f1c76b85
+--- /dev/null
++++ b/src/com/android/customization/picker/font/FontSectionView.java
+@@ -0,0 +1,12 @@
++package com.android.customization.picker.font;
++
++import android.content.Context;
++import android.util.AttributeSet;
++
++import com.android.wallpaper.picker.SectionView;
++
++public final class FontSectionView extends SectionView {
++    public FontSectionView(Context context, AttributeSet attributeSet) {
++        super(context, attributeSet);
++    }
++}
+diff --git a/src/com/android/customization/picker/iconpack/IconPackFragment.java b/src/com/android/customization/picker/iconpack/IconPackFragment.java
+new file mode 100644
+index 00000000..88951812
+--- /dev/null
++++ b/src/com/android/customization/picker/iconpack/IconPackFragment.java
+@@ -0,0 +1,205 @@
++/*
++ * Copyright (C) 2018 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.picker.iconpack;
++
++import static com.android.wallpaper.widget.BottomActionBar.BottomAction.APPLY_TEXT;
++
++import android.os.Bundle;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.SurfaceView;
++import android.view.View;
++import android.view.ViewGroup;
++
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
++import androidx.core.widget.ContentLoadingProgressBar;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.android.customization.model.CustomizationManager.Callback;
++import com.android.customization.model.CustomizationManager.OptionsFetchedListener;
++import com.android.customization.model.CustomizationOption;
++import com.android.customization.model.iconpack.IconPackOption;
++import com.android.customization.model.iconpack.IconPackManager;
++import com.android.customization.model.theme.OverlayManagerCompat;
++import com.android.customization.module.logging.ThemesUserEventLogger;
++import com.android.customization.picker.WallpaperPreviewer;
++import com.android.customization.widget.OptionSelectorController;
++import com.android.customization.widget.OptionSelectorController.CheckmarkStyle;
++import com.android.wallpaper.R;
++import com.android.wallpaper.picker.AppbarFragment;
++import com.android.wallpaper.widget.BottomActionBar;
++
++import java.util.List;
++
++/**
++ * Fragment that contains the UI for selecting and applying a IconPackOption.
++ */
++public class IconPackFragment extends AppbarFragment {
++
++    private static final String TAG = "IconPackFragment";
++    private static final String KEY_STATE_SELECTED_OPTION = "IconPackFragment.selectedOption";
++    private static final String KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE =
++            "IconPackFragment.bottomActionBarVisible";
++
++    public static IconPackFragment newInstance(CharSequence title) {
++        IconPackFragment fragment = new IconPackFragment();
++        fragment.setArguments(AppbarFragment.createArguments(title));
++        return fragment;
++    }
++
++    private RecyclerView mOptionsContainer;
++    private OptionSelectorController<IconPackOption> mOptionsController;
++    private IconPackManager mIconPackManager;
++    private IconPackOption mSelectedOption;
++    private ContentLoadingProgressBar mLoading;
++    private ViewGroup mContent;
++    private View mError;
++    private BottomActionBar mBottomActionBar;
++
++    private final Callback mApplyIconPackCallback = new Callback() {
++        @Override
++        public void onSuccess() {
++        }
++
++        @Override
++        public void onError(@Nullable Throwable throwable) {
++            // Since we disabled it when clicked apply button.
++            mBottomActionBar.enableActions();
++            mBottomActionBar.hide();
++            //TODO(chihhangchuang): handle
++        }
++    };
++
++    @Nullable
++    @Override
++    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
++            @Nullable Bundle savedInstanceState) {
++        View view = inflater.inflate(
++                R.layout.fragment_icon_pack_picker, container, /* attachToRoot */ false);
++        setUpToolbar(view);
++        mContent = view.findViewById(R.id.content_section);
++        mOptionsContainer = view.findViewById(R.id.options_container);
++        mLoading = view.findViewById(R.id.loading_indicator);
++        mError = view.findViewById(R.id.error_section);
++
++        // For nav bar edge-to-edge effect.
++        view.setOnApplyWindowInsetsListener((v, windowInsets) -> {
++            v.setPadding(
++                    v.getPaddingLeft(),
++                    windowInsets.getSystemWindowInsetTop(),
++                    v.getPaddingRight(),
++                    windowInsets.getSystemWindowInsetBottom());
++            return windowInsets.consumeSystemWindowInsets();
++        });
++
++        mIconPackManager = IconPackManager.getInstance(getContext(), new OverlayManagerCompat(getContext()));
++        setUpOptions(savedInstanceState);
++
++        return view;
++    }
++
++    @Override
++    public void onSaveInstanceState(@NonNull Bundle outState) {
++        super.onSaveInstanceState(outState);
++        if (mBottomActionBar != null) {
++            outState.putBoolean(KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE, mBottomActionBar.isVisible());
++        }
++    }
++
++    @Override
++    protected void onBottomActionBarReady(BottomActionBar bottomActionBar) {
++        super.onBottomActionBarReady(bottomActionBar);
++        mBottomActionBar = bottomActionBar;
++        mBottomActionBar.showActionsOnly(APPLY_TEXT);
++        mBottomActionBar.setActionClickListener(APPLY_TEXT, v -> applyIconPackOption(mSelectedOption));
++    }
++
++    private void applyIconPackOption(IconPackOption iconPackOption) {
++        mBottomActionBar.disableActions();
++        mIconPackManager.apply(iconPackOption, mApplyIconPackCallback);
++    }
++
++    private void setUpOptions(@Nullable Bundle savedInstanceState) {
++        hideError();
++        mLoading.show();
++        mIconPackManager.fetchOptions(new OptionsFetchedListener<IconPackOption>() {
++            @Override
++            public void onOptionsLoaded(List<IconPackOption> options) {
++                mLoading.hide();
++                mOptionsController = new OptionSelectorController<>(
++                        mOptionsContainer, options, /* useGrid= */ false, CheckmarkStyle.CORNER);
++                mOptionsController.initOptions(mIconPackManager);
++                mSelectedOption = getActiveOption(options);
++                mOptionsController.setSelectedOption(mSelectedOption);
++                onOptionSelected(mSelectedOption);
++                restoreBottomActionBarVisibility(savedInstanceState);
++
++                mOptionsController.addListener(selectedOption -> {
++                    onOptionSelected(selectedOption);
++                    mBottomActionBar.show();
++                });
++            }
++
++            @Override
++            public void onError(@Nullable Throwable throwable) {
++                if (throwable != null) {
++                    Log.e(TAG, "Error loading iconpack options", throwable);
++                }
++                showError();
++            }
++        }, /*reload= */ true);
++    }
++
++    private IconPackOption getActiveOption(List<IconPackOption> options) {
++        return options.stream()
++                .filter(option -> option.isActive(mIconPackManager))
++                .findAny()
++                // For development only, as there should always be an iconpack set.
++                .orElse(options.get(0));
++    }
++
++    private void hideError() {
++        mContent.setVisibility(View.VISIBLE);
++        mError.setVisibility(View.GONE);
++    }
++
++    private void showError() {
++        mLoading.hide();
++        mContent.setVisibility(View.GONE);
++        mError.setVisibility(View.VISIBLE);
++    }
++
++    private void onOptionSelected(CustomizationOption selectedOption) {
++        mSelectedOption = (IconPackOption) selectedOption;
++        refreshPreview();
++    }
++
++    private void refreshPreview() {
++        mSelectedOption.bindPreview(mContent);
++    }
++
++    private void restoreBottomActionBarVisibility(@Nullable Bundle savedInstanceState) {
++        boolean isBottomActionBarVisible = savedInstanceState != null
++                && savedInstanceState.getBoolean(KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE);
++        if (mBottomActionBar == null) return;
++        if (isBottomActionBarVisible) {
++            mBottomActionBar.show();
++        } else {
++            mBottomActionBar.hide();
++        }
++    }
++}
+diff --git a/src/com/android/customization/picker/iconpack/IconPackSectionView.java b/src/com/android/customization/picker/iconpack/IconPackSectionView.java
+new file mode 100644
+index 00000000..7e626f50
+--- /dev/null
++++ b/src/com/android/customization/picker/iconpack/IconPackSectionView.java
+@@ -0,0 +1,12 @@
++package com.android.customization.picker.iconpack;
++
++import android.content.Context;
++import android.util.AttributeSet;
++
++import com.android.wallpaper.picker.SectionView;
++
++public final class IconPackSectionView extends SectionView {
++    public IconPackSectionView(Context context, AttributeSet attributeSet) {
++        super(context, attributeSet);
++    }
++}
+diff --git a/src/com/android/customization/picker/iconshape/IconShapeFragment.java b/src/com/android/customization/picker/iconshape/IconShapeFragment.java
+new file mode 100644
+index 00000000..257bb390
+--- /dev/null
++++ b/src/com/android/customization/picker/iconshape/IconShapeFragment.java
+@@ -0,0 +1,202 @@
++/*
++ * Copyright (C) 2018 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.picker.iconshape;
++
++import static com.android.wallpaper.widget.BottomActionBar.BottomAction.APPLY_TEXT;
++
++import android.os.Bundle;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
++import androidx.core.widget.ContentLoadingProgressBar;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.android.customization.model.CustomizationManager.Callback;
++import com.android.customization.model.CustomizationManager.OptionsFetchedListener;
++import com.android.customization.model.CustomizationOption;
++import com.android.customization.model.iconshape.IconShapeOption;
++import com.android.customization.model.iconshape.IconShapeManager;
++import com.android.customization.model.theme.OverlayManagerCompat;
++import com.android.customization.widget.OptionSelectorController;
++import com.android.customization.widget.OptionSelectorController.CheckmarkStyle;
++import com.android.wallpaper.R;
++import com.android.wallpaper.picker.AppbarFragment;
++import com.android.wallpaper.widget.BottomActionBar;
++
++import java.util.List;
++
++/**
++ * Fragment that contains the UI for selecting and applying a IconShapeOption.
++ */
++public class IconShapeFragment extends AppbarFragment {
++
++    private static final String TAG = "IconShapeFragment";
++    private static final String KEY_STATE_SELECTED_OPTION = "IconShapeFragment.selectedOption";
++    private static final String KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE =
++            "IconShapeFragment.bottomActionBarVisible";
++
++    public static IconShapeFragment newInstance(CharSequence title) {
++        IconShapeFragment fragment = new IconShapeFragment();
++        fragment.setArguments(AppbarFragment.createArguments(title));
++        return fragment;
++    }
++
++    private RecyclerView mOptionsContainer;
++    private OptionSelectorController<IconShapeOption> mOptionsController;
++    private IconShapeManager mIconShapeManager;
++    private IconShapeOption mSelectedOption;
++    private ContentLoadingProgressBar mLoading;
++    private ViewGroup mContent;
++    private View mError;
++    private BottomActionBar mBottomActionBar;
++
++    private final Callback mApplyIconShapeCallback = new Callback() {
++        @Override
++        public void onSuccess() {
++        }
++
++        @Override
++        public void onError(@Nullable Throwable throwable) {
++            // Since we disabled it when clicked apply button.
++            mBottomActionBar.enableActions();
++            mBottomActionBar.hide();
++            //TODO(chihhangchuang): handle
++        }
++    };
++
++    @Nullable
++    @Override
++    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
++            @Nullable Bundle savedInstanceState) {
++        View view = inflater.inflate(
++                R.layout.fragment_icon_shape_picker, container, /* attachToRoot */ false);
++        setUpToolbar(view);
++        mContent = view.findViewById(R.id.content_section);
++        mOptionsContainer = view.findViewById(R.id.options_container);
++        mLoading = view.findViewById(R.id.loading_indicator);
++        mError = view.findViewById(R.id.error_section);
++
++        // For nav bar edge-to-edge effect.
++        view.setOnApplyWindowInsetsListener((v, windowInsets) -> {
++            v.setPadding(
++                    v.getPaddingLeft(),
++                    windowInsets.getSystemWindowInsetTop(),
++                    v.getPaddingRight(),
++                    windowInsets.getSystemWindowInsetBottom());
++            return windowInsets.consumeSystemWindowInsets();
++        });
++
++        mIconShapeManager = IconShapeManager.getInstance(getContext(), new OverlayManagerCompat(getContext()));
++        setUpOptions(savedInstanceState);
++
++        return view;
++    }
++
++    @Override
++    public void onSaveInstanceState(@NonNull Bundle outState) {
++        super.onSaveInstanceState(outState);
++        if (mBottomActionBar != null) {
++            outState.putBoolean(KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE, mBottomActionBar.isVisible());
++        }
++    }
++
++    @Override
++    protected void onBottomActionBarReady(BottomActionBar bottomActionBar) {
++        super.onBottomActionBarReady(bottomActionBar);
++        mBottomActionBar = bottomActionBar;
++        mBottomActionBar.showActionsOnly(APPLY_TEXT);
++        mBottomActionBar.setActionClickListener(APPLY_TEXT, v -> applyIconShapeOption(mSelectedOption));
++    }
++
++    private void applyIconShapeOption(IconShapeOption iconPackOption) {
++        mBottomActionBar.disableActions();
++        mIconShapeManager.apply(iconPackOption, mApplyIconShapeCallback);
++    }
++
++    private void setUpOptions(@Nullable Bundle savedInstanceState) {
++        hideError();
++        mLoading.show();
++        mIconShapeManager.fetchOptions(new OptionsFetchedListener<IconShapeOption>() {
++            @Override
++            public void onOptionsLoaded(List<IconShapeOption> options) {
++                mLoading.hide();
++                mOptionsController = new OptionSelectorController<>(
++                        mOptionsContainer, options, /* useGrid= */ false, CheckmarkStyle.CORNER);
++                mOptionsController.initOptions(mIconShapeManager);
++                mSelectedOption = getActiveOption(options);
++                mOptionsController.setSelectedOption(mSelectedOption);
++                onOptionSelected(mSelectedOption);
++                restoreBottomActionBarVisibility(savedInstanceState);
++
++                mOptionsController.addListener(selectedOption -> {
++                    onOptionSelected(selectedOption);
++                    mBottomActionBar.show();
++                });
++            }
++
++            @Override
++            public void onError(@Nullable Throwable throwable) {
++                if (throwable != null) {
++                    Log.e(TAG, "Error loading iconpack options", throwable);
++                }
++                showError();
++            }
++        }, /*reload= */ true);
++    }
++
++    private IconShapeOption getActiveOption(List<IconShapeOption> options) {
++        return options.stream()
++                .filter(option -> option.isActive(mIconShapeManager))
++                .findAny()
++                // For development only, as there should always be an iconpack set.
++                .orElse(options.get(0));
++    }
++
++    private void hideError() {
++        mContent.setVisibility(View.VISIBLE);
++        mError.setVisibility(View.GONE);
++    }
++
++    private void showError() {
++        mLoading.hide();
++        mContent.setVisibility(View.GONE);
++        mError.setVisibility(View.VISIBLE);
++    }
++
++    private void onOptionSelected(CustomizationOption selectedOption) {
++        mSelectedOption = (IconShapeOption) selectedOption;
++        refreshPreview();
++    }
++
++    private void refreshPreview() {
++        mSelectedOption.bindPreview(mContent);
++    }
++
++    private void restoreBottomActionBarVisibility(@Nullable Bundle savedInstanceState) {
++        boolean isBottomActionBarVisible = savedInstanceState != null
++                && savedInstanceState.getBoolean(KEY_STATE_BOTTOM_ACTION_BAR_VISIBLE);
++        if (mBottomActionBar == null) return;
++        if (isBottomActionBarVisible) {
++            mBottomActionBar.show();
++        } else {
++            mBottomActionBar.hide();
++        }
++    }
++}
+diff --git a/src/com/android/customization/picker/iconshape/IconShapeSectionView.java b/src/com/android/customization/picker/iconshape/IconShapeSectionView.java
+new file mode 100644
+index 00000000..654b0d08
+--- /dev/null
++++ b/src/com/android/customization/picker/iconshape/IconShapeSectionView.java
+@@ -0,0 +1,12 @@
++package com.android.customization.picker.iconshape;
++
++import android.content.Context;
++import android.util.AttributeSet;
++
++import com.android.wallpaper.picker.SectionView;
++
++public final class IconShapeSectionView extends SectionView {
++    public IconShapeSectionView(Context context, AttributeSet attributeSet) {
++        super(context, attributeSet);
++    }
++}
+diff --git a/src/com/android/customization/widget/OptionSelectorController.java b/src/com/android/customization/widget/OptionSelectorController.java
+new file mode 100644
+index 00000000..6eb052c0
+--- /dev/null
++++ b/src/com/android/customization/widget/OptionSelectorController.java
+@@ -0,0 +1,470 @@
++/*
++ * Copyright (C) 2018 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.customization.widget;
++
++import static com.android.internal.util.Preconditions.checkNotNull;
++
++import android.content.Context;
++import android.content.res.Resources;
++import android.graphics.Rect;
++import android.graphics.drawable.Drawable;
++import android.graphics.drawable.LayerDrawable;
++import android.text.TextUtils;
++import android.util.DisplayMetrics;
++import android.util.TypedValue;
++import android.view.Gravity;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.view.WindowManager;
++import android.view.accessibility.AccessibilityEvent;
++import android.widget.TextView;
++
++import androidx.annotation.Dimension;
++import androidx.annotation.IntDef;
++import androidx.annotation.NonNull;
++import androidx.recyclerview.widget.GridLayoutManager;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate;
++
++import com.android.customization.model.CustomizationManager;
++import com.android.customization.model.CustomizationOption;
++import com.android.wallpaper.R;
++
++import java.util.HashSet;
++import java.util.List;
++import java.util.Set;
++
++/**
++ * Simple controller for a RecyclerView-based widget to hold the options for each customization
++ * section (eg, thumbnails for themes, clocks, grid sizes).
++ * To use, just pass the RV that will contain the tiles and the list of {@link CustomizationOption}
++ * representing each option, and call {@link #initOptions(CustomizationManager)} to populate the
++ * widget.
++ */
++public class OptionSelectorController<T extends CustomizationOption<T>> {
++
++    /**
++     * Interface to be notified when an option is selected by the user.
++     */
++    public interface OptionSelectedListener {
++
++        /**
++         * Called when an option has been selected (and marked as such in the UI)
++         */
++        void onOptionSelected(CustomizationOption selected);
++    }
++
++    @IntDef({CheckmarkStyle.NONE, CheckmarkStyle.CORNER, CheckmarkStyle.CENTER,
++            CheckmarkStyle.CENTER_CHANGE_COLOR_WHEN_NOT_SELECTED})
++    public @interface CheckmarkStyle {
++        int NONE = 0;
++        int CORNER = 1;
++        int CENTER = 2;
++        int CENTER_CHANGE_COLOR_WHEN_NOT_SELECTED = 3;
++    }
++
++    private final float mLinearLayoutHorizontalDisplayOptionsMax;
++
++    private final RecyclerView mContainer;
++    private final List<T> mOptions;
++    private final boolean mUseGrid;
++    @CheckmarkStyle
++    private final int mCheckmarkStyle;
++
++    private final Set<OptionSelectedListener> mListeners = new HashSet<>();
++    private RecyclerView.Adapter<TileViewHolder> mAdapter;
++    private T mSelectedOption;
++    private T mAppliedOption;
++
++    public OptionSelectorController(RecyclerView container, List<T> options) {
++        this(container, options, true, CheckmarkStyle.CORNER);
++    }
++
++    public OptionSelectorController(RecyclerView container, List<T> options,
++            boolean useGrid, @CheckmarkStyle int checkmarkStyle) {
++        mContainer = container;
++        mOptions = options;
++        mUseGrid = useGrid;
++        mCheckmarkStyle = checkmarkStyle;
++        TypedValue typedValue = new TypedValue();
++        mContainer.getResources().getValue(R.dimen.linear_layout_horizontal_display_options_max,
++                typedValue, true);
++        mLinearLayoutHorizontalDisplayOptionsMax = typedValue.getFloat();
++    }
++
++    public void addListener(OptionSelectedListener listener) {
++        mListeners.add(listener);
++    }
++
++    public void removeListener(OptionSelectedListener listener) {
++        mListeners.remove(listener);
++    }
++
++    /**
++     * Mark the given option as selected
++     */
++    public void setSelectedOption(T option) {
++        if (!mOptions.contains(option)) {
++            throw new IllegalArgumentException("Invalid option");
++        }
++        T lastSelectedOption = mSelectedOption;
++        mSelectedOption = option;
++        mAdapter.notifyItemChanged(mOptions.indexOf(option));
++        if (lastSelectedOption != null) {
++            mAdapter.notifyItemChanged(mOptions.indexOf(lastSelectedOption));
++        }
++        notifyListeners();
++    }
++
++    /**
++     * @return whether this controller contains the given option
++     */
++    public boolean containsOption(T option) {
++        return mOptions.contains(option);
++    }
++
++    /**
++     * Mark an option as the one which is currently applied on the device. This will result in a
++     * check being displayed in the lower-right corner of the corresponding ViewHolder.
++     */
++    public void setAppliedOption(T option) {
++        if (!mOptions.contains(option)) {
++            throw new IllegalArgumentException("Invalid option");
++        }
++        T lastAppliedOption = mAppliedOption;
++        mAppliedOption = option;
++        mAdapter.notifyItemChanged(mOptions.indexOf(option));
++        if (lastAppliedOption != null) {
++            mAdapter.notifyItemChanged(mOptions.indexOf(lastAppliedOption));
++        }
++    }
++
++    /**
++     * Notify that a given option has changed.
++     *
++     * @param option the option that changed
++     */
++    public void optionChanged(T option) {
++        if (!mOptions.contains(option)) {
++            throw new IllegalArgumentException("Invalid option");
++        }
++        mAdapter.notifyItemChanged(mOptions.indexOf(option));
++    }
++
++    /**
++     * Initializes the UI for the options passed in the constructor of this class.
++     */
++    public void initOptions(final CustomizationManager<T> manager) {
++        mContainer.setAccessibilityDelegateCompat(
++                new OptionSelectorAccessibilityDelegate(mContainer));
++
++        mAdapter = new RecyclerView.Adapter<TileViewHolder>() {
++            @Override
++            public int getItemViewType(int position) {
++                return mOptions.get(position).getLayoutResId();
++            }
++
++            @NonNull
++            @Override
++            public TileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
++                View v = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
++                // Provide width constraint when a grid layout manager is not use and width is set
++                // to match parent
++                if (!mUseGrid
++                        && v.getLayoutParams().width == RecyclerView.LayoutParams.MATCH_PARENT) {
++                    Resources res = mContainer.getContext().getResources();
++                    RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(
++                            res.getDimensionPixelSize(R.dimen.option_tile_width),
++                            RecyclerView.LayoutParams.WRAP_CONTENT);
++                    v.setLayoutParams(layoutParams);
++                }
++                return new TileViewHolder(v);
++            }
++
++            @Override
++            public void onBindViewHolder(@NonNull TileViewHolder holder, int position) {
++                T option = mOptions.get(position);
++                if (option.isActive(manager)) {
++                    mAppliedOption = option;
++                    if (mSelectedOption == null) {
++                        mSelectedOption = option;
++                    }
++                }
++                if (holder.labelView != null) {
++                    holder.labelView.setText(option.getTitle());
++                    holder.labelView.setSelected(true);
++                }
++                holder.itemView.setActivated(option.equals(mSelectedOption));
++                option.bindThumbnailTile(holder.tileView);
++                holder.itemView.setOnClickListener(view -> setSelectedOption(option));
++
++                Resources res = mContainer.getContext().getResources();
++                if (mCheckmarkStyle == CheckmarkStyle.CORNER && option.equals(mAppliedOption)) {
++                    drawCheckmark(option, holder,
++                            res.getDrawable(R.drawable.check_circle_accent_24dp,
++                                    mContainer.getContext().getTheme()),
++                            Gravity.BOTTOM | Gravity.RIGHT,
++                            res.getDimensionPixelSize(R.dimen.check_size),
++                            res.getDimensionPixelOffset(R.dimen.check_offset), true);
++                } else if (mCheckmarkStyle == CheckmarkStyle.CENTER
++                        && option.equals(mAppliedOption)) {
++                    drawCheckmark(option, holder,
++                            res.getDrawable(R.drawable.check_circle_grey_large,
++                                    mContainer.getContext().getTheme()),
++                            Gravity.CENTER, res.getDimensionPixelSize(R.dimen.center_check_size),
++                            0, true);
++                } else if (mCheckmarkStyle == CheckmarkStyle.CENTER_CHANGE_COLOR_WHEN_NOT_SELECTED
++                        && option.equals(mAppliedOption)) {
++                    int drawableRes = option.equals(mSelectedOption)
++                            ? R.drawable.check_circle_grey_large
++                            : R.drawable.check_circle_grey_large_not_select;
++                    drawCheckmark(option, holder,
++                            res.getDrawable(drawableRes,
++                                    mContainer.getContext().getTheme()),
++                            Gravity.CENTER, res.getDimensionPixelSize(R.dimen.center_check_size),
++                            0, option.equals(mSelectedOption));
++                } else if (option.equals(mAppliedOption)) {
++                    // Initialize with "previewed" description if we don't show checkmark
++                    holder.setContentDescription(mContainer.getContext(), option,
++                            R.string.option_previewed_description);
++                } else if (mCheckmarkStyle != CheckmarkStyle.NONE) {
++                    if (mCheckmarkStyle == CheckmarkStyle.CENTER_CHANGE_COLOR_WHEN_NOT_SELECTED) {
++                        if (option.equals(mSelectedOption)) {
++                            holder.setContentDescription(mContainer.getContext(), option,
++                                    R.string.option_previewed_description);
++                        } else {
++                            holder.setContentDescription(mContainer.getContext(), option,
++                                    R.string.option_change_applied_previewed_description);
++                        }
++                    }
++
++                    holder.tileView.setForeground(null);
++                }
++            }
++
++            @Override
++            public int getItemCount() {
++                return mOptions.size();
++            }
++
++            private void drawCheckmark(CustomizationOption<?> option, TileViewHolder holder,
++                    Drawable checkmark, int gravity, @Dimension int checkSize,
++                    @Dimension int checkOffset, boolean currentlyPreviewed) {
++                Drawable frame = holder.tileView.getForeground();
++                Drawable[] layers = {frame, checkmark};
++                if (frame == null) {
++                    layers = new Drawable[]{checkmark};
++                }
++                LayerDrawable checkedFrame = new LayerDrawable(layers);
++
++                // Position according to the given gravity and offset
++                int idx = layers.length - 1;
++                checkedFrame.setLayerGravity(idx, gravity);
++                checkedFrame.setLayerWidth(idx, checkSize);
++                checkedFrame.setLayerHeight(idx, checkSize);
++                checkedFrame.setLayerInsetBottom(idx, checkOffset);
++                checkedFrame.setLayerInsetRight(idx, checkOffset);
++                holder.tileView.setForeground(checkedFrame);
++
++                // Initialize the currently applied option
++                if (currentlyPreviewed) {
++                    holder.setContentDescription(mContainer.getContext(), option,
++                            R.string.option_applied_previewed_description);
++                } else {
++                    holder.setContentDescription(mContainer.getContext(), option,
++                            R.string.option_applied_description);
++                }
++            }
++        };
++
++        Resources res = mContainer.getContext().getResources();
++        mContainer.setAdapter(mAdapter);
++        final DisplayMetrics metrics = new DisplayMetrics();
++        mContainer.getContext().getSystemService(WindowManager.class)
++                .getDefaultDisplay().getMetrics(metrics);
++        final boolean hasDecoration = mContainer.getItemDecorationCount() != 0;
++
++        if (mUseGrid) {
++            int numColumns = res.getInteger(R.integer.options_grid_num_columns);
++            GridLayoutManager gridLayoutManager = new GridLayoutManager(mContainer.getContext(),
++                    numColumns);
++            mContainer.setLayoutManager(gridLayoutManager);
++        } else {
++            final int padding = res.getDimensionPixelSize(
++                    R.dimen.option_tile_linear_padding_horizontal);
++            final int widthPerItem = res.getDimensionPixelSize(R.dimen.option_tile_width) + (
++                    hasDecoration ? 0 : 2 * padding);
++            mContainer.setLayoutManager(new LinearLayoutManager(mContainer.getContext(),
++                    LinearLayoutManager.HORIZONTAL, false));
++            mContainer.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
++            int availableWidth = metrics.widthPixels;
++            int extraSpace = availableWidth - mContainer.getMeasuredWidth();
++            if (extraSpace >= 0) {
++                mContainer.setOverScrollMode(View.OVER_SCROLL_NEVER);
++            }
++
++            if (mAdapter.getItemCount() >= mLinearLayoutHorizontalDisplayOptionsMax) {
++                int spaceBetweenItems = availableWidth
++                        - Math.round(widthPerItem * mLinearLayoutHorizontalDisplayOptionsMax)
++                        - mContainer.getPaddingLeft();
++                int itemEndMargin =
++                        spaceBetweenItems / (int) mLinearLayoutHorizontalDisplayOptionsMax;
++                itemEndMargin = Math.max(itemEndMargin, res.getDimensionPixelOffset(
++                        R.dimen.option_tile_margin_horizontal));
++                mContainer.addItemDecoration(new ItemEndHorizontalSpaceItemDecoration(
++                        mContainer.getContext(), itemEndMargin));
++                return;
++            }
++
++            int spaceBetweenItems = extraSpace / (mAdapter.getItemCount() + 1);
++            int itemSideMargin = spaceBetweenItems / 2;
++            mContainer.addItemDecoration(new HorizontalSpacerItemDecoration(itemSideMargin));
++        }
++    }
++
++    public void resetOptions(List<T> options) {
++        mOptions.clear();
++        mOptions.addAll(options);
++        mAdapter.notifyDataSetChanged();
++    }
++
++    private void notifyListeners() {
++        if (mListeners.isEmpty()) {
++            return;
++        }
++        T option = mSelectedOption;
++        Set<OptionSelectedListener> iterableListeners = new HashSet<>(mListeners);
++        for (OptionSelectedListener listener : iterableListeners) {
++            listener.onOptionSelected(option);
++        }
++    }
++
++    private static class TileViewHolder extends RecyclerView.ViewHolder {
++        TextView labelView;
++        View tileView;
++        CharSequence title;
++
++        TileViewHolder(@NonNull View itemView) {
++            super(itemView);
++            labelView = itemView.findViewById(R.id.option_label);
++            tileView = itemView.findViewById(R.id.option_tile);
++            title = null;
++        }
++
++        /**
++         * Set the content description for this holder using the given string id.
++         * If the option does not have a label, the description will be set on the tile view.
++         *
++         * @param context The view's context
++         * @param option  The customization option
++         * @param id      Resource ID of the string to use for the content description
++         */
++        public void setContentDescription(Context context, CustomizationOption<?> option, int id) {
++            title = option.getTitle();
++            if (TextUtils.isEmpty(title) && tileView != null) {
++                title = tileView.getContentDescription();
++            }
++
++            CharSequence cd = context.getString(id, title);
++            if (labelView != null && !TextUtils.isEmpty(labelView.getText())) {
++                labelView.setAccessibilityPaneTitle(cd);
++                labelView.setContentDescription(cd);
++            } else if (tileView != null) {
++                tileView.setAccessibilityPaneTitle(cd);
++                tileView.setContentDescription(cd);
++            }
++        }
++
++        public void resetContentDescription() {
++            if (labelView != null && !TextUtils.isEmpty(labelView.getText())) {
++                labelView.setAccessibilityPaneTitle(title);
++                labelView.setContentDescription(title);
++            } else if (tileView != null) {
++                tileView.setAccessibilityPaneTitle(title);
++                tileView.setContentDescription(title);
++            }
++        }
++    }
++
++    private class OptionSelectorAccessibilityDelegate extends RecyclerViewAccessibilityDelegate {
++
++        OptionSelectorAccessibilityDelegate(RecyclerView recyclerView) {
++            super(recyclerView);
++        }
++
++        @Override
++        public boolean onRequestSendAccessibilityEvent(
++                ViewGroup host, View child, AccessibilityEvent event) {
++
++            // Apply this workaround to horizontal recyclerview only,
++            // since the symptom is TalkBack will lose focus when navigating horizontal list items.
++            if (mContainer.getLayoutManager() != null
++                    && mContainer.getLayoutManager().canScrollHorizontally()
++                    && event.getEventType() == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
++                int itemPos = mContainer.getChildLayoutPosition(child);
++                int itemWidth = mContainer.getContext().getResources()
++                        .getDimensionPixelOffset(R.dimen.option_tile_width);
++                int itemMarginHorizontal = mContainer.getContext().getResources()
++                        .getDimensionPixelOffset(R.dimen.option_tile_margin_horizontal) * 2;
++                int scrollOffset = itemWidth + itemMarginHorizontal;
++
++                // Make focusing item's previous/next item totally visible when changing focus,
++                // ensure TalkBack won't lose focus when recyclerview scrolling.
++                if (itemPos >= ((LinearLayoutManager) mContainer.getLayoutManager())
++                        .findLastCompletelyVisibleItemPosition()) {
++                    mContainer.scrollBy(scrollOffset, 0);
++                } else if (itemPos <= ((LinearLayoutManager) mContainer.getLayoutManager())
++                        .findFirstCompletelyVisibleItemPosition() && itemPos != 0) {
++                    mContainer.scrollBy(-scrollOffset, 0);
++                }
++            }
++            return super.onRequestSendAccessibilityEvent(host, child, event);
++        }
++    }
++
++    /** Custom ItemDecorator to add specific spacing between items in the list. */
++    private static final class ItemEndHorizontalSpaceItemDecoration
++            extends RecyclerView.ItemDecoration {
++        private final int mHorizontalSpacePx;
++        private final boolean mDirectionLTR;
++
++        private ItemEndHorizontalSpaceItemDecoration(Context context, int horizontalSpacePx) {
++            mDirectionLTR = context.getResources().getConfiguration().getLayoutDirection()
++                    == View.LAYOUT_DIRECTION_LTR;
++            mHorizontalSpacePx = horizontalSpacePx;
++        }
++
++        @Override
++        public void getItemOffsets(Rect outRect, View view, RecyclerView recyclerView,
++                RecyclerView.State state) {
++            if (recyclerView.getAdapter() == null) {
++                return;
++            }
++
++            if (recyclerView.getChildAdapterPosition(view)
++                    != checkNotNull(recyclerView.getAdapter()).getItemCount() - 1) {
++                // Don't add spacing behind the last item
++                if (mDirectionLTR) {
++                    outRect.right = mHorizontalSpacePx;
++                } else {
++                    outRect.left = mHorizontalSpacePx;
++                }
++            }
++        }
++    }
++}
+-- 
+2.34.1
+
