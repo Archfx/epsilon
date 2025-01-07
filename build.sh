@@ -17,7 +17,7 @@ BV=$1
 
 initRepos() {
     echo "--> Initializing workspace"
-    repo init -u https://android.googlesource.com/platform/manifest -b android-15.0.0_r9 --git-lfs
+    repo init -u https://android.googlesource.com/platform/manifest -b android-15.0.0_r10 --git-lfs
     echo
 
     echo "--> Preparing local manifest"
@@ -156,15 +156,15 @@ uploadOTA() {
 
 START=$(date +%s)
 
-initRepos
-syncRepos
-applyPatches
-# setupEnv
-# buildTrebleApp
-# buildVariants
-# generatePackages
-# generateOta
-# uploadOTA
+# initRepos
+# syncRepos
+# applyPatches
+setupEnv
+buildTrebleApp
+buildVariants
+generatePackages
+generateOta
+uploadOTA
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))
