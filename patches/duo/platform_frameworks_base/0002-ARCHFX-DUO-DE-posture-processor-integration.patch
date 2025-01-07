@@ -29,7 +29,7 @@ index 85197221e651..d5a7eb19ff71 100644
 @@ -119,6 +121,9 @@ public final class DisplayManagerGlobal {
      @UnsupportedAppUsage
      private static DisplayManagerGlobal sInstance;
- 
+
 +    @UnsupportedAppUsage
 +    private static IDisplayManager sDisplayManagerService;
 +
@@ -39,7 +39,7 @@ index 85197221e651..d5a7eb19ff71 100644
 @@ -189,6 +194,18 @@ public final class DisplayManagerGlobal {
          }
      }
- 
+
 +    @UnsupportedAppUsage
 +    public static IDisplayManager getDisplayManagerService() {
 +        synchronized (DisplayManagerGlobal.class) {
@@ -62,7 +62,7 @@ index b7c02b0d0720..527a232e742e 100644
 @@ -220,6 +220,9 @@ interface IDisplayManager {
      // Query for DISPLAY_DECORATION support.
      DisplayDecorationSupport getDisplayDecorationSupport(int displayId);
- 
+
 +    // set display offsets for logical display
 +    void setDisplayOffsets(int displayId, int x, int y);
 +
@@ -75,7 +75,7 @@ index e37dea4dfd69..9803ba1f0af8 100644
 +++ b/libs/WindowManager/Jetpack/src/androidx/window/common/layout/CommonFoldingFeature.java
 @@ -213,7 +213,7 @@ public final class CommonFoldingFeature {
      private final Rect mRect;
- 
+
      CommonFoldingFeature(int type, @State int state, @NonNull Rect rect) {
 -        assertReportableState(state);
 +        // assertReportableState(state);
@@ -108,9 +108,9 @@ index ae33b83b49dc..dd17b0108e66 100644
 +                    scheduleTraversalLocked(false);
 +                }
 +            }
-+        }   
++        }
      }
- 
+
      @VisibleForTesting
 diff --git a/services/core/java/com/android/server/policy/DeviceStateProviderImpl.java b/services/core/java/com/android/server/policy/DeviceStateProviderImpl.java
 index 453c6ef41437..ec7fcecdf573 100644
@@ -119,7 +119,7 @@ index 453c6ef41437..ec7fcecdf573 100644
 @@ -765,6 +765,12 @@ public final class DeviceStateProviderImpl implements DeviceStateProvider,
              return configFileFromDataDir;
          }
- 
+
 +        final File configFileFromSystemDir = Environment.buildPath(Environment.getRootDirectory(),
 +                VENDOR_CONFIG_FILE_PATH, CONFIG_FILE_NAME);
 +        if (configFileFromSystemDir .exists()) {
@@ -136,7 +136,7 @@ index 107c2947c550..92e85837b8de 100644
 @@ -2951,6 +2951,14 @@ public final class SystemServer implements Dumpable {
          }
          t.traceEnd();
- 
+
 +        t.traceBegin("PostureProcessorService");
 +        try {
 +            startPostureProcessor(context);
@@ -151,17 +151,17 @@ index 107c2947c550..92e85837b8de 100644
 @@ -3460,6 +3468,13 @@ public final class SystemServer implements Dumpable {
          t.traceEnd();
      }
- 
+
 +    private static void startPostureProcessor(Context context) {
 +        PackageManagerInternal pm = LocalServices.getService(PackageManagerInternal.class);
 +        Intent intent = new Intent();
 +        intent.setComponent(ComponentName.unflattenFromString("com.thain.duo/.PostureProcessorService"));
 +        context.startServiceAsUser(intent, UserHandle.SYSTEM);
-+    }    
++    }
 +
      private static void startSystemUi(Context context, WindowManagerService windowManager) {
          PackageManagerInternal pm = LocalServices.getService(PackageManagerInternal.class);
          Intent intent = new Intent();
--- 
+--
 2.34.1
 

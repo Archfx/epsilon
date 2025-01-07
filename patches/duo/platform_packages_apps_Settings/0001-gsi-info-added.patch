@@ -14,7 +14,7 @@ index 5550aa4aec9..2163becb2d3 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
 @@ -13679,4 +13679,7 @@
- 
+
      <!-- Text for Search bar of Settings home screen [CHAR LIMIT=34] -->
      <string name="homepage_search">Search Settings</string>
 +
@@ -29,7 +29,7 @@ index aec064b599f..edc6408efd7 100644
              android:summary="@string/summary_placeholder"
              settings:enableCopying="true"
              settings:controller="com.android.settings.deviceinfo.BuildNumberPreferenceController"/>
-+        
++
 +        <Preference
 +            android:key="gsi_info"
 +            android:order="54"
@@ -37,8 +37,8 @@ index aec064b599f..edc6408efd7 100644
 +            android:summary="@string/gsi_info_summary"
 +            settings:enableCopying="true"/>
      </PreferenceCategory>
- 
+
  </PreferenceScreen>
--- 
+--
 2.34.1
 

@@ -156,7 +156,7 @@ uploadOTA() {
 
 START=$(date +%s)
 
-# initRepos
+initRepos
 syncRepos
 applyPatches
 # setupEnv
