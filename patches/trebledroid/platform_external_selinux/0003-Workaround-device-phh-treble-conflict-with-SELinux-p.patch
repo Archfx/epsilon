@@ -1,7 +1,7 @@
 From 613eea002a11f50d9008b5543a08400ed49333c9 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Wed, 31 Mar 2021 23:32:37 +0200
-Subject: [PATCH 03/11] Workaround device/phh/treble conflict with SELinux
+Subject: [PATCH 03/12] Workaround device/phh/treble conflict with SELinux
  policy
 
 device/phh/treble defines the following three types (hostapd,
