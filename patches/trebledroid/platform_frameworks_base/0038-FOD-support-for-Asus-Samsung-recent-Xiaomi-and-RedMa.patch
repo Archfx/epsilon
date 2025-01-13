@@ -1,7 +1,7 @@
 From 7bdc259f231e9b54ebf34ed986fe8a6ec871dac7 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 18 Dec 2022 18:20:40 -0500
-Subject: [PATCH 38/53] FOD support for Asus, Samsung recent Xiaomi and
+Subject: [PATCH 38/54] FOD support for Asus, Samsung recent Xiaomi and
  RedMagic 8 devices
 
 Thanks Asus for providing a free device to make this support

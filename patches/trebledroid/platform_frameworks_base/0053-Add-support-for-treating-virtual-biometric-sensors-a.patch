@@ -1,7 +1,7 @@
 From ee039764aaff1c81429ab7fc573172d700978e71 Mon Sep 17 00:00:00 2001
 From: Peter Cai <peter@typeblog.net>
 Date: Sat, 21 Dec 2024 11:04:35 -0500
-Subject: [PATCH 53/53] Add support for treating virtual biometric sensors as
+Subject: [PATCH 53/54] Add support for treating virtual biometric sensors as
  real ones
 
 This happens on Unihertz Jelly Max. They forgot to change their sensor
