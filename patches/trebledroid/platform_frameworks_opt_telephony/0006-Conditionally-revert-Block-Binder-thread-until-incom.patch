@@ -1,7 +1,7 @@
 From 96c1503252281213a1bb6b97848e69e1312b3bc2 Mon Sep 17 00:00:00 2001
 From: ExactExampl <exactxmpl@pixelexperience.org>
 Date: Tue, 11 Oct 2022 12:38:00 +0300
-Subject: [PATCH 06/10] Conditionally revert "Block Binder thread until
+Subject: [PATCH 06/11] Conditionally revert "Block Binder thread until
  incoming call process completes"
 
 * Legacy IMS packages handling incoming calls in such a way that
