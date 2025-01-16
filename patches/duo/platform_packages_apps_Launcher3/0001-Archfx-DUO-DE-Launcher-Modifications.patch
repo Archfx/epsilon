@@ -146,7 +146,7 @@ index 15641ab516..02ee22eb1e 100644
          });
 
 +        // Add RestartReceiver to listen for restart intent
-+        SimpleBroadcastReceiver restartReceiver = new SimpleBroadcastReceiver(intent -> {
++        SimpleBroadcastReceiver restartReceiver = new SimpleBroadcastReceiver(UI_HELPER_EXECUTOR, intent -> {
 +            if ("com.thain.duo.LAUNCHER_RESTART".equals(intent.getAction())) {
 +                Log.d("RestartReceiver by Archfx", "Received broadcast to restart the launcher.");
 +                restartLauncher(context);
