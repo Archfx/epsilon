@@ -1,4 +1,4 @@
-From 9c29102bd6af974add2bedb92f1e6c41388c20d7 Mon Sep 17 00:00:00 2001
+From 7f5565230f99faf652a369a25bd0004ca2d18bca Mon Sep 17 00:00:00 2001
 From: Jonathan Klee <jonathan.klee@e.email>
 Date: Thu, 12 Dec 2024 15:27:57 +0100
 Subject: [PATCH 54/54] Allow spoofing signingInfo for microG

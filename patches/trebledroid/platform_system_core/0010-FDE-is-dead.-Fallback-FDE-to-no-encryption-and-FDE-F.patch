@@ -1,7 +1,7 @@
 From 62bf8425d904473bbfd6e2fc4b64f34bd76d06b2 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Thu, 10 Nov 2022 13:30:50 -0500
-Subject: [PATCH 10/27] FDE is dead. Fallback FDE to no encryption, and FDE+FBE
+Subject: [PATCH 10/28] FDE is dead. Fallback FDE to no encryption, and FDE+FBE
  to FBE
 
 ---

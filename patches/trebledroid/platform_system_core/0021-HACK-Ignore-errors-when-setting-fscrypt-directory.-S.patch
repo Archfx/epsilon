@@ -1,7 +1,7 @@
 From e6fe66ad69122385a09852774ec16d1e110a210c Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Thu, 23 Nov 2023 11:05:20 -0500
-Subject: [PATCH 21/27] HACK: Ignore errors when setting fscrypt directory.
+Subject: [PATCH 21/28] HACK: Ignore errors when setting fscrypt directory.
  Some devices fail to set it on first boot, but is happy later (?!?)
 
 ---
